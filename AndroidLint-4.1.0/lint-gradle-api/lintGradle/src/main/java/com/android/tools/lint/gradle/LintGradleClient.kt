@@ -161,54 +161,36 @@ class LintGradleClient(
     override fun getGradleVisitor(): GradleVisitor = GroovyGradleVisitor()
 
     override fun configureLintRequest(lintRequest: LintRequest) {
-        val search = ProjectSearch()
-        val project = search.getProject(this, gradleProject, variantName)
-            ?: run {
-                lintRequest.setProjects(emptyList())
-                return
-            }
+        // 这里避免 setProjects,那么在 LintDriver 中
+        // 就可以走 request.getProjects() ?: computeProjects(request.files)的逻辑
+        // 读取自定义的文件（本来是用于IDE 增量扫描的），会自动根据文件 查找出所在的project
+//        val search = ProjectSearch()
+//        val project = search.getProject(this, gradleProject, variantName)
+//            ?: run {
+//                lintRequest.setProjects(emptyList())
+//                return
+//            }
+// 这里放弃动态模块检测
+//        val buildModel = project.buildModule
+//        if (buildModel != null && !buildModel.dynamicFeatures.isEmpty()) {
+//            for (feature in buildModel.dynamicFeatures) {
+//                val rootProject = gradleProject.rootProject
+//                val featureProject = rootProject.findProject(feature)
+//                if (featureProject != null) {
+//                    search.getProject(this, featureProject, variantName)?.let {
+//                        project.mergeFolders(it)
+//                    }
+//                }
+//            }
+//        }
 
-        val buildModel = project.buildModule
-
-        // If an app project has dynamic feature modules, it doesn't depend on those
-        // modules; instead, the feature modules depend on the app. However, when analyzing
-        // the app we should consider the feature modules too; it's not easy to run lint
-        // on the set of all of them, so just make :gradlew :app:lintDebug imply including
-        // the feature modules themselves, similar to how app installation will also "depend"
-        // on them. We don't want to add them as dependent projects from the app project since
-        // that would be a circular dependency.
-        //
-        // One possibility here is to pass in the feature modules as additional roots
-        // in the lint request. However, that does not have the desired effect; each root
-        // is treated as an independent project, with its own set of detector instances.
-        //
-        // Another thing I tried was creating a "join" project; a non-reporting project
-        // which just depends on everything (the feature modules and the app module). But
-        // that still doesn't work quite right.
-        //
-        // Turns out the simplest thing to do is to just merge the source sets from
-        // the feature modules into the app project. This doesn't quite capture the right
-        // override semantics, but is a step in the right direction for reducing
-        // false positives around dynamic features.
-        if (buildModel != null && !buildModel.dynamicFeatures.isEmpty()) {
-            for (feature in buildModel.dynamicFeatures) {
-                val rootProject = gradleProject.rootProject
-                val featureProject = rootProject.findProject(feature)
-                if (featureProject != null) {
-                    search.getProject(this, featureProject, variantName)?.let {
-                        project.mergeFolders(it)
-                    }
-                }
-            }
-        }
-
-        lintRequest.setProjects(listOf(project))
-        registerProject(project.dir, project)
-        for (dependency in project.allLibraries) {
-            registerProject(dependency.dir, dependency)
-        }
+//        lintRequest.setProjects(listOf(project))
+//        registerProject(project.dir, project)
+//        for (dependency in project.allLibraries) {
+//            registerProject(dependency.dir, dependency)
+//        }
         //增量扫描
-        IncrementUtils.inject(gradleProject, lintRequest)
+//        IncrementUtils.inject(gradleProject, lintRequest)
     }
 
     override fun createDriver(
@@ -231,7 +213,7 @@ class LintGradleClient(
             return Pair(emptyList(), null)
         }
 
-        val exitCode = run(registry, emptyList())
+        val exitCode = run(registry, IncrementUtils.checkFileList)
         if (exitCode == ERRNO_CREATED_BASELINE) {
             if (continueAfterBaseLineCreated()) {
                 return Pair(emptyList(), driver.baseline)
