@@ -1,9 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
-enableFeaturePreview("VERSION_CATALOGS")
-
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -35,4 +29,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "AndroidLint"
-//include(":app")
+include(":app")
