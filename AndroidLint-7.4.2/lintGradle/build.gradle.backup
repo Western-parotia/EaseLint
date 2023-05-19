@@ -1,0 +1,23 @@
+import com.easelint.buildsrc.QuickDependencies
+
+plugins {
+    id 'java-library'
+    id 'kotlin'
+    id 'maven-publish'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:${QuickDependencies.Kotlin.kotlin_version}"
+    compileOnly "com.android.tools.lint:lint-gradle:${QuickDependencies.Lint.lint_version}"
+    compileOnly gradleApi()
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource
+}
