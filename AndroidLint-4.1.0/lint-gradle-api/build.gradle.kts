@@ -1,4 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+com.buildsrc.kts.GlobalConfig.init(project)
 buildscript {
 
     repositories {

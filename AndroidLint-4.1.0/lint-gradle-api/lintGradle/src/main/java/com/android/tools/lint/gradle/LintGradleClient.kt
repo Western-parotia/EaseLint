@@ -8,7 +8,6 @@ import com.android.tools.lint.LintCliFlags.ERRNO_CREATED_BASELINE
 import com.android.tools.lint.Warning
 import com.android.tools.lint.client.api.*
 import com.android.tools.lint.detector.api.*
-import com.android.tools.lint.gradle.IncrementUtils.inject
 import com.android.tools.lint.gradle.api.VariantInputs
 import com.android.tools.lint.model.LintModelSeverity
 import com.android.utils.XmlUtils
@@ -209,7 +208,7 @@ class LintGradleClient(
             registerProject(dependency.dir, dependency)
         }
         //增量扫描
-        inject(gradleProject, lintRequest)
+        IncrementUtils.inject(gradleProject, lintRequest)
     }
 
     override fun createDriver(

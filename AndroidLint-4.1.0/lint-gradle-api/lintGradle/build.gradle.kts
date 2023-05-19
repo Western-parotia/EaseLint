@@ -1,4 +1,5 @@
 import com.buildsrc.kts.Dependencies
+import com.buildsrc.kts.Publish
 import org.gradle.jvm.tasks.Jar
 
 plugins {
@@ -26,21 +27,17 @@ tasks.register("sourcesJar", Jar::class) {
 publishing {
     publications {
         create<MavenPublication>("lintGradle") {
-            groupId = "com.mj.lint"
-            artifactId = "lint-gradle"
-            version = "0.0.1"
+            Publish.Maven.setGAV(this)
             from(components["java"])
             artifact(tasks["sourcesJar"])
         }
     }
 
     repositories {
-        maven {
-            url = uri("https://mijukeji-maven.pkg.coding.net/repository/jileiku/base_maven/")
-            credentials {
-                username = "base_maven-1639657395993"
-                password = "631a6828fffb502f53b0c51db9072ebf76418ac3"
-            }
+        if (Publish.SNAPSHOT) {
+            Publish.Maven.aliyunSnapshotRepositories(this)
+        } else {
+            Publish.Maven.aliyunReleaseRepositories(this)
         }
     }
 }

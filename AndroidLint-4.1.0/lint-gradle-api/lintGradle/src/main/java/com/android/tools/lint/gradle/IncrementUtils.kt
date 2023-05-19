@@ -14,7 +14,8 @@ object IncrementUtils {
     @JvmStatic
     var whiteList = emptyList<String>()
 
-    private var checkFileList: MutableList<File> = mutableListOf()
+    var checkFileList: MutableList<File> = mutableListOf()
+        private set
 
     fun inject(project: Project, lintRequest: LintRequest) {
         when {
