@@ -1,6 +1,6 @@
-package com.buildsrc.kts
+package com.buildsrc.easelint
 
-import com.buildsrc.kts.Repositories.mavenPassword
+import com.buildsrc.easelint.Repositories.mavenPassword
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.publish.maven.MavenPublication
 
