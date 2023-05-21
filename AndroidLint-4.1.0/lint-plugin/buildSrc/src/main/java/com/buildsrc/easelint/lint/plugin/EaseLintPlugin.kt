@@ -1,7 +1,5 @@
 package com.buildsrc.easelint.lint.plugin
 
-import com.buildsrc.kts.lint.extensions.*
-import com.buildsrc.kts.lint.task.*
 import com.android.build.api.variant.impl.VariantImpl
 import com.android.build.api.variant.impl.VariantPropertiesImpl
 import com.android.build.gradle.internal.VariantManager

@@ -1,6 +1,5 @@
 package com.buildsrc.easelint.lint.task
 
-import com.buildsrc.kts.lint.extensions.*
 import com.android.tools.lint.gradle.api.DelegatingClassLoader
 import com.android.tools.lint.gradle.api.ExtractAnnotationRequest
 import com.android.tools.lint.gradle.api.LintExecutionRequest
