@@ -1,9 +1,7 @@
 package com.buildsrc.easelint.lint.task
 
 import com.android.build.gradle.internal.dsl.LintOptions
-import com.buildsrc.easelint.lint.extensions.LintConfigExtension
-import com.buildsrc.easelint.lint.extensions.ExtensionHelper
-
+import com.buildsrc.easelint.lint.extensions.LintConfigExtensionHelper
 import org.gradle.api.Project
 import java.io.File
 
@@ -14,13 +12,14 @@ class LintOptionsInjector {
         const val XML_OUTPUT_RELATIVE_PATH = "build/reports/lint-results.xml"
         const val HTML_OUTPUT_RELATIVE_PATH = "build/reports/lint-results.html"
         const val BASELINE_RELATIVE_PATH = "lint-baseline.xml"
-        const val CHECK_ONLY_CONFIG_URL =
-            "http://xpxsrcapp.51xpx.com/lintReport/lint_check_only_config.json"
-        var lintConfigRes: LintConfigRes? = null
+        private var lintConfigRes: LintConfigRes? = null
     }
 
+    /**
+     * 判断运行环境，确认是否需要 设置 check only
+     * 需要则拉取check only 配置文件 进行设置
+     */
     fun inject(project: Project, lintOptions: LintOptions) {
-        //只有流水线执行时需要设置check only
         if (System.getProperty("os.name").equals("Linux", true)) {
             println("========Lint options injector==========")
             val checkOnlyList = arrayListOf<String>()
@@ -36,14 +35,15 @@ class LintOptionsInjector {
         }
 
         lintOptions.apply {
-            val issueDisableList =
-                (project.extensions.getByName(ExtensionHelper.EXTENSION_LINT_CONFIG) as LintConfigExtension).issueDisableList
+            val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
+            val issueDisableList = lcg.issueDisableList
+
             disable(*issueDisableList.toTypedArray())
             xmlOutput = File(XML_OUTPUT_RELATIVE_PATH)//指定xml输出目录
             htmlOutput = File(HTML_OUTPUT_RELATIVE_PATH)//指定html输出目录
             isWarningsAsErrors = false//返回lint是否应将所有警告视为错误
             isAbortOnError = false//发生错误停止task执行 默认true
-            if ((project.extensions.getByName(ExtensionHelper.EXTENSION_LINT_CONFIG) as LintConfigExtension).baseline) {
+            if (lcg.baseline) {
                 baselineFile = project.file(BASELINE_RELATIVE_PATH)//创建警告基准
             }
         }

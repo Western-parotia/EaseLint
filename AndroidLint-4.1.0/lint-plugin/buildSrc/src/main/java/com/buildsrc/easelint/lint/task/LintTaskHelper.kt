@@ -5,6 +5,7 @@ import com.android.build.api.variant.impl.VariantPropertiesImpl
 import com.android.build.gradle.internal.VariantManager
 import com.android.build.gradle.internal.tasks.factory.TaskFactoryImpl
 import com.android.build.gradle.internal.variant.ComponentInfo
+import com.buildsrc.easelint.lint.helper.LintGradleHelper
 import com.google.common.collect.ImmutableList
 import org.gradle.api.Project
 
@@ -43,6 +44,9 @@ class LintTaskHelper {
                 )
             )
         }
+        //为两个任务 配置不一样等文件抓取流程
+
+
     }
 
     class MJLintCreationAction(
@@ -53,7 +57,7 @@ class LintTaskHelper {
     ) : MJLintPerVariantTask.CreationAction(variantProperties, allVariants) {
         override fun configure(task: MJLintPerVariantTask) {
             //加入补丁修复lint的bug同时支持增量扫描功能，需要在super#configure之前调用
-            DependencyHelper.injectLintPatch(project)
+            LintGradleHelper.injectLintPatch(project)
             super.configure(task)
         }
 

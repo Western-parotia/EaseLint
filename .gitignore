@@ -14,3 +14,4 @@
 .externalNativeBuild
 /AndroidLint-4.1.0/lint-gradle-api/.gradle/
 /AndroidLint-4.1.0/lint-gradle-api/buildSrc/.gradle/
+local.properties

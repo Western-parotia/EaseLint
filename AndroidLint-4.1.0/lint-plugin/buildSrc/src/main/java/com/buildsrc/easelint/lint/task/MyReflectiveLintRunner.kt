@@ -30,12 +30,14 @@ class MyReflectiveLintRunner {
             val lintConfigExtension =
                 project.extensions.getByName(ExtensionHelper.EXTENSION_LINT_CONFIG) as LintConfigExtension
             val whiteList = lintConfigExtension.fileWhiteList
-            val targetClazz = loader.loadClass("com.android.tools.lint.gradle.IncrementUtils")
+
+            val targetClazz = loader.loadClass(LINT_GRADLE_HOOK_CLASS)
             if (!whiteList.isNullOrEmpty()) {
                 val addWhiteListMethod: Method =
                     targetClazz.getMethod("addWhiteList", List::class.java)
                 addWhiteListMethod.invoke(null, whiteList)
             }
+
 
             //打印配置的白名单
             val printMethod: Method = targetClazz.getMethod("printIgnoreInfo")
@@ -95,6 +97,9 @@ class MyReflectiveLintRunner {
         private var loader: DelegatingClassLoader? = null
 
         private var buildCompletionListenerRegistered = false
+        private const val LINT_GRADLE_HOOK_CLASS =
+            "com.android.tools.lint.gradle.ScanTargetContainer"
+
 
         @Synchronized
         private fun getLintClassLoader(gradle: Gradle, lintClassPath: Set<File>): ClassLoader {

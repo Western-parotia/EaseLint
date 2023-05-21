@@ -7,10 +7,10 @@ import com.android.build.gradle.internal.plugins.AppPlugin
 import com.android.build.gradle.internal.plugins.BasePlugin
 import com.android.build.gradle.internal.plugins.LibraryPlugin
 import com.buildsrc.easelint.lint.extensions.ExtensionHelper
+import com.buildsrc.easelint.lint.helper.LintWrapperHelper
 import com.buildsrc.easelint.lint.task.LintTaskHelper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import java.io.File
 
 class EaseLintPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -22,6 +22,8 @@ class EaseLintPlugin : Plugin<Project> {
         val currentPlugin = libPlugin ?: appPlugin!!
         val variantManager = reflectionVM(currentPlugin)
         LintTaskHelper().apply(target, variantManager)
+        LintWrapperHelper.apply(target)
+
     }
 }
 
