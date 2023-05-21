@@ -208,12 +208,12 @@ class LintGradleClient(
      */
     fun run(registry: IssueRegistry): Pair<List<Warning>, LintBaseline?> {
         //先判断是否有待检查的文件，如果没有直接结束task
-        if (!IncrementUtils.hasDiffFiles(gradleProject)) {
-            IncrementUtils.printSplitLine("No target file, lint stop")
+        if (!ScanTargetContainer.hasTarget()) {
+            println("No target file, stop the lint task")
             return Pair(emptyList(), null)
         }
 
-        val exitCode = run(registry, IncrementUtils.checkFileList)
+        val exitCode = run(registry, ScanTargetContainer.checkFileList)
         if (exitCode == ERRNO_CREATED_BASELINE) {
             if (continueAfterBaseLineCreated()) {
                 return Pair(emptyList(), driver.baseline)

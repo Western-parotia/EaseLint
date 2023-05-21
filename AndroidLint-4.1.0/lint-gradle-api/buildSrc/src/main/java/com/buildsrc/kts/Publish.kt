@@ -14,7 +14,8 @@ object Publish {
     private const val GROUP_ID = "com.easelint"
 
     object Version {
-        val versionName = if (SNAPSHOT) "$VERSION-SNAPSHOT" else VERSION
+        //阿里云不支持 -SNAPSHOT,会被忽略
+        val versionName = VERSION
         const val versionCode = 1
         const val artifactId = ARTIFACT_ID
 
