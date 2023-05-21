@@ -3,21 +3,44 @@ package com.buildsrc.easelint.lint.task
 import com.android.tools.lint.gradle.api.DelegatingClassLoader
 import com.android.tools.lint.gradle.api.ExtractAnnotationRequest
 import com.android.tools.lint.gradle.api.LintExecutionRequest
-import com.buildsrc.easelint.lint.extensions.ExtensionHelper
-import com.buildsrc.easelint.lint.extensions.LintConfigExtension
+import com.buildsrc.easelint.lint.extensions.LintConfigExtensionHelper
+import com.buildsrc.easelint.lint.utils.log
 import com.google.common.base.Throwables
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.invocation.Gradle
 import org.gradle.initialization.BuildCompletionListener
 import java.io.File
+import java.lang.reflect.Field
 import java.lang.reflect.InvocationTargetException
-import java.lang.reflect.Method
 import java.net.URI
 import java.net.URL
 import java.net.URLClassLoader
 
-class MyReflectiveLintRunner {
+class EaseLintReflectiveLintRunner {
+    /**
+     * 1.过滤白名单
+     * 2.反射为Lint设置扫描目标
+     */
+    private fun lockTarget(project: Project, loader: ClassLoader): Boolean {
+        val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
+        val whiteList = lcg.fileWhiteList
+        val targets = lcg.targetFiles
+        val files = targets.filter { t ->
+            return whiteList.any { w ->
+                t.contains(w)
+            }
+        }
+        if (files.isNotEmpty()) {
+            val scanTargetContainer =
+                loader.loadClass(LINT_GRADLE_HOOK_CLASS)::class.objectInstance!!
+            val targetField: Field = scanTargetContainer.getDeclaredField("checkFileList")
+            targetField.set(scanTargetContainer, files)
+            return true
+        }
+        return false
+    }
+
     fun runLint(
         gradle: Gradle,
         request: LintExecutionRequest,
@@ -26,28 +49,15 @@ class MyReflectiveLintRunner {
     ) {
         try {
             val loader = getLintClassLoader(gradle, lintClassPath)
-            //导入lint-gradle之后，通过反射配白名单和起始时间
-            val lintConfigExtension =
-                project.extensions.getByName(ExtensionHelper.EXTENSION_LINT_CONFIG) as LintConfigExtension
-            val whiteList = lintConfigExtension.fileWhiteList
-
-            val targetClazz = loader.loadClass(LINT_GRADLE_HOOK_CLASS)
-            if (!whiteList.isNullOrEmpty()) {
-                val addWhiteListMethod: Method =
-                    targetClazz.getMethod("addWhiteList", List::class.java)
-                addWhiteListMethod.invoke(null, whiteList)
+            if (!lockTarget(project, loader)) {
+                "There has no target file need to scan,lint over".log()
             }
-
-
-            //打印配置的白名单
-            val printMethod: Method = targetClazz.getMethod("printIgnoreInfo")
-            printMethod.invoke(null)
-
             val cls = loader.loadClass("com.android.tools.lint.gradle.LintGradleExecution")
             val constructor = cls.getConstructor(LintExecutionRequest::class.java)
             val driver = constructor.newInstance(request)
             val analyzeMethod = driver.javaClass.getDeclaredMethod("analyze")
             analyzeMethod.invoke(driver)
+
         } catch (e: InvocationTargetException) {
             if (e.targetException is GradleException) {
                 // Build error from lint -- pass it on

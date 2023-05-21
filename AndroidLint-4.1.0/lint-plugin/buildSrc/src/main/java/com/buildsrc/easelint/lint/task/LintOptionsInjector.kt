@@ -37,15 +37,15 @@ class LintOptionsInjector {
         lintOptions.apply {
             val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
             val issueDisableList = lcg.issueDisableList
-
             disable(*issueDisableList.toTypedArray())
             xmlOutput = File(XML_OUTPUT_RELATIVE_PATH)//指定xml输出目录
             htmlOutput = File(HTML_OUTPUT_RELATIVE_PATH)//指定html输出目录
             isWarningsAsErrors = false//返回lint是否应将所有警告视为错误
             isAbortOnError = false//发生错误停止task执行 默认true
-            if (lcg.baseline) {
-                baselineFile = project.file(BASELINE_RELATIVE_PATH)//创建警告基准
-            }
+            //不需要baseline
+//            if (lcg.baseline) {
+//                baselineFile = project.file(BASELINE_RELATIVE_PATH)//创建警告基准
+//            }
         }
     }
 

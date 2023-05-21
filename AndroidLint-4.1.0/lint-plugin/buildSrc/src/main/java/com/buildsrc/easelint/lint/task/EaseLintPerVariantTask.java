@@ -61,7 +61,7 @@ public abstract class EaseLintPerVariantTask extends LintBaseTask implements Var
         //使用自己的ReflectiveLintRunner，需要通过反射设置文件的筛选条件
         FileCollection lintClassPath = getLintClassPath();
         if (lintClassPath != null) {
-            new MyReflectiveLintRunner().runLint(
+            new EaseLintReflectiveLintRunner().runLint(
                     getProject().getGradle(),
                     descriptor,
                     lintClassPath.getFiles(),

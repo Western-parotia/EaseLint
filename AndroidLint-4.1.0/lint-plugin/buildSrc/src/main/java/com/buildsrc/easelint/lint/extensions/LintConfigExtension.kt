@@ -5,18 +5,17 @@ import org.gradle.api.Project
 import java.io.File
 
 open class LintConfigExtension {
-    var baseline = false
+    //需要关闭的 issue 清单，部署到CI时用与快速降级，快速停用个别异常issue
+    var issueDisableList: MutableList<String> = mutableListOf()
 
-    //文件白名单
+    //扫描文件白名单
     val fileWhiteList: MutableList<String> = mutableListOf()
 
-    //issue黑名单
-    var issueDisableList = emptyList<String>()
-
-    var targetFiles = emptyList<String>()
+    //扫描目标，统一为文件全路径
+    var targetFiles: MutableList<String> = mutableListOf()
 
     /**
-     * 输入可变参为文件路径，例如 buildSrc/src/main/java/com/ci/plugin/lint/LintIncrementPlugin
+     * 为了避免多module 扫描的白名单存在冲突，限制白名单文件路径最少提供4级目录
      *
      * @param filePaths
      */
@@ -25,7 +24,10 @@ open class LintConfigExtension {
             val itemPath = it.split("/")
             if (itemPath.size < 4) {
                 //路径小于4级，不规范
-                throw LintException("Lint Config: file path illegal: $it")
+                throw LintException(
+                    "Invalid whitelist file path," +
+                            " a minimum of 4 levels of directory is required: $it"
+                )
             } else {
                 //路径规范，添加至白名单
                 fileWhiteList.add(it.replace("/", File.separator))
