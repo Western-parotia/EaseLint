@@ -10,16 +10,29 @@ plugins {
 }
 
 repositories {
-    mavenCentral()
-    google()
+    maven {
+        setUrl("https://maven.aliyun.com/nexus/content/groups/public/")
+    }
+    maven {
+        setUrl("https://maven.aliyun.com/repository/public/")
+    }
+    maven {
+        setUrl("https://maven.aliyun.com/repository/google/")
+    }
+    maven {
+        setUrl("https://maven.aliyun.com/repository/central/")
+    }
+    maven {
+        setUrl("https://jitpack.io")
+    }
+
+//    mavenCentral()
+//    google()
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
 
 dependencies {
     // 无法引用 buildSrc 内的类
     implementation("com.android.tools.build:gradle:4.1.0")
 }
+
