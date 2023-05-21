@@ -1,7 +1,8 @@
 package com.buildsrc.easelint.lint.extensions
 
-import java.io.File
 import com.buildsrc.easelint.lint.task.LintException
+import org.gradle.api.Project
+import java.io.File
 
 open class LintConfigExtension {
     var baseline = false
@@ -11,6 +12,8 @@ open class LintConfigExtension {
 
     //issue黑名单
     var issueDisableList = emptyList<String>()
+
+    var targetFiles = emptyList<String>()
 
     /**
      * 输入可变参为文件路径，例如 buildSrc/src/main/java/com/ci/plugin/lint/LintIncrementPlugin
@@ -30,4 +33,11 @@ open class LintConfigExtension {
         }
     }
 
+}
+
+object LintConfigExtensionHelper {
+    fun findLintConfigExtension(project: Project): LintConfigExtension {
+        val target = project.extensions.getByName(ExtensionHelper.EXTENSION_LINT_CONFIG)
+        return target as LintConfigExtension
+    }
 }
