@@ -4,8 +4,8 @@
 
 * 1.替换lint gradle，在 EaseLintCreationAction 的super configure 之前 hook 覆盖
 * 2.在 LintTaskHelper apply 时 加载 lint wrapper
-*
-    3.
+* 3.读取checkList,设置给 com.android.tools.lint.gradle.ScanTargetContainer EaseLintReflectiveLintRunner
+  内的targetList 变量名要 校对
 
 * 外部制定要扫描的文件列表
 * 获取报告
