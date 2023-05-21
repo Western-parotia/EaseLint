@@ -2,7 +2,11 @@
 
 # 模块
 
-* 替换lint gradle
+* 1.替换lint gradle，在 EaseLintCreationAction 的super configure 之前 hook 覆盖
+* 2.在 LintTaskHelper apply 时 加载 lint wrapper
+*
+    3.
+
 * 外部制定要扫描的文件列表
 * 获取报告
 * 动态获取lint rules

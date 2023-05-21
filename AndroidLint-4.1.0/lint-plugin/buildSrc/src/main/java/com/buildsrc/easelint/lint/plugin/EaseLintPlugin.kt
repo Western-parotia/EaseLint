@@ -7,7 +7,6 @@ import com.android.build.gradle.internal.plugins.AppPlugin
 import com.android.build.gradle.internal.plugins.BasePlugin
 import com.android.build.gradle.internal.plugins.LibraryPlugin
 import com.buildsrc.easelint.lint.extensions.ExtensionHelper
-import com.buildsrc.easelint.lint.helper.LintWrapperHelper
 import com.buildsrc.easelint.lint.task.LintTaskHelper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -18,18 +17,14 @@ class EaseLintPlugin : Plugin<Project> {
         val libPlugin = target.plugins.findPlugin(LibraryPlugin::class.java)
         val appPlugin = target.plugins.findPlugin(AppPlugin::class.java)
         if (libPlugin == null && appPlugin == null) return
-
         val currentPlugin = libPlugin ?: appPlugin!!
         val variantManager = reflectionVM(currentPlugin)
         LintTaskHelper().apply(target, variantManager)
-        LintWrapperHelper.apply(target)
-
     }
 }
 
 /**
- * 获取 VariantManager<VariantT, VariantPropertiesT> variantManager;
- *
+ * 读源码后发现可以采用反射获取 VariantManager<VariantT, VariantPropertiesT>
  */
 @Suppress("UNCHECKED_CAST")
 private fun reflectionVM(

@@ -6,6 +6,7 @@ import com.android.build.gradle.internal.VariantManager
 import com.android.build.gradle.internal.tasks.factory.TaskFactoryImpl
 import com.android.build.gradle.internal.variant.ComponentInfo
 import com.buildsrc.easelint.lint.helper.LintGradleHelper
+import com.buildsrc.easelint.lint.helper.LintWrapperHelper
 import com.google.common.collect.ImmutableList
 import org.gradle.api.Project
 
@@ -19,6 +20,7 @@ class LintTaskHelper {
         project: Project,
         variantManager: VariantManager<VariantImpl<VariantPropertiesImpl>, VariantPropertiesImpl>
     ) {
+        LintWrapperHelper.apply(project)
         val variants: List<ComponentInfo<VariantImpl<VariantPropertiesImpl>, VariantPropertiesImpl>> =
             variantManager.mainComponents
         val variantPropertiesList = variants.stream()
@@ -44,6 +46,7 @@ class LintTaskHelper {
                 )
             )
         }
+
         //为两个任务 配置不一样等文件抓取流程
 
 
