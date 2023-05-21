@@ -8,8 +8,6 @@ import com.android.build.gradle.internal.tasks.VariantAwareTask;
 import com.android.build.gradle.options.BooleanOption;
 import com.android.build.gradle.tasks.LintBaseTask;
 import com.android.utils.StringHelper;
-import com.buildsrc.easelint.lint.task.LintOptionsInjector;
-import com.buildsrc.easelint.lint.task.MyReflectiveLintRunner;
 
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
@@ -24,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public abstract class MJLintPerVariantTask extends LintBaseTask implements VariantAwareTask {
+public abstract class EaseLintPerVariantTask extends LintBaseTask implements VariantAwareTask {
     private VariantInputs variantInputs;
     private ConfigurableFileCollection allInputs;
     private boolean fatalOnly;
@@ -75,7 +73,7 @@ public abstract class MJLintPerVariantTask extends LintBaseTask implements Varia
         @Nullable
         @Override
         public String getVariantName() {
-            return MJLintPerVariantTask.this.getVariantName();
+            return EaseLintPerVariantTask.this.getVariantName();
         }
 
         @Nullable
@@ -97,7 +95,7 @@ public abstract class MJLintPerVariantTask extends LintBaseTask implements Varia
         }
     }
 
-    public static class CreationAction extends BaseCreationAction<MJLintPerVariantTask> {
+    public static class CreationAction extends BaseCreationAction<EaseLintPerVariantTask> {
 
         private final VariantPropertiesImpl variantProperties;
         private final List<? extends VariantPropertiesImpl> allVariants;
@@ -118,12 +116,12 @@ public abstract class MJLintPerVariantTask extends LintBaseTask implements Varia
 
         @Override
         @NonNull
-        public Class<MJLintPerVariantTask> getType() {
-            return MJLintPerVariantTask.class;
+        public Class<EaseLintPerVariantTask> getType() {
+            return EaseLintPerVariantTask.class;
         }
 
         @Override
-        public void configure(@NonNull MJLintPerVariantTask lint) {
+        public void configure(@NonNull EaseLintPerVariantTask lint) {
             super.configure(lint);
 
             lint.setVariantName(variantProperties.getName());
@@ -148,7 +146,7 @@ public abstract class MJLintPerVariantTask extends LintBaseTask implements Varia
         }
     }
 
-    public static class VitalCreationAction extends BaseCreationAction<MJLintPerVariantTask> {
+    public static class VitalCreationAction extends BaseCreationAction<EaseLintPerVariantTask> {
 
         private final ComponentPropertiesImpl componentProperties;
         private final List<? extends VariantPropertiesImpl> allComponentsWithLint;
@@ -169,12 +167,12 @@ public abstract class MJLintPerVariantTask extends LintBaseTask implements Varia
 
         @NonNull
         @Override
-        public Class<MJLintPerVariantTask> getType() {
-            return MJLintPerVariantTask.class;
+        public Class<EaseLintPerVariantTask> getType() {
+            return EaseLintPerVariantTask.class;
         }
 
         @Override
-        public void configure(@NonNull MJLintPerVariantTask task) {
+        public void configure(@NonNull EaseLintPerVariantTask task) {
             super.configure(task);
 
             task.setVariantName(componentProperties.getName());

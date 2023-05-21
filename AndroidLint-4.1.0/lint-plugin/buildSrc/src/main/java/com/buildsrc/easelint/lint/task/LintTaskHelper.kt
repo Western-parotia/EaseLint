@@ -34,12 +34,12 @@ class LintTaskHelper {
 
         TaskFactoryImpl(project.tasks).apply {
             register(
-                MJLintCreationAction(
+                EaseLintCreationAction(
                     project, TASK_NAME_LINT_FULL, variant, variantPropertiesList
                 )
             )
             register(
-                MJLintCreationAction(
+                EaseLintCreationAction(
                     project, TASK_NAME_LINT_INCREMENT, variant, variantPropertiesList
                 )
             )
@@ -49,14 +49,14 @@ class LintTaskHelper {
 
     }
 
-    class MJLintCreationAction(
+    class EaseLintCreationAction(
         private val project: Project,
         private val taskName: String,
         variantProperties: VariantPropertiesImpl,
         allVariants: List<VariantPropertiesImpl>
-    ) : MJLintPerVariantTask.CreationAction(variantProperties, allVariants) {
-        override fun configure(task: MJLintPerVariantTask) {
-            //加入补丁修复lint的bug同时支持增量扫描功能，需要在super#configure之前调用
+    ) : EaseLintPerVariantTask.CreationAction(variantProperties, allVariants) {
+        override fun configure(task: EaseLintPerVariantTask) {
+            //放在这里最安全，保证一定在super#configure之前调用，覆盖系统的 lint gradle
             LintGradleHelper.injectLintPatch(project)
             super.configure(task)
         }
