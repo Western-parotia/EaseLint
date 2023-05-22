@@ -5,11 +5,12 @@
 * 1.替换lint gradle，在 EaseLintCreationAction 的super configure 之前 hook 覆盖
 * 2.在 LintTaskHelper apply 时 加载 lint wrapper
 * 3.读取checkList,设置给 com.android.tools.lint.gradle.ScanTargetContainer EaseLintReflectiveLintRunner
-  内的targetList 变量名要 校对
+* 4.配置lint 扫描的 扫描文件集合，白名单集合，checkOnly,disableIssue
 
-* 外部制定要扫描的文件列表
-* 获取报告
-* 动态获取lint rules
+# 报告输出目录
+
+const val XML_OUTPUT_RELATIVE_PATH = "build/reports/lint-results.xml"
+const val HTML_OUTPUT_RELATIVE_PATH = "build/reports/lint-results.html"
 
 # 编译问题
 

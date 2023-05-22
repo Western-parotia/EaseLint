@@ -17,8 +17,8 @@ object Repositories {
         "https://packages.aliyun.com/maven/repository/2196753-snapshot-XaSZiY"
 
     //公共账号密码，只可用于拉取
-    private const val aliyunDefName = "632a761fe39d7932770f41cf"
-    private const val aliyunDefPassword = "obLVJ9r]Cx8["
+    private const val aliyunDefName = "642b9f209f62bf75b33fc1ae"
+    private const val aliyunDefPassword = "EkNR7ao]bCHh"
 
     /**
      * 默认的需要拉的库
@@ -34,6 +34,9 @@ object Repositories {
             maven(jitpackIo)
             mavenPassword(
                 aliyunReleaseAndArtifacts, aliyunDefName, aliyunDefPassword
+            )
+            mavenPassword(
+                aliyunSnapshotAndArtifacts, aliyunDefName, aliyunDefPassword
             )
         }
     }

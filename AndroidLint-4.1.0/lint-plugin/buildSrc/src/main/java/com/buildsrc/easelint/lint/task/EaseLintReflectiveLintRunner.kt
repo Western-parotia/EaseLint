@@ -50,14 +50,14 @@ class EaseLintReflectiveLintRunner {
         try {
             val loader = getLintClassLoader(gradle, lintClassPath)
             if (!lockTarget(project, loader)) {
-                "There has no target file need to scan,lint over".log()
+                "There has no target file need to scan,lint task over".log()
+                return
             }
             val cls = loader.loadClass("com.android.tools.lint.gradle.LintGradleExecution")
             val constructor = cls.getConstructor(LintExecutionRequest::class.java)
             val driver = constructor.newInstance(request)
             val analyzeMethod = driver.javaClass.getDeclaredMethod("analyze")
             analyzeMethod.invoke(driver)
-
         } catch (e: InvocationTargetException) {
             if (e.targetException is GradleException) {
                 // Build error from lint -- pass it on

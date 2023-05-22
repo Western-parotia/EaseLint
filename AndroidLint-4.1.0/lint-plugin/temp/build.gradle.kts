@@ -2,6 +2,15 @@ plugins {
     id("com.android.application")
     id("ease.lint")
 }
+easeLintExt {
+
+    targetFiles = fetchFiles()
+
+}
+fun fetchFiles(): HashSet<String> {
+
+    return hashSetOf()
+}
 
 android {
     compileSdk = 31
