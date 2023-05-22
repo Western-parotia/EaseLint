@@ -32,7 +32,7 @@ android {
     )
     lintOptions {
 //        disable("GradleDependency")
-//        checkOnly(*lintIds)
+        checkOnly(*lintIds)
 //        lintConfig = file("lint.xml")
         isAbortOnError = properties["lint.isAbortOnError"] ?: "false" == "true"
         isCheckDependencies = false

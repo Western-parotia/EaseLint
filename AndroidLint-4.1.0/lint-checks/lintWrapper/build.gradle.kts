@@ -14,6 +14,7 @@ android {
 }
 dependencies {
     lintPublish(project(":lintChecker"))
+
 }
 // afterEvaluate 才可以读取 components["release"]
 afterEvaluate {
