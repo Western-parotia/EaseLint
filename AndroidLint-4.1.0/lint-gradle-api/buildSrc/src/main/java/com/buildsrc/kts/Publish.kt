@@ -15,22 +15,11 @@ object Publish {
     //由于阿里云 制品 采取分仓管理snapshot版本，默认也会忽略-SNAPSHOT的策略模式，所以这里从group进行区分，便于管理
     private val GROUP_ID = if (SNAPSHOT) "com.easelint.snapshot" else "com.easelint"
 
-    object Version {
-        //阿里云不支持 -SNAPSHOT,会被忽略
-        val versionName = VERSION
-        const val versionCode = 1
-        const val artifactId = ARTIFACT_ID
-
-        private fun getTimestamp(): String {
-            return java.text.SimpleDateFormat(
-                "yyyy-MM-dd-hh-mm-ss",
-                java.util.Locale.CHINA
-            ).format(java.util.Date())
-        }
-
-        fun getVersionTimestamp(): String {
-            return "$versionName-${getTimestamp()}"
-        }
+    private fun getTimestamp(): String {
+        return java.text.SimpleDateFormat(
+            "yyyy-MM-dd-hh-mm-ss",
+            java.util.Locale.CHINA
+        ).format(java.util.Date())
     }
 
     object Maven {
@@ -52,7 +41,8 @@ object Publish {
         fun setGAV(mp: MavenPublication) {
             mp.groupId = GROUP_ID
             mp.artifactId = ARTIFACT_ID
-            mp.version = VERSION
+            mp.version = VERSION + "-" + getTimestamp()
+            println("publish=> ${mp.groupId}:${mp.artifactId}:${mp.version}")
         }
 
         /**
