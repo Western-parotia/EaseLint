@@ -28,7 +28,7 @@ class EaseLintReflectiveLintRunner {
         val targets = lcg.targetFiles
         val files = targets.filter { t ->
             return whiteList.any { w ->
-                t.contains(w)
+                !t.contains(w)
             }
         }
         if (files.isNotEmpty()) {

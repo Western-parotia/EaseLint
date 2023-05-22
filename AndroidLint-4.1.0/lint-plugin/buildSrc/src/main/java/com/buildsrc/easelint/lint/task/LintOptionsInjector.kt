@@ -1,8 +1,6 @@
 package com.buildsrc.easelint.lint.task
 
 import com.android.build.gradle.internal.dsl.LintOptions
-import com.buildsrc.easelint.lint.extensions.LintConfig
-import com.buildsrc.easelint.lint.extensions.LintConfigExtensionHelper
 import com.buildsrc.easelint.lint.utils.log
 import org.gradle.api.Project
 import java.io.File
@@ -28,11 +26,6 @@ class LintOptionsInjector {
          }
          */
         "========sync Lint options ==========".log(TAG)
-        val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
-        LintConfig.clearAll()
-        LintConfig.addFileWhiteList(lcg.fileWhiteList)
-        LintConfig.addCheckOnly(lcg.checkOnlyConfig)
-        LintConfig.addDisableIssue(lcg.issueDisableList)
 
         lintOptions.apply {
             xmlOutput = File(XML_OUTPUT_RELATIVE_PATH)//指定xml输出目录

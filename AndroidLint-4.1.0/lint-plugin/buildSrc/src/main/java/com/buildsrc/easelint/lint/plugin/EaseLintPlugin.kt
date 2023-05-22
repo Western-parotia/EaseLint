@@ -6,6 +6,7 @@ import com.android.build.gradle.internal.VariantManager
 import com.android.build.gradle.internal.plugins.AppPlugin
 import com.android.build.gradle.internal.plugins.BasePlugin
 import com.android.build.gradle.internal.plugins.LibraryPlugin
+import com.buildsrc.easelint.lint.extensions.LintConfig
 import com.buildsrc.easelint.lint.extensions.LintConfigExtensionHelper
 import com.buildsrc.easelint.lint.helper.LintGradleHelper
 import com.buildsrc.easelint.lint.task.LintTaskHelper
@@ -29,6 +30,12 @@ class EaseLintPlugin : Plugin<Project> {
             val variantManager = reflectionVM(currentPlugin)
             //初始化lint task（hook点）
             LintTaskHelper().apply(target, variantManager)
+
+            val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
+            LintConfig.clearAll()
+            LintConfig.addFileWhiteList(lcg.fileWhiteList)
+            LintConfig.addCheckOnly(lcg.checkOnlyConfig)
+            LintConfig.addDisableIssue(lcg.issueDisableList)
         }
     }
 }
