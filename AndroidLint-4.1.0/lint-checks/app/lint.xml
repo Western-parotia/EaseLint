@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Change the severity of hardcoded strings to "error" -->
+    <issue id="HardcodedText" severity="error" />
+    <issue id="IconDuplicatesConfig" severity="ignore"/>
+    <issue id="IconLauncherShape" severity="ignore"/>
+    <issue id="GradleDynamicVersion" severity="warning" />
+<!--    <issue id="LogDetector" severity="ignore"/>-->
+
+</lint>
