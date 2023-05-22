@@ -1,5 +1,6 @@
 import com.buildsrc.easelint.Dependencies
-import com.buildsrc.kts.*
+import com.buildsrc.easelint.*
+
 plugins {
     id 'java-library'
     id 'kotlin'
@@ -10,15 +11,15 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 dependencies {
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:${Dependencies.Kotlin.kotlin_version}"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:${Dependencies.Kotlin.version}"
     compileOnly "com.android.tools.lint:lint-api:${Dependencies.Lint.lint_version}"
     compileOnly "com.android.tools.lint:lint-checks:${Dependencies.Lint.lint_version}"
 }
-
+// 注册
 jar {
     manifest {
         // Only use the "-v2" key here if your checks have been updated to the
         // new 3.0 APIs (including UAST)
-        attributes("Lint-Registry-v2": "com.mj.lint.lintchecker.Registry")
+        attributes("Lint-Registry-v2": "com.easelint.lintchecker.Registry")
     }
 }

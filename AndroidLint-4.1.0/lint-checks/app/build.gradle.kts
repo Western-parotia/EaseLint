@@ -46,7 +46,7 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation(Dependencies.Kotlin.kotlin_stdlib)
-//    implementation(project(":lintWrapper"))
+    implementation(project(":lintWrapper"))
     implementation("com.google.code.gson:gson:2.9.0")
 
 }

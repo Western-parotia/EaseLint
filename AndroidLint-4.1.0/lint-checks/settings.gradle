@@ -1,4 +1,4 @@
 //include ':sub_module'
-//include ':lintWrapper'
-//include ':lintChecker'
+include ':lintWrapper'
+include ':lintChecker'
 include ':app'
