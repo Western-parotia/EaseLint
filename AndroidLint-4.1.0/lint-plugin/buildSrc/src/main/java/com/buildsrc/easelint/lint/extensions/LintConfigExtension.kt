@@ -4,6 +4,18 @@ import com.buildsrc.easelint.lint.task.LintException
 import org.gradle.api.Project
 import java.io.File
 
+object LintConfigExtensionHelper {
+    const val EXTENSION_LINT_CONFIG = "EaseLintExtensions"
+
+    fun apply(project: Project) {
+        project.extensions.create(EXTENSION_LINT_CONFIG, LintConfigExtension::class.java)
+    }
+
+    fun findLintConfigExtension(project: Project): LintConfigExtension {
+        val target = project.extensions.getByName(EXTENSION_LINT_CONFIG)
+        return target as LintConfigExtension
+    }
+}
 open class LintConfigExtension {
     //需要关闭的 issue 清单，部署到CI时用与快速降级，快速停用个别异常issue
     var issueDisableList: MutableList<String> = mutableListOf()
@@ -37,9 +49,3 @@ open class LintConfigExtension {
 
 }
 
-object LintConfigExtensionHelper {
-    fun findLintConfigExtension(project: Project): LintConfigExtension {
-        val target = project.extensions.getByName(ExtensionHelper.EXTENSION_LINT_CONFIG)
-        return target as LintConfigExtension
-    }
-}

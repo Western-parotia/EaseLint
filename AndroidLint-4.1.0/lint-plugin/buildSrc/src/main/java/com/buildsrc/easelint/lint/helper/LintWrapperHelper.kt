@@ -4,17 +4,25 @@ import com.buildsrc.easelint.lint.utils.log
 import org.gradle.api.Project
 
 object LintWrapperHelper {
-    // 动态更新可采取反射修改 版本号
-    private var VERSION_LINT_WRAPPER = "0.0.1"
+    private var version = "0.0.1"
+    private var group = ""
+    private var artifactId = "lint-wrapper"
 
-    private val DEPENDENCY_LINT_PATH
-        get() = "com.easelint:lint-wrapper:$VERSION_LINT_WRAPPER"
+    fun init(snapshot: Boolean, version: String) {
+        this.version = version
+        group = "com.easelint"
+        if (snapshot) {
+            group += ".snapshot"
+        }
+    }
 
+    private val PATH
+        get() = "$group:$artifactId:$version"
 
     fun apply(project: Project) {
         // 加载自定义的 Lint rules
-        DEPENDENCY_LINT_PATH.log("LintWrapperHelper add LINT_WRAPPER")
-        project.dependencies.add("implementation", DEPENDENCY_LINT_PATH)
+        PATH.log("LintWrapperHelper:implementation ")
+        project.dependencies.add("implementation", PATH)
     }
 
 }

@@ -12,8 +12,7 @@ import org.gradle.api.Project
 
 class LintTaskHelper {
     companion object {
-        const val TASK_NAME_LINT_FULL = "easeLintFull"
-        const val TASK_NAME_LINT_INCREMENT = "easeLintIncrement"
+        const val TASK_NAME = "easeLint"
     }
 
     fun apply(
@@ -37,19 +36,10 @@ class LintTaskHelper {
         TaskFactoryImpl(project.tasks).apply {
             register(
                 EaseLintCreationAction(
-                    project, TASK_NAME_LINT_FULL, variant, variantPropertiesList
-                )
-            )
-            register(
-                EaseLintCreationAction(
-                    project, TASK_NAME_LINT_INCREMENT, variant, variantPropertiesList
+                    project, TASK_NAME, variant, variantPropertiesList
                 )
             )
         }
-
-        //为两个任务 配置不一样等文件抓取流程
-
-
     }
 
     class EaseLintCreationAction(

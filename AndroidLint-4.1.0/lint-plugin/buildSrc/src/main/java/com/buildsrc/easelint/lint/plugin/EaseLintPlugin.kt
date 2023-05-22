@@ -6,20 +6,29 @@ import com.android.build.gradle.internal.VariantManager
 import com.android.build.gradle.internal.plugins.AppPlugin
 import com.android.build.gradle.internal.plugins.BasePlugin
 import com.android.build.gradle.internal.plugins.LibraryPlugin
-import com.buildsrc.easelint.lint.extensions.ExtensionHelper
+import com.buildsrc.easelint.lint.extensions.LintConfigExtensionHelper
+import com.buildsrc.easelint.lint.helper.LintGradleHelper
+import com.buildsrc.easelint.lint.helper.LintWrapperHelper
 import com.buildsrc.easelint.lint.task.LintTaskHelper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 class EaseLintPlugin : Plugin<Project> {
     override fun apply(target: Project) {
-        ExtensionHelper().apply(target)//得放在afterEvaluate之外，否则无法读取到配置
+        // 访问网络，获取lint 配置,lint gradle 版本，lint wrapper，这两个需要在插件任务初始化时完成配置
+        // 最好直接从cdn等文件资源读取数据，这样耗时可以忽略不计
+        LintGradleHelper.init(true, "0.0.11")
+        LintWrapperHelper.init(true, "0.0.1")
+
+        LintConfigExtensionHelper.apply(target)
         val libPlugin = target.plugins.findPlugin(LibraryPlugin::class.java)
         val appPlugin = target.plugins.findPlugin(AppPlugin::class.java)
         if (libPlugin == null && appPlugin == null) return
         val currentPlugin = libPlugin ?: appPlugin!!
         val variantManager = reflectionVM(currentPlugin)
+        //初始化lint task（hook点）
         LintTaskHelper().apply(target, variantManager)
+
     }
 }
 
