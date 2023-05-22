@@ -5,8 +5,8 @@ import org.gradle.api.Project
 
 object LintWrapperHelper {
     private var version = "0.0.1"
-    private var group = ""
-    private var artifactId = "lint-wrapper"
+    private var group = "com.easelint.snapshot"
+    private var artifactId = "lint-checks"
 
     fun init(snapshot: Boolean, version: String) {
         this.version = version

@@ -1,4 +1,4 @@
-package com.zsw.devopshsyq.log;
+package com.practice.temp;
 
 import android.util.Log;
 
