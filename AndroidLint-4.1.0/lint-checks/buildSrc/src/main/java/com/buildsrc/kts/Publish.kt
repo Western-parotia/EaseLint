@@ -5,15 +5,15 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.publish.maven.MavenPublication
 
 object Publish {
-    private const val VERSION = "0.0.1"
+    const val VERSION = "0.0.1"
     const val SNAPSHOT = true
 
-    private const val ARTIFACT_ID = "lint-checks"
+    const val ARTIFACT_ID = "lint-checks"
 
     //由于阿里云 制品 采取分仓管理snapshot版本，默认也会忽略-SNAPSHOT的策略模式，所以这里从group进行区分，便于管理
-    private val GROUP_ID = if (SNAPSHOT) "com.easelint.snapshot" else "com.easelint"
+    val GROUP_ID = if (SNAPSHOT) "com.easelint.snapshot" else "com.easelint"
 
-    private fun getTimestamp(): String {
+    fun getTimestamp(): String {
         return java.text.SimpleDateFormat(
             "yyyy-MM-dd-hh-mm-ss",
             java.util.Locale.CHINA
