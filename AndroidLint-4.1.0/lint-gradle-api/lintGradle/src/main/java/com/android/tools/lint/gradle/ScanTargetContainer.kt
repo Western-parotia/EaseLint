@@ -4,7 +4,7 @@ import java.io.File
 
 object ScanTargetContainer {
 
-    val checkFileList: List<File> = mutableListOf()
+    val checkFileList: ArrayList<File> = arrayListOf()
 
     fun hasTarget(): Boolean {
         "checkFileList.size=${checkFileList.size}".log("ScanTargetContainer")
