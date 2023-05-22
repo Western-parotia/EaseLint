@@ -26,9 +26,15 @@ class EaseLintReflectiveLintRunner {
         val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
         val whiteList = lcg.fileWhiteList
         val targets = lcg.targetFiles
-        val files = targets.filter { t ->
-            return whiteList.any { w ->
-                !t.contains(w)
+        val files = hashSetOf<File>()
+        targets.forEach { t ->
+            if (!whiteList.contains(t)) {
+                val file = File(t)
+                if (file.exists()) {
+                    files.add(file)
+                } else {
+                    "this file[$t] is not exists".log("EaseLintReflectiveLintRunner")
+                }
             }
         }
         if (files.isNotEmpty()) {
