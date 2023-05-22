@@ -138,9 +138,10 @@ class LintGradleClient(
         dir: File,
         referenceDir: File
     ): Project {
-        // Should not be called by lint since we supply an explicit set of projects
-        // to the LintRequest
-        throw IllegalStateException()
+        return Project.create(this, dir, referenceDir)
+//        // Should not be called by lint since we supply an explicit set of projects
+//        // to the LintRequest
+//        throw IllegalStateException()
     }
 
     override fun getSdkHome(): File? = sdkHome ?: super.getSdkHome()
