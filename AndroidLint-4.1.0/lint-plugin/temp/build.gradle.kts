@@ -1,16 +1,30 @@
+import java.util.*
+
 plugins {
     id("com.android.application")
     id("ease.lint")
 }
+fun String.log() {
+    println("temp_kts:$this")
+}
 easeLintExt {
-
-    targetFiles = fetchFiles()
+    val dir = project.projectDir
+    val parent = File(dir, "src/main/java/com/practice/temp")
+    val files = LinkedList<String>()
+    val ignores = LinkedList<String>()
+    parent.listFiles()!!.forEach {
+        if (it.endsWith("LintTestWhiteFile.kt")) {
+            ignores.add(it.absolutePath)
+        } else {
+            files.add(it.absolutePath)
+        }
+    }
+    targetFiles = files
+    fileWhiteList = ignores
 
 }
-fun fetchFiles(): HashSet<String> {
 
-    return hashSetOf()
-}
+
 
 android {
     compileSdk = 31

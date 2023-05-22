@@ -1,6 +1,7 @@
 package com.buildsrc.easelint.lint.extensions
 
 import org.gradle.api.Project
+import java.util.*
 
 
 object LintConfigExtensionHelper {
@@ -19,16 +20,16 @@ object LintConfigExtensionHelper {
 open class LintConfigExtension {
 
     //扫描目标，统一为文件全路径
-    var targetFiles: HashSet<String> = hashSetOf()
+    var targetFiles: LinkedList<String> = LinkedList()
 
     //需要关闭的 issue 清单，部署到CI时用与快速降级，快速停用个别异常issue，优先级最高
-    var issueDisableList: HashSet<String> = hashSetOf()
+    var issueDisableList: LinkedList<String> = LinkedList()
 
     // 用于定向控制所有的 issue ,主要用于上线自己开发的 Issue
-    var checkOnlyConfig: HashSet<String> = hashSetOf()
+    var checkOnlyConfig: LinkedList<String> = LinkedList()
 
     //扫描文件白名单
-    var fileWhiteList: HashSet<String> = hashSetOf()
+    var fileWhiteList: LinkedList<String> = LinkedList()
 
 }
 

@@ -11,11 +11,11 @@ import org.gradle.api.Project
 import org.gradle.api.invocation.Gradle
 import org.gradle.initialization.BuildCompletionListener
 import java.io.File
-import java.lang.reflect.Field
 import java.lang.reflect.InvocationTargetException
 import java.net.URI
 import java.net.URL
 import java.net.URLClassLoader
+import java.util.*
 
 class EaseLintReflectiveLintRunner {
     /**
@@ -26,7 +26,7 @@ class EaseLintReflectiveLintRunner {
         val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
         val whiteList = lcg.fileWhiteList
         val targets = lcg.targetFiles
-        val files = hashSetOf<File>()
+        val files = LinkedList<File>()
         targets.forEach { t ->
             if (!whiteList.contains(t)) {
                 val file = File(t)
@@ -38,10 +38,9 @@ class EaseLintReflectiveLintRunner {
             }
         }
         if (files.isNotEmpty()) {
-            val scanTargetContainer =
-                loader.loadClass(LINT_GRADLE_HOOK_CLASS)::class.objectInstance!!
-            val targetField: Field = scanTargetContainer.getDeclaredField("checkFileList")
-            targetField.set(scanTargetContainer, files)
+            val clz = loader.loadClass(LINT_GRADLE_HOOK_CLASS)
+            val method = clz.getDeclaredMethod("putCheckListFiles", List::class.java)
+            method.invoke(null, files)
             return true
         }
         return false

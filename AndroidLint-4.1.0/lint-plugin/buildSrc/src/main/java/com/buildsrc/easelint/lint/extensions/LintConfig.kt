@@ -2,18 +2,19 @@ package com.buildsrc.easelint.lint.extensions
 
 import com.buildsrc.easelint.lint.task.LintException
 import java.io.File
+import java.util.*
 
-object LintConfig {
+internal object LintConfig {
     //需要关闭的 issue 清单，部署到CI时用与快速降级，快速停用个别异常issue，优先级最高
-    private val issueDisableList_: HashSet<String> = hashSetOf()
-    val issueDisableList: Set<String> = issueDisableList_
+    private val issueDisableList_: LinkedList<String> = LinkedList()
+    val issueDisableList: LinkedList<String> = issueDisableList_
 
     // 用于定向控制所有的 issue ,主要用于上线自己开发的 Issue
-    private val checkOnlyConfig_: HashSet<String> = hashSetOf()
-    val checkOnlyConfig: Set<String> = checkOnlyConfig_
+    private val checkOnlyConfig_: LinkedList<String> = LinkedList()
+    val checkOnlyConfig: LinkedList<String> = checkOnlyConfig_
 
     //扫描文件白名单
-    private val fileWhiteList_: MutableList<String> = mutableListOf()
+    private val fileWhiteList_: LinkedList<String> = LinkedList()
     val fileWhiteList: List<String> = fileWhiteList_
 
     /**
@@ -22,7 +23,7 @@ object LintConfig {
      * 建议  moduleName/src/main/java/com/xx/xx
      * @param filePaths
      */
-    fun addFileWhiteList(filePaths: HashSet<String>) {
+    fun addFileWhiteList(filePaths: LinkedList<String>) {
         filePaths.forEach {
             val itemPath = it.split("/")
             if (itemPath.size < 4) {
@@ -42,15 +43,15 @@ object LintConfig {
         fileWhiteList_.clear()
     }
 
-    fun addDisableIssue(issueIds: HashSet<String>) {
-        issueDisableList_.addAll(issueIds.toHashSet())
+    fun addDisableIssue(issueIds: LinkedList<String>) {
+        issueDisableList_.addAll(issueIds)
     }
 
     fun clearDisable() {
         issueDisableList_.clear()
     }
 
-    fun addCheckOnly(issueIds: HashSet<String>) {
+    fun addCheckOnly(issueIds: LinkedList<String>) {
         checkOnlyConfig_.addAll(issueIds)
     }
 
