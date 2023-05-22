@@ -1,6 +1,7 @@
 package com.buildsrc.easelint.lint.task
 
 import com.android.build.gradle.internal.dsl.LintOptions
+import com.buildsrc.easelint.lint.extensions.LintConfig
 import com.buildsrc.easelint.lint.utils.log
 import org.gradle.api.Project
 import java.io.File
@@ -10,8 +11,8 @@ class LintOptionsInjector {
 
     companion object {
         private val TAG = LintOptionsInjector::class.java.simpleName
-        const val XML_OUTPUT_RELATIVE_PATH = "build/reports/lint-results.xml"
-        const val HTML_OUTPUT_RELATIVE_PATH = "build/reports/lint-results.html"
+        const val XML_OUTPUT_RELATIVE_PATH = "build/easeLintReports/lint-results.xml"
+        const val HTML_OUTPUT_RELATIVE_PATH = "build/easeLintReports/lint-results.html"
         const val BASELINE_RELATIVE_PATH = "lint-baseline.xml"
     }
 
@@ -36,6 +37,10 @@ class LintOptionsInjector {
 //            if (lcg.baseline) {
 //                baselineFile = project.file(BASELINE_RELATIVE_PATH)//创建警告基准
 //            }
+            checkOnly(*LintConfig.checkOnlyConfig.toTypedArray())
+            checkOnly.forEach {
+                "checkOnly:$it".log("LintOptionsInjector")
+            }
         }
     }
 

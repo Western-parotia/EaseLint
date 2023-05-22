@@ -2,6 +2,7 @@
 com.buildsrc.easelint.GlobalConfig.init(project)
 plugins {
     `maven-publish`
+
 }
 buildscript {
 

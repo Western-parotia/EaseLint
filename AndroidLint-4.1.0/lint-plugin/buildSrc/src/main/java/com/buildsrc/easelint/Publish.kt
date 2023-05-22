@@ -11,23 +11,15 @@ object Publish {
     // 基于 27.1.1版本的 lint gradle 进行二开，对应AGP 4.1.0
     // AGP 7.4.2 对应的是 30.4.2
     private const val ARTIFACT_ID = "4.1.0-lint-plugin"
-    private const val GROUP_ID = "com.easelint"
 
-    object Version {
-        val versionName = if (SNAPSHOT) "$VERSION-SNAPSHOT" else VERSION
-        const val versionCode = 1
-        const val artifactId = ARTIFACT_ID
+    //由于阿里云 制品 采取分仓管理snapshot版本，默认也会忽略-SNAPSHOT的策略模式，所以这里从group进行区分，便于管理
+    private val GROUP_ID = if (SNAPSHOT) "com.easelint.snapshot" else "com.easelint"
 
-        private fun getTimestamp(): String {
-            return java.text.SimpleDateFormat(
-                "yyyy-MM-dd-hh-mm-ss",
-                java.util.Locale.CHINA
-            ).format(java.util.Date())
-        }
-
-        fun getVersionTimestamp(): String {
-            return "$versionName-${getTimestamp()}"
-        }
+    private fun getTimestamp(): String {
+        return java.text.SimpleDateFormat(
+            "yyyy-MM-dd-hh-mm-ss",
+            java.util.Locale.CHINA
+        ).format(java.util.Date())
     }
 
     object Maven {
@@ -49,7 +41,8 @@ object Publish {
         fun setGAV(mp: MavenPublication) {
             mp.groupId = GROUP_ID
             mp.artifactId = ARTIFACT_ID
-            mp.version = VERSION
+            mp.version = VERSION + "-" + getTimestamp()
+            println("publish=> ${mp.groupId}:${mp.artifactId}:${mp.version}")
         }
 
         /**

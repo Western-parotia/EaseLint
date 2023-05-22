@@ -2,6 +2,7 @@ import java.util.*
 
 plugins {
     id("com.android.application")
+    id("kotlin-android")
     id("ease.lint")
 }
 fun String.log() {
@@ -31,7 +32,7 @@ android {
 
     defaultConfig {
         applicationId = "com.practice.temp"
-        minSdk = 23
+        minSdk = 21
         targetSdk = 31
         versionCode = 1
         versionName = "1.0"
@@ -42,14 +43,8 @@ android {
     buildTypes {
         getByName("debug") {
             isDebuggable = true
-            isMinifyEnabled = true
+            isMinifyEnabled = false
         }
-        getByName("release") {
-            isDebuggable = false
-            isMinifyEnabled = true
-
-        }
-
     }
 
     compileOptions {
@@ -68,4 +63,5 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+//    compileOnly("com.android.tools.lint:lint-checks:27.1.1")
 }
