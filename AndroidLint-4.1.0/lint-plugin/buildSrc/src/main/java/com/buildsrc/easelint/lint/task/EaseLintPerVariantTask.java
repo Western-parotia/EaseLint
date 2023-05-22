@@ -55,7 +55,7 @@ public abstract class EaseLintPerVariantTask extends LintBaseTask implements Var
 
     @Override
     protected void runLint(LintBaseTaskDescriptor descriptor) {
-        //修改lintOptions
+        //每次run lint 时 同步最新的lintOptions
         new LintOptionsInjector().inject(getProject(), lintOptions);
 
         //使用自己的ReflectiveLintRunner，需要通过反射设置文件的筛选条件

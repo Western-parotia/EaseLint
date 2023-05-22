@@ -1,7 +1,9 @@
 package com.buildsrc.easelint.lint.task
 
 import com.android.build.gradle.internal.dsl.LintOptions
+import com.buildsrc.easelint.lint.extensions.LintConfig
 import com.buildsrc.easelint.lint.extensions.LintConfigExtensionHelper
+import com.buildsrc.easelint.lint.utils.log
 import org.gradle.api.Project
 import java.io.File
 
@@ -9,35 +11,30 @@ import java.io.File
 class LintOptionsInjector {
 
     companion object {
+        private val TAG = LintOptionsInjector::class.java.simpleName
         const val XML_OUTPUT_RELATIVE_PATH = "build/reports/lint-results.xml"
         const val HTML_OUTPUT_RELATIVE_PATH = "build/reports/lint-results.html"
         const val BASELINE_RELATIVE_PATH = "lint-baseline.xml"
-        private var lintConfigRes: LintConfigRes? = null
     }
 
     /**
-     * 判断运行环境，确认是否需要 设置 check only
-     * 需要则拉取check only 配置文件 进行设置
+     * 每次运行 Lint 时都再次更新lint 扫描规则配置
+     * 如果运行在CI上，这里应该动态获取较好
      */
     fun inject(project: Project, lintOptions: LintOptions) {
-        if (System.getProperty("os.name").equals("Linux", true)) {
-            println("========Lint options injector==========")
-            val checkOnlyList = arrayListOf<String>()
-            lintConfigRes?.let { res ->
-                res.checkOnlyList.forEach {
-                    if (it.enable == 1 && it.issueId.isNotEmpty()) checkOnlyList.add(it.issueId)
-                    println("issue:${it.issueId}--enable:${it.enable == 1}")
-                }
-                if (checkOnlyList.isNotEmpty()) {
-                    lintOptions.checkOnly(*checkOnlyList.toTypedArray())
-                }
-            }
-        }
+        /* 判断 os 为 linux 时 处于CI服务器上，动态获取 lintOptions 配置进行覆盖
+      if (System.getProperty("os.name").equals("Linux", true)){
+                    io
+         }
+         */
+        "========sync Lint options ==========".log(TAG)
+        val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
+        LintConfig.clearAll()
+        LintConfig.addFileWhiteList(lcg.fileWhiteList)
+        LintConfig.addCheckOnly(lcg.checkOnlyConfig)
+        LintConfig.addDisableIssue(lcg.issueDisableList)
 
         lintOptions.apply {
-            val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
-            val issueDisableList = lcg.issueDisableList
-            disable(*issueDisableList.toTypedArray())
             xmlOutput = File(XML_OUTPUT_RELATIVE_PATH)//指定xml输出目录
             htmlOutput = File(HTML_OUTPUT_RELATIVE_PATH)//指定html输出目录
             isWarningsAsErrors = false//返回lint是否应将所有警告视为错误
@@ -49,13 +46,4 @@ class LintOptionsInjector {
         }
     }
 
-    data class LintConfigRes(
-        val checkOnlyList: ArrayList<Issue> = arrayListOf(),
-        val testBranch: String = ""
-    ) {
-        data class Issue(
-            val issueId: String = "",
-            val enable: Int = 0//0关闭 1启用
-        )
-    }
 }

@@ -28,7 +28,6 @@ class EaseLintPlugin : Plugin<Project> {
         val variantManager = reflectionVM(currentPlugin)
         //初始化lint task（hook点）
         LintTaskHelper().apply(target, variantManager)
-
     }
 }
 
