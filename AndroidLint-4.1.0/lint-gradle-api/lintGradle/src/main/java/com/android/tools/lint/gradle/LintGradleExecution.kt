@@ -22,6 +22,7 @@ import java.io.File
 import java.io.IOException
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.lang.Exception
 import kotlin.math.max
 
 /**
@@ -37,21 +38,25 @@ class LintGradleExecution(private val descriptor: LintExecutionRequest) {
     // intended to be used via reflection. Everything else should be private:
     @Throws(IOException::class)
     fun analyze() {
-        if (descriptor.android) {
-            val variantName = descriptor.variantName
-            if (variantName != null) {
-                lintSingleVariant(variantName)
-            } else { // All variants
-                val variantNames = descriptor.getVariantNames()
-                if (variantNames.size == 1) { // usually not the case
-                    lintSingleVariant(variantNames.iterator().next())
-                } else {
-                    lintAllVariants(variantNames)
+        try {
+            if (descriptor.android) {
+                val variantName = descriptor.variantName
+                if (variantName != null) {
+                    lintSingleVariant(variantName)
+                } else { // All variants
+                    val variantNames = descriptor.getVariantNames()
+                    if (variantNames.size == 1) { // usually not the case
+                        lintSingleVariant(variantNames.iterator().next())
+                    } else {
+                        lintAllVariants(variantNames)
+                    }
                 }
+            } else {
+                // Not applying the Android Gradle plugin
+                lintNonAndroid()
             }
-        } else {
-            // Not applying the Android Gradle plugin
-            lintNonAndroid()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

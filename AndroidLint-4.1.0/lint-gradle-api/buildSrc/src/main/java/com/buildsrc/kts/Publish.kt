@@ -5,7 +5,7 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.publish.maven.MavenPublication
 
 object Publish {
-    private const val VERSION = "0.0.16"
+    private const val VERSION = "0.0.17"
     const val SNAPSHOT = true
 
     // 基于 27.1.1版本的 lint gradle 进行二开，对应AGP 4.1.0
