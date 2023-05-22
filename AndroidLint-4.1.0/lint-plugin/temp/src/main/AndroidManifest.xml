@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Lintplugin">
         <activity
-            android:name=".MainActivity2"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
