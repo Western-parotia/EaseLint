@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("ease.lint")
 }
 
 android {
@@ -16,6 +17,10 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            isDebuggable = true
+            isMinifyEnabled = true
+        }
         getByName("release") {
             isDebuggable = false
             isMinifyEnabled = true
