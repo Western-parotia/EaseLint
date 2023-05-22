@@ -5,13 +5,15 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.publish.maven.MavenPublication
 
 object Publish {
-    private const val VERSION = "0.0.2"
+    private const val VERSION = "0.0.1"
     const val SNAPSHOT = true
 
     // 基于 27.1.1版本的 lint gradle 进行二开，对应AGP 4.1.0
     // AGP 7.4.2 对应的是 30.4.2
     private const val ARTIFACT_ID = "27.1.1-lint-gradle"
-    private const val GROUP_ID = "com.easelint"
+
+    //由于阿里云 制品 采取分仓管理snapshot版本，默认也会忽略-SNAPSHOT的策略模式，所以这里从group进行区分，便于管理
+    private val GROUP_ID = if (SNAPSHOT) "com.easelint.snapshot" else "com.easelint"
 
     object Version {
         //阿里云不支持 -SNAPSHOT,会被忽略

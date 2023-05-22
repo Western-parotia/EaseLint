@@ -161,9 +161,11 @@ class LintGradleClient(
     override fun getGradleVisitor(): GradleVisitor = GroovyGradleVisitor()
 
     override fun configureLintRequest(lintRequest: LintRequest) {
-        // 这里避免 setProjects,那么在 LintDriver 中
+
+        // 这里setProjects(null),那么在 LintDriver 中
         // 就可以走 request.getProjects() ?: computeProjects(request.files)的逻辑
         // 读取自定义的文件（本来是用于IDE 增量扫描的），会自动根据文件 查找出所在的project
+        lintRequest.setProjects(null)
 //        val search = ProjectSearch()
 //        val project = search.getProject(this, gradleProject, variantName)
 //            ?: run {
@@ -209,7 +211,7 @@ class LintGradleClient(
     fun run(registry: IssueRegistry): Pair<List<Warning>, LintBaseline?> {
         //先判断是否有待检查的文件，如果没有直接结束task
         if (!ScanTargetContainer.hasTarget()) {
-            println("No target file, stop the lint task")
+            "There are no target files to scan".log("LintGradleClient")
             return Pair(emptyList(), null)
         }
 
