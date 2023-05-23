@@ -38,8 +38,6 @@ android {
         isCheckDependencies = false
         textReport = false//输出检测日志
         xmlReport = true
-        htmlOutput = file("lint-result.html")
-        xmlOutput = file("lint-result.xml")
 //        baselineFile = file("base_line.xml")
     }
 }
@@ -47,6 +45,7 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${Dependencies.Kotlin.kotlin_version}")
     implementation(project(":lintWrapper"))
+//    implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-22-10-09-35")
     implementation("com.google.code.gson:gson:2.9.0")
 
 }
