@@ -5,11 +5,9 @@ import android.util.Log;
 /**
  * create by zhusw on 11/1/21 15:54
  */
-public class TestLog2 {
-
+public class JavaLog {
     static void foo() {
         Log.d("", "cccc");
-        System.out.println("this is foo log");
-        System.out.println("this is foo log");
+        Log.e("", "cccc");
     }
 }

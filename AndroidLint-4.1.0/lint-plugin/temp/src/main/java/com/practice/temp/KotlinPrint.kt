@@ -1,8 +1,8 @@
 package com.practice.temp
 
-object LintTest2 {
-    val tast1 = 1
+class KotlinPrint {
     fun log() {
+        //报告中，println 没检测出来
         println("this is foo log")
     }
 }

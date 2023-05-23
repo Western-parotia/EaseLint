@@ -8,17 +8,29 @@ plugins {
 fun String.log() {
     println("temp_kts:$this")
 }
+
+val targets = arrayListOf(
+    "JavaLog.java",
+    "JavaPrint.java",
+    "KotlinLog.kt",
+    "KotlinPrint.kt"
+)
 easeLintExt {
     val dir = project.projectDir
     val parent = File(dir, "src/main/java/com/practice/temp")
     val files = LinkedList<String>()
     val ignores = LinkedList<String>()
-    parent.listFiles()!!.forEach {
-        if (it.endsWith("LintTestWhiteFile.kt")) {
-            ignores.add(it.absolutePath)
-        } else {
-            files.add(it.absolutePath)
+    parent.listFiles()!!.forEach { file ->
+        targets.forEach { name ->
+            if (file.absolutePath.endsWith(name)) {
+                files.add(file.absolutePath)
+            }
         }
+//        if (it.endsWith("LintTestWhiteFile.kt")) {
+//            ignores.add(it.absolutePath)
+//        } else {
+//            files.add(it.absolutePath)
+//        }
     }
     targetFiles = files
     fileWhiteList = ignores
