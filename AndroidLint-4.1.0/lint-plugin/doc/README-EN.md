@@ -1,5 +1,6 @@
 # 介绍[中文](xxx) [英文]()
 
+
 # hook内容
 * 1.替换lint gradle，在 EaseLintCreationAction 的super configure 之前 hook 覆盖原始
 * 2.在 LintTaskHelper apply 时 加载 lint checks

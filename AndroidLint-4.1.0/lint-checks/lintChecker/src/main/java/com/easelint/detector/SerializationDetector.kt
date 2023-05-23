@@ -2,10 +2,11 @@ package com.easelint.detector
 
 import com.android.tools.lint.client.api.*
 import com.android.tools.lint.detector.api.*
+import com.easelint.utils.log
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiType
-import com.easelint.utils.log
-import org.jetbrains.uast.*
+import org.jetbrains.uast.UClass
+import org.jetbrains.uast.UField
 
 private val BASIC_TYPE_LIST = listOf(
     TYPE_STRING,
@@ -34,7 +35,7 @@ private val BASIC_TYPE_LIST = listOf(
  * 1. field 是否实现 Parcelable 或 Serializable
  */
 class SerializationDetector : Detector(), SourceCodeScanner {
-    private val TAG = "ParcelableDetector"
+    private val TAG = "SerializationDetector"
 
     companion object {
         val ISSUE_SERIALIZATION_MEMBERS = Issue.create(
