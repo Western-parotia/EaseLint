@@ -69,8 +69,9 @@ android {
 
 dependencies {
     implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-22-10-09-35")
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${com.buildsrc.easelint.Dependencies.Kotlin.version}")
+    // 引入了 kotlin_stdlib 1.5.31，lint 规则打包是 基于 1.4.31 的，会检测不出来
+//    implementation("androidx.core:core-ktx:1.7.0")
+    implementation(com.buildsrc.easelint.Dependencies.Kotlin.kotlin_stdlib)
     implementation("androidx.appcompat:appcompat:1.3.0")
     implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
