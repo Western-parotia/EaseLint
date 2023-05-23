@@ -1,5 +1,18 @@
 > > com.easelint:27.1.1-lint-gradle:0.0.1
 
+# 扫描不出 Kotlin JDK API 的问题
+
+lint 发布基于 org.jetbrains.kotlin:kotlin-stdlib:1.4.31
+
+如果被检测的项目高于这个版本，有可能无法检测出来（实际依赖版本需要使用 gradle app:dependencies 确认）
+已验证检测不出的版本：1.5.31,1.6.21
+
+* 如何解决？
+
+尽量提高lint-checks 库依赖的kotlin-stdlib版本 。
+
+
+1.8.20
 # 模块
 
 * 1.替换lint gradle，在 EaseLintCreationAction 的super configure 之前 hook 覆盖

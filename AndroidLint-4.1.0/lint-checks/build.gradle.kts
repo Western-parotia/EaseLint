@@ -14,7 +14,7 @@ buildscript {
         classpath(
             group = "org.jetbrains.kotlin",
             name = "kotlin-gradle-plugin",
-            version = "1.4.31"
+            version = com.buildsrc.kts.Dependencies.Kotlin.kotlin_version
         )
 
         // NOTE: Do not place your application dependencies here; they belong
