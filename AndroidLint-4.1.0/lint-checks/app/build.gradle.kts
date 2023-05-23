@@ -1,5 +1,3 @@
-import com.buildsrc.kts.Dependencies
-
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -43,9 +41,9 @@ android {
 }
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${Dependencies.Kotlin.kotlin_version}")
-    implementation(project(":lintWrapper"))
-//    implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-22-10-09-35")
+//    implementation("org.jetbrains.kotlin:kotlin-stdlib:${Dependencies.Kotlin.kotlin_version}")
+//    implementation(project(":lintWrapper"))
+    implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-23-06-37-35")
     implementation("com.google.code.gson:gson:2.9.0")
 
 }

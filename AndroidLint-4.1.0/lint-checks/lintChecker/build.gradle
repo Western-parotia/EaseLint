@@ -1,4 +1,5 @@
-import com.buildsrc.kts.*
+import com.buildsrc.kts.Dependencies
+
 plugins {
     id 'java-library'
     id 'kotlin'
@@ -8,7 +9,7 @@ java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
-
+// checker 项目不可以导入 dependencies,必须全部 compileOnly
 dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:${Dependencies.Kotlin.kotlin_version}"
     compileOnly "com.android.tools.lint:lint-api:${Dependencies.Lint.lint_version}"
