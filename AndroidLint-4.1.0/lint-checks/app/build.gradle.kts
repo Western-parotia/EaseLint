@@ -32,7 +32,7 @@ android {
 //        disable("GradleDependency")
 //        checkOnly(*lintIds)
 //        lintConfig = file("lint.xml")
-        isAbortOnError = properties["lint.isAbortOnError"] ?: "false" == "true"
+        isAbortOnError = false
         isCheckDependencies = false
         textReport = false//输出检测日志
         xmlReport = true
@@ -41,9 +41,9 @@ android {
 }
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
-//    implementation("org.jetbrains.kotlin:kotlin-stdlib:${Dependencies.Kotlin.kotlin_version}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:${com.buildsrc.kts.Dependencies.Kotlin.kotlin_version}")
 //    implementation(project(":lintWrapper"))
-    implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-23-06-37-35")
+    implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-23-07-14-33")
     implementation("com.google.code.gson:gson:2.9.0")
 
 }
