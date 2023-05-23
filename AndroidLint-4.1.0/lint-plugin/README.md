@@ -1,5 +1,3 @@
-> > com.easelint:27.1.1-lint-gradle:0.0.1
-
 # 扫描不出 Kotlin JDK API 的问题
 
 lint 发布基于 org.jetbrains.kotlin:kotlin-stdlib:1.4.31
@@ -11,22 +9,15 @@ lint 发布基于 org.jetbrains.kotlin:kotlin-stdlib:1.4.31
 * 如何解决？
   使用1.4.31 版本
 
-或使用7.0 AGP ? 待验证
+* 使用7.0 AGP 是否可避免， 待验证
 
-# 模块
+# hook内容
 
-* 1.替换lint gradle，在 EaseLintCreationAction 的super configure 之前 hook 覆盖
-* 2.在 LintTaskHelper apply 时 加载 lint wrapper
-* 3.读取checkList,设置给 com.android.tools.lint.gradle.ScanTargetContainer EaseLintReflectiveLintRunner
+* 1.替换lint gradle，在 EaseLintCreationAction 的super configure 之前 hook 覆盖原始
+* 2.在 LintTaskHelper apply 时 加载 lint checks
+* 3.读取 checkList,设置给 com.android.tools.lint.gradle.ScanTargetContainer EaseLintReflectiveLintRunner
 * 4.配置lint 扫描的 扫描文件集合，白名单集合，checkOnly,disableIssue
 
-# 报告输出目录
+# 首次打开项目可能碰到 KTS 编译报错问题
 
-const val XML_OUTPUT_RELATIVE_PATH = "build/reports/lint-results.xml"
-const val HTML_OUTPUT_RELATIVE_PATH = "build/reports/lint-results.html"
-
-# 编译问题
-
-* 如果碰到 引入  `kotlin-dsl` 或者 `maven-publish` 等插件后 无法访问 implementation 或 publishing api，
-
-选择 Invalidate Caches, Sync 一下 即可
+按照 android studio 脚本生命周期进行逐层编译（如果部分插件找不到，注释掉插件引用，先保证kts脚本被加载）

@@ -1,5 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-com.buildsrc.easelint.GlobalConfig.init(project)
+com.buildsrc.easelint.kts.GlobalConfig.init(project)
 plugins {
     `maven-publish`
 
@@ -7,17 +7,17 @@ plugins {
 buildscript {
 
     repositories {
-        com.buildsrc.easelint.Repositories.defRepositories(this)
+        com.buildsrc.easelint.kts.Repositories.defRepositories(this)
     }
     dependencies {
         //buildscript 偶尔编译错误 找不到包名，给全包名即可
-        classpath(com.buildsrc.easelint.Dependencies.Gradle.agp)
-        classpath(com.buildsrc.easelint.Dependencies.Gradle.kgp)
+        classpath(com.buildsrc.easelint.kts.Dependencies.Gradle.agp)
+        classpath(com.buildsrc.easelint.kts.Dependencies.Gradle.kgp)
     }
 }
 allprojects {
     repositories {
-        com.buildsrc.easelint.Repositories.defRepositories(this)
+        com.buildsrc.easelint.kts.Repositories.defRepositories(this)
     }
 }
 
@@ -29,7 +29,7 @@ publishing {
     publications {
         /*在buildSrc gradle 添加的任务在AS右侧 看不到task 列表*/
         create<MavenPublication>("lintPlugin") {
-            com.buildsrc.easelint.Publish.Maven.setGAV(this)
+            com.buildsrc.easelint.kts.Publish.Maven.setGAV(this)
             artifact("buildSrc/build/libs/buildSrc.jar")
             pom.withXml {
                 fun groovy.util.Node.addDependencies(group: String) {
@@ -53,10 +53,10 @@ publishing {
             }
         }
         repositories {
-            if (com.buildsrc.easelint.Publish.SNAPSHOT) {
-                com.buildsrc.easelint.Publish.Maven.aliyunSnapshotRepositories(this)
+            if (com.buildsrc.easelint.kts.Publish.SNAPSHOT) {
+                com.buildsrc.easelint.kts.Publish.Maven.aliyunSnapshotRepositories(this)
             } else {
-                com.buildsrc.easelint.Publish.Maven.aliyunReleaseRepositories(this)
+                com.buildsrc.easelint.kts.Publish.Maven.aliyunReleaseRepositories(this)
             }
         }
     }

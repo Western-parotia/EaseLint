@@ -1,4 +1,4 @@
-package com.buildsrc.easelint
+package com.buildsrc.easelint.kts
 
 object Dependencies {
 

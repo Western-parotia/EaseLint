@@ -80,7 +80,7 @@ dependencies {
     implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-23-06-37-35")
     // core-ktx:1.7.0引入了 kotlin_stdlib 1.5.31，lint 规则打包是 基于 1.4.31 的，会检测不出来
 //    implementation("androidx.core:core-ktx:1.7.0")
-    implementation(com.buildsrc.easelint.Dependencies.Kotlin.kotlin_stdlib)
+    implementation(com.buildsrc.easelint.kts.Dependencies.Kotlin.kotlin_stdlib)
     //测试1.8.0
 //    implementation(com.buildsrc.easelint.Dependencies.Kotlin.kotlin_stdlib)
     implementation("androidx.appcompat:appcompat:1.3.0")

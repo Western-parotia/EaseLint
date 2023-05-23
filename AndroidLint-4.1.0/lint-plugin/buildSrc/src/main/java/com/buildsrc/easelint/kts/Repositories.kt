@@ -1,4 +1,4 @@
-package com.buildsrc.easelint
+package com.buildsrc.easelint.kts
 
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.kotlin.dsl.maven
