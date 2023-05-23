@@ -3,7 +3,7 @@ package com.buildsrc.easelint
 object Dependencies {
 
     object Kotlin {
-        const val version = "1.6.21"
+        const val version = "1.4.31"
         const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
     }
 

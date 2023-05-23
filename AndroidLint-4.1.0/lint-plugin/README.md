@@ -4,15 +4,15 @@
 
 lint 发布基于 org.jetbrains.kotlin:kotlin-stdlib:1.4.31
 
-如果被检测的项目高于这个版本，有可能无法检测出来（实际依赖版本需要使用 gradle app:dependencies 确认）
-已验证检测不出的版本：1.5.31,1.6.21
+经测试 只有 基于 1.4.31 打包的lint规则 可以检测 1.4.31的 项目
+
+其他版本就算lint 打包依赖的版本高与项目版本也不行。相同也不行，1.5.31,1.6.21 都测试不行。
 
 * 如何解决？
+  使用1.4.31 版本
 
-尽量提高lint-checks 库依赖的kotlin-stdlib版本 。
+或使用7.0 AGP ? 待验证
 
-
-1.8.20
 # 模块
 
 * 1.替换lint gradle，在 EaseLintCreationAction 的super configure 之前 hook 覆盖

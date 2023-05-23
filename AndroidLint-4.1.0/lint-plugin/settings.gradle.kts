@@ -1,1 +1,2 @@
 include(":temp")
+include(":singleTest")
