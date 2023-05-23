@@ -162,38 +162,10 @@ class LintGradleClient(
     override fun getGradleVisitor(): GradleVisitor = GroovyGradleVisitor()
 
     override fun configureLintRequest(lintRequest: LintRequest) {
-
         // 这里setProjects(null),那么在 LintDriver 中
         // 就可以走 request.getProjects() ?: computeProjects(request.files)的逻辑
         // 读取自定义的文件（本来是用于IDE 增量扫描的），会自动根据文件 查找出所在的project
         lintRequest.setProjects(null)
-//        val search = ProjectSearch()
-//        val project = search.getProject(this, gradleProject, variantName)
-//            ?: run {
-//                lintRequest.setProjects(emptyList())
-//                return
-//            }
-// 这里放弃动态模块检测
-//        val buildModel = project.buildModule
-//        if (buildModel != null && !buildModel.dynamicFeatures.isEmpty()) {
-//            for (feature in buildModel.dynamicFeatures) {
-//                val rootProject = gradleProject.rootProject
-//                val featureProject = rootProject.findProject(feature)
-//                if (featureProject != null) {
-//                    search.getProject(this, featureProject, variantName)?.let {
-//                        project.mergeFolders(it)
-//                    }
-//                }
-//            }
-//        }
-
-//        lintRequest.setProjects(listOf(project))
-//        registerProject(project.dir, project)
-//        for (dependency in project.allLibraries) {
-//            registerProject(dependency.dir, dependency)
-//        }
-        //增量扫描
-//        IncrementUtils.inject(gradleProject, lintRequest)
     }
 
     override fun createDriver(
