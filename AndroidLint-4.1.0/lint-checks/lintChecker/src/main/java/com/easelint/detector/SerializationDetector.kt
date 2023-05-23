@@ -51,7 +51,7 @@ class SerializationDetector : Detector(), SourceCodeScanner {
             )
         )
         val ISSUE_KOTLIN_CLASS = Issue.create(
-            SerializationDetector::class.java.simpleName,
+            "ParcelableDetector",
             briefDescription = "实现 Parcelable 的 kotlin 类，需添加注解{kotlinx.parcelize.Parcelize}",
             explanation = "explanation",
             category = Category.create("风险代码检测", 110),

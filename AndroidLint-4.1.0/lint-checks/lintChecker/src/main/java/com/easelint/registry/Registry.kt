@@ -22,6 +22,5 @@ class Registry : IssueRegistry() {
             ParseDetector.ISSUE_PARSE_STRING,
             SuppressWarningsDetector.ISSUE_SUPPRESS_ANNOTATION
         )
-    override val api: Int
-        get() = CURRENT_API
+    override val api: Int = CURRENT_API
 }

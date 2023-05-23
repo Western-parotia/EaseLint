@@ -21,8 +21,8 @@ class EaseLintPlugin : Plugin<Project> {
         target.afterEvaluate {
             // 访问网络，获取lint 配置,lint gradle 版本，lint wrapper，这两个需要在插件任务初始化时完成配置
             // 最好直接从cdn等文件资源读取数据，这样耗时可以忽略不计
-            LintGradleHelper.init(true, "0.0.18-2023-05-22-06-19-06")
-            LintWrapperHelper.init(true, "0.0.1-2023-05-22-10-09-35")
+            LintGradleHelper.init(false, "0.0.4-2023-05-23-10-18-58")
+            LintWrapperHelper.init(true, "0.0.1-2023-05-23-10-35-42")
             val libPlugin = target.plugins.findPlugin(LibraryPlugin::class.java)
             val appPlugin = target.plugins.findPlugin(AppPlugin::class.java)
             if (libPlugin == null && appPlugin == null) return@afterEvaluate

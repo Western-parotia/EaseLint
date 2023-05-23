@@ -1,39 +1,34 @@
+import java.util.*
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
-//    id("ease.lint")
+    id("ease.lint")
 }
 fun String.log() {
     println("temp_kts:$this")
 }
 
 val targets = arrayListOf(
-//    "JavaLog.java",
-//    "JavaPrint.java",
-//    "KotlinLog.kt",
     "KotlinPrint.kt"
 )
-//easeLintExt {
-//    val dir = project.projectDir
-//    val parent = File(dir, "src/main/java/com/practice/temp")
-//    val files = LinkedList<String>()
-//    val ignores = LinkedList<String>()
-//    parent.listFiles()!!.forEach { file ->
-//        targets.forEach { name ->
-//            if (file.absolutePath.endsWith(name)) {
-//                files.add(file.absolutePath)
-//            }
-//        }
-////        if (it.endsWith("LintTestWhiteFile.kt")) {
-////            ignores.add(it.absolutePath)
-////        } else {
-////            files.add(it.absolutePath)
-////        }
-//    }
-//    targetFiles = files
-//    fileWhiteList = ignores
-//
-//}
+easeLintExt {
+    val dir = project.projectDir
+    val parent = File(dir, "src/main/java/com/practice/temp")
+    val files = LinkedList<String>()
+    val ignores = LinkedList<String>()
+    parent.listFiles()!!.forEach { file ->
+        targets.forEach { name ->
+            if (file.absolutePath.endsWith(name)) {
+                files.add(file.absolutePath)
+            }
+        }
+
+    }
+    targetFiles = files
+    fileWhiteList = ignores
+
+}
 
 
 android {
@@ -62,9 +57,9 @@ android {
             multiDexEnabled = true
         }
     }
-//    kotlinOptions {
-//        jvmTarget = ("1.8")
-//    }
+    kotlinOptions {
+        jvmTarget = ("1.8")
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -76,7 +71,7 @@ android {
 }
 
 dependencies {
-    implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-23-07-23-55")
+//    implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-23-10-35-42")
     // core-ktx:1.7.0引入了 kotlin_stdlib 1.5.31，lint 规则打包是 基于 1.4.31 的，会检测不出来
 //    implementation("androidx.core:core-ktx:1.7.0")
     implementation(com.buildsrc.easelint.kts.Dependencies.Kotlin.kotlin_stdlib)

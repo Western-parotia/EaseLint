@@ -1,4 +1,4 @@
-import java.util.LinkedList
+import java.util.*
 
 plugins {
     id("com.android.application")
@@ -13,15 +13,19 @@ val targets = arrayListOf(
 //    "JavaLog.java",
 //    "JavaPrint.java",
 //    "KotlinLog.kt",
-    "KotlinPrint.kt"
+//    "KotlinPrint.kt",
+    "LintParcelableKt.kt",
+    "LintSerializableKt.kt"
+
 )
 val checkOnlyIssues = LinkedList<String>().apply {
-    add("SerializationDetector")
+//    add("SerializationDetector")
+//    add("ParcelableDetector")
     add("LogDetector")
-    add("ViewIdDetector")
-    add("RelativeLayoutDetector")
-    add("ParseStringDetector")
-    add("ParseColorDetector")
+//    add("ViewIdDetector")
+//    add("RelativeLayoutDetector")
+//    add("ParseStringDetector")
+//    add("ParseColorDetector")
 }
 easeLintExt {
     val dir = project.projectDir
@@ -29,13 +33,14 @@ easeLintExt {
     val files = LinkedList<String>()
     val ignores = LinkedList<String>()
     parent.listFiles()!!.forEach { file ->
+        files.add(file.absolutePath)
         targets.forEach { name ->
             if (file.absolutePath.endsWith(name)) {
-                files.add(file.absolutePath)
+
             }
         }
-
     }
+
     targetFiles = files
     fileWhiteList = ignores
     checkOnlyConfig = checkOnlyIssues
@@ -83,8 +88,8 @@ android {
 }
 
 dependencies {
-//    implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-22-10-09-35")
-//    implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-23-06-37-35")
+// 单独测试，需要先取消引入 ease.lint 插件
+//    implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-23-09-46-58")
     // core-ktx:1.7.0引入了 kotlin_stdlib 1.5.31，lint 规则打包是 基于 1.4.31 的，会检测不出来
 //    implementation("androidx.core:core-ktx:1.7.0")
     implementation(com.buildsrc.easelint.kts.Dependencies.Kotlin.kotlin_stdlib)
