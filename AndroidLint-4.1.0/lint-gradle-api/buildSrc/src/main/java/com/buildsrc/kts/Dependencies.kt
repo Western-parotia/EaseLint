@@ -8,8 +8,8 @@ object Dependencies {
     }
 
     object Lint {
-        // agp 4.1.0 对应的 lint-gradle 是 27.1.1
-        const val version = "27.1.1"
+        // agp 4.1.0 对应的 lint-gradle 是 27.1.0
+        const val version = "27.1.0"
         const val lint_gradle = "com.android.tools.lint:lint-gradle:${Lint.version}"
 
     }

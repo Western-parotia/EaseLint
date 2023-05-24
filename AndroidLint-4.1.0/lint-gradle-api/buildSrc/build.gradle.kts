@@ -21,6 +21,4 @@ java {
 
 dependencies {
     implementation("com.android.tools.build:gradle:4.1.0")
-    /*内部依赖了kotlin的核心版本*/
-    implementation("com.android.tools.lint:lint-gradle-api:27.1.1")
 }
