@@ -138,10 +138,13 @@ class LintGradleClient(
         dir: File,
         referenceDir: File
     ): Project {
-        return Project.create(this, dir, referenceDir)
 //        // Should not be called by lint since we supply an explicit set of projects
 //        // to the LintRequest
-//        throw IllegalStateException()
+        throw IllegalStateException(
+            "Should not be called by lint since we " +
+                    "supply an explicit set of projects" +
+                    "to the LintRequest"
+        )
     }
 
     override fun getSdkHome(): File? = sdkHome ?: super.getSdkHome()
@@ -213,11 +216,16 @@ class LintGradleClient(
     fun run(registry: IssueRegistry): Pair<List<Warning>, LintBaseline?> {
         //先判断是否有待检查的文件，如果没有直接结束task
         if (!ScanTargetContainer.hasTarget()) {
-            "There are no target files to scan".log("LintGradleClient")
-            return Pair(emptyList(), null)
+            //如果没有文件需要被扫描，那么不应该启动lint扫描
+            //单单是从0启动lint 任务也需要先编译项目，这会浪费时间
+            throw GradleException(
+                "There are no target files to scan" +
+                        ":ScanTargetContainer.hasTarget()=false"
+            )
         }
-
-//        val exitCode = run(registry, ScanTargetContainer.checkFileList)
+// 这样设置在 4.1.0的AGP 环境下 运行easelint时  kotlin文件不会被检测
+// 看 有关google issue 的 帖子提到在7.0 这一问题似乎修复了
+// val exitCode = run(registry, ScanTargetContainer.checkFileList)
         val exitCode = run(registry, emptyList())
         if (exitCode == ERRNO_CREATED_BASELINE) {
             if (continueAfterBaseLineCreated()) {
