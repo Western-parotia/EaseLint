@@ -1,6 +1,9 @@
 # EaseLint
 
-项目包含三模块来完成，分别是 [lintPlugin](),[Lint-gradle](),[Lint-checks]()
+项目包含三模块来完成，分别是
+[lintPlugin](AndroidLint-4.1.0/lint-plugin),
+[Lint-gradle](AndroidLint-4.1.0/lint-gradle-api)
+,[Lint-checks](AndroidLint-4.1.0/lint-checks)
 
 # 版本兼容
 
