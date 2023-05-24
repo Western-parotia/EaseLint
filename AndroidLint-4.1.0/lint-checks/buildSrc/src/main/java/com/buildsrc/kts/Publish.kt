@@ -8,7 +8,7 @@ object Publish {
     const val VERSION = "0.0.1"
     const val SNAPSHOT = true
 
-    const val ARTIFACT_ID = "lint-checks"
+    const val ARTIFACT_ID = "${Dependencies.Lint.lint_version}-lint-checks"
 
     //由于阿里云 制品 采取分仓管理snapshot版本，默认也会忽略-SNAPSHOT的策略模式，所以这里从group进行区分，便于管理
     val GROUP_ID = if (SNAPSHOT) "com.easelint.snapshot" else "com.easelint"

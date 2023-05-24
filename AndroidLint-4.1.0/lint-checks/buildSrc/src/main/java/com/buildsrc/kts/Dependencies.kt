@@ -7,6 +7,6 @@ object Dependencies {
 
     object Lint {
         //gradle version+23
-        const val lint_version = "27.1.1"
+        const val lint_version = "27.1.0"
     }
 }
