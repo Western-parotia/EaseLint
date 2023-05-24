@@ -7,7 +7,7 @@ import org.gradle.api.Project
 object LintGradleHelper {
     private var version = "0.0.1"
     private var group = ""
-    private var artifactId = "27.1.1-lint-gradle"
+    private var artifactId = "27.1.0-lint-gradle"
 
     fun init(snapshot: Boolean, version: String) {
         this.version = version

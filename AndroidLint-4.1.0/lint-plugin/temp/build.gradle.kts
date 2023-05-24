@@ -11,11 +11,11 @@ fun String.log() {
 
 val targets = arrayListOf(
 //    "JavaLog.java",
-//    "JavaPrint.java",
+    "JavaPrint.java",
 //    "KotlinLog.kt",
-//    "KotlinPrint.kt",
-    "LintParcelableKt.kt",
-    "LintSerializableKt.kt"
+    "KotlinPrint.kt"
+//    "LintParcelableKt.kt",
+//    "LintSerializableKt.kt"
 
 )
 val checkOnlyIssues = LinkedList<String>().apply {
@@ -33,17 +33,16 @@ easeLintExt {
     val files = LinkedList<String>()
     val ignores = LinkedList<String>()
     parent.listFiles()!!.forEach { file ->
-        files.add(file.absolutePath)
-        targets.forEach { name ->
-            if (file.absolutePath.endsWith(name)) {
-
+        targets.forEach {
+            if (file.absolutePath.endsWith(it)) {
+                files.add(file.absolutePath)
             }
         }
     }
 
     targetFiles = files
     fileWhiteList = ignores
-    checkOnlyConfig = checkOnlyIssues
+//    checkOnlyConfig = checkOnlyIssues
 //    issueDisableList =
 }
 
@@ -74,9 +73,7 @@ android {
             multiDexEnabled = true
         }
     }
-//    kotlinOptions {
-//        jvmTarget = ("1.8")
-//    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -89,12 +86,11 @@ android {
 
 dependencies {
 // 单独测试，需要先取消引入 ease.lint 插件
-//    implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-23-09-46-58")
+//    implementation("com.easelint.snapshot:27.1.0-lint-checks:0.0.1-2023-05-24-10-18-01")
     // core-ktx:1.7.0引入了 kotlin_stdlib 1.5.31，lint 规则打包是 基于 1.4.31 的，会检测不出来
 //    implementation("androidx.core:core-ktx:1.7.0")
     implementation(com.buildsrc.easelint.kts.Dependencies.Kotlin.kotlin_stdlib)
-    //测试1.8.0
-//    implementation(com.buildsrc.easelint.Dependencies.Kotlin.kotlin_stdlib)
+
     implementation("androidx.appcompat:appcompat:1.3.0")
     implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")

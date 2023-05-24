@@ -44,7 +44,7 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${com.buildsrc.kts.Dependencies.Kotlin.kotlin_version}")
 //    implementation(project(":lintWrapper"))
-    implementation("com.easelint.snapshot:27.1.0-lint-checks:0.0.1-2023-05-24-10-12-14")
+    implementation("com.easelint.snapshot:27.1.0-lint-checks:0.0.1-2023-05-24-10-18-01")
     implementation("com.google.code.gson:gson:2.9.0")
 
 }

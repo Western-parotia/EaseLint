@@ -10,10 +10,7 @@ plugins {
 }
 
 repositories {
-    maven {
-        // org.jetbrains.kotlin.jvm
-        url = uri("https://plugins.gradle.org/m2/")
-    }
+
     maven {
         setUrl("https://maven.aliyun.com/nexus/content/groups/public/")
     }
@@ -29,7 +26,10 @@ repositories {
     maven {
         setUrl("https://jitpack.io")
     }
-
+    maven {
+        // org.jetbrains.kotlin.jvm
+        url = uri("https://plugins.gradle.org/m2/")
+    }
 //    mavenCentral()
 //    google()
 }
