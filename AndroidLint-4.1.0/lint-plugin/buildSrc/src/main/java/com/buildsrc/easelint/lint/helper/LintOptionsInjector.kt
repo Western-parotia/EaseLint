@@ -1,7 +1,6 @@
-package com.buildsrc.easelint.lint.task
+package com.buildsrc.easelint.lint.helper
 
 import com.android.build.gradle.internal.dsl.LintOptions
-import com.buildsrc.easelint.lint.extensions.LintConfig
 import com.buildsrc.easelint.lint.utils.log
 import org.gradle.api.Project
 import java.io.File
@@ -18,16 +17,10 @@ class LintOptionsInjector {
 
     /**
      * 每次运行 Lint 时都再次更新lint 扫描规则配置
-     * 如果运行在CI上，这里应该动态获取较好
+     * 如果运行在CI上，这里应该动态从网络获取较好
+     * project: Project 作为运行时核心上下文对象，这里作为保留参数传入
      */
     fun inject(project: Project, lintOptions: LintOptions) {
-        /* 判断 os 为 linux 时 处于CI服务器上，动态获取 lintOptions 配置进行覆盖
-      if (System.getProperty("os.name").equals("Linux", true)){
-                    io
-         }
-         */
-        "========sync Lint options ==========".log(TAG)
-
         lintOptions.apply {
             xmlOutput = File(XML_OUTPUT_RELATIVE_PATH)//指定xml输出目录
             htmlOutput = File(HTML_OUTPUT_RELATIVE_PATH)//指定html输出目录
@@ -37,7 +30,7 @@ class LintOptionsInjector {
 //            if (lcg.baseline) {
 //                baselineFile = project.file(BASELINE_RELATIVE_PATH)//创建警告基准
 //            }
-            checkOnly(*LintConfig.checkOnlyConfig.toTypedArray())
+            checkOnly(*LintSlot.checkOnlyConfig.toTypedArray())
             checkOnly.forEach {
                 "checkOnly:$it".log("LintOptionsInjector")
             }

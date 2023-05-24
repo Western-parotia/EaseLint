@@ -1,21 +1,31 @@
-package com.buildsrc.easelint.lint.extensions
+package com.buildsrc.easelint.lint.helper
 
 import com.buildsrc.easelint.lint.task.LintException
+import com.buildsrc.easelint.lint.utils.log
 import java.io.File
 import java.util.*
 
-internal object LintConfig {
-    //需要关闭的 issue 清单，部署到CI时用与快速降级，快速停用个别异常issue，优先级最高
+/**
+ * 与扫描相关的所有参数都应该通过这个 LintSlot 进行修改。
+ *
+ */
+object LintSlot {
+
+    //扫描目标，统一为文件全路径
+    private val targetFiles_: LinkedList<String> = LinkedList()
+    val targetFiles = targetFiles_
+
+    //需要关闭的 issue 清单，部署到CI时用于快速降级，快速停用个别异常issue，优先级最高
     private val issueDisableList_: LinkedList<String> = LinkedList()
-    val issueDisableList: LinkedList<String> = issueDisableList_
+    val issueDisableList = issueDisableList_
 
     // 用于定向控制所有的 issue ,主要用于上线自己开发的 Issue
     private val checkOnlyConfig_: LinkedList<String> = LinkedList()
-    val checkOnlyConfig: LinkedList<String> = checkOnlyConfig_
+    val checkOnlyConfig = checkOnlyConfig_
 
     //扫描文件白名单
     private val fileWhiteList_: LinkedList<String> = LinkedList()
-    val fileWhiteList: List<String> = fileWhiteList_
+    val fileWhiteList = fileWhiteList_
 
     /**
      * 白名单支持文件夹级别，所以为了避免多module 扫描的白名单存在冲突，限制白名单文件路径最少提供4级目录
@@ -37,6 +47,14 @@ internal object LintConfig {
                 fileWhiteList_.add(it.replace("/", File.separator))
             }
         }
+    }
+
+    fun clearTargetFiles() {
+        targetFiles_.clear()
+    }
+
+    fun addTargetFile(file: LinkedList<String>) {
+        targetFiles_.addAll(file)
     }
 
     fun clearWhiteList() {
@@ -63,5 +81,21 @@ internal object LintConfig {
         clearWhiteList()
         clearDisable()
         clearCheckOnly()
+        clearTargetFiles()
+    }
+
+    fun finalTargets(): List<File> {
+        val files = LinkedList<File>()
+        targetFiles.forEach { t ->
+            if (!fileWhiteList.contains(t)) {
+                val file = File(t)
+                if (file.exists()) {
+                    files.add(file)
+                } else {
+                    "this file[$t] is not exists".log("EaseLintReflectiveLintRunner")
+                }
+            }
+        }
+        return files
     }
 }

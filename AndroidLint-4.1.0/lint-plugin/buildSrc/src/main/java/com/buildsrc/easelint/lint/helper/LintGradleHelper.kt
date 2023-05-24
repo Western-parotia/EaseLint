@@ -22,7 +22,7 @@ object LintGradleHelper {
 
     /**
      * 提前引入 lint gradle，替代系统默认的包
-     * 内部将置换 Lint gradle 扫描文件对功能，支持自定义设置文件清单
+     * 内部将置换 Lint gradle 扫描文件的功能，支持自定义设置文件清单
      */
     fun injectLintPatch(project: Project) {
         PATH.log("LintGradleHelper:implementation ")

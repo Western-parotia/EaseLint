@@ -17,6 +17,9 @@ object LintConfigExtensionHelper {
     }
 }
 
+/**
+ * 在module的build.gradle中配置 easeLint 参数
+ */
 open class LintConfigExtension {
 
     //扫描目标，统一为文件全路径
@@ -28,7 +31,7 @@ open class LintConfigExtension {
     // 用于定向控制所有的 issue ,主要用于上线自己开发的 Issue
     var checkOnlyConfig: LinkedList<String> = LinkedList()
 
-    //扫描文件白名单
+    //扫描文件白名单,有些文件始终都不需要被扫描
     var fileWhiteList: LinkedList<String> = LinkedList()
 
 }

@@ -8,6 +8,7 @@ import com.android.build.gradle.internal.tasks.VariantAwareTask;
 import com.android.build.gradle.options.BooleanOption;
 import com.android.build.gradle.tasks.LintBaseTask;
 import com.android.utils.StringHelper;
+import com.buildsrc.easelint.lint.helper.LintOptionsInjector;
 
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;

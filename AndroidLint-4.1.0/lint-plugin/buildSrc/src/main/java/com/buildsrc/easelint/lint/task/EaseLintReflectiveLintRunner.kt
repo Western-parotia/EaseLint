@@ -3,8 +3,7 @@ package com.buildsrc.easelint.lint.task
 import com.android.tools.lint.gradle.api.DelegatingClassLoader
 import com.android.tools.lint.gradle.api.ExtractAnnotationRequest
 import com.android.tools.lint.gradle.api.LintExecutionRequest
-import com.buildsrc.easelint.lint.extensions.LintConfigExtensionHelper
-import com.buildsrc.easelint.lint.utils.log
+import com.buildsrc.easelint.lint.helper.LintSlot
 import com.google.common.base.Throwables
 import org.gradle.api.GradleException
 import org.gradle.api.Project
@@ -18,25 +17,9 @@ import java.net.URLClassLoader
 import java.util.*
 
 class EaseLintReflectiveLintRunner {
-    /**
-     * 1.过滤白名单
-     * 2.反射为Lint设置扫描目标
-     */
-    private fun lockTarget(project: Project, loader: ClassLoader): Boolean {
-        val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
-        val whiteList = lcg.fileWhiteList
-        val targets = lcg.targetFiles
-        val files = LinkedList<File>()
-        targets.forEach { t ->
-            if (!whiteList.contains(t)) {
-                val file = File(t)
-                if (file.exists()) {
-                    files.add(file)
-                } else {
-                    "this file[$t] is not exists".log("EaseLintReflectiveLintRunner")
-                }
-            }
-        }
+
+    private fun lockTheTarget(loader: ClassLoader): Boolean {
+        val files = LintSlot.finalTargets()
         if (files.isNotEmpty()) {
             val clz = loader.loadClass(LINT_GRADLE_HOOK_CLASS)
             val method = clz.getDeclaredMethod("putCheckListFiles", List::class.java)
@@ -54,8 +37,8 @@ class EaseLintReflectiveLintRunner {
     ) {
         try {
             val loader = getLintClassLoader(gradle, lintClassPath)
-            if (!lockTarget(project, loader)) {
-               throw GradleException("Before running easelint, you may need to check if the target is empty first.")
+            if (!lockTheTarget(loader)) {
+                throw GradleException("Before running easelint, you may need to check if the target is empty first.")
             }
             val cls = loader.loadClass("com.android.tools.lint.gradle.LintGradleExecution")
             val constructor = cls.getConstructor(LintExecutionRequest::class.java)

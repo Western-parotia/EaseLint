@@ -1,12 +1,11 @@
-package com.buildsrc.easelint.lint.task
+package com.buildsrc.easelint.lint.helper
 
 import com.android.build.api.variant.impl.VariantImpl
 import com.android.build.api.variant.impl.VariantPropertiesImpl
 import com.android.build.gradle.internal.VariantManager
 import com.android.build.gradle.internal.tasks.factory.TaskFactoryImpl
 import com.android.build.gradle.internal.variant.ComponentInfo
-import com.buildsrc.easelint.lint.helper.LintGradleHelper
-import com.buildsrc.easelint.lint.helper.LintWrapperHelper
+import com.buildsrc.easelint.lint.task.EaseLintPerVariantTask
 import com.google.common.collect.ImmutableList
 import org.gradle.api.GradleException
 import org.gradle.api.Project
