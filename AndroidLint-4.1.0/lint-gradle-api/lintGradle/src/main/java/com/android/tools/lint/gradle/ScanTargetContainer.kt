@@ -14,7 +14,6 @@ object ScanTargetContainer {
      */
     @JvmStatic
     fun putCheckListFiles(files: List<File>) {
-        checkFileList.clear()
         checkFileList.addAll(files)
     }
 
