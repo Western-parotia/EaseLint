@@ -1,49 +1,108 @@
 # EaseLint
 
-# 介绍[中文](xxx) [英文]()
-
-# 功能
-
-* 自由指定扫描文件目标，哪些文件需要被扫描，完全由开发者决定，具体到单个文件，而不是一个范围。
-* 预留代码插槽拓展支持 Lint 规则动态下发，降级
-* 预留代码插槽拓展支持动态设置 Lint Options
+# [中文介绍](README.md) [英文介绍](xxx)
 
 # 版本兼容
 
 * AGP 4.x ✅
 * AGP 7.x 准备中...
 
-# 它是如何工作的
+项目包含三模块来完成，分别是 [lintPlugin](),[Lint-gradle](),[Lint-checks]()
 
-* 1.修改了LintGradle，
+# EaseLint 特性
 
+* 精准指定扫描目标，比如某一次 git 新增或修改的代码
+* 动态控制 lintOptions,在lint task 运行前都可以通过修改 LintSlot 的属性进行修改。
 
-* 1.修改 Lint-gradle 库，借助预留给 IDE 使用的扫描目标设置逻辑，装载自定义的扫描目标
+目前已经支持的属性：
+
+```java
+object LintSlot{
+        //扫描目标，统一为文件全路径
+        var targetFiles:LinkedList<String> =LinkedList()
+
+        //需要关闭的 issue 清单，部署到CI时用与快速降级，快速停用个别异常issue，优先级最高
+        var disableIssues:LinkedList<String> =LinkedList()
+
+        // 用于定向控制所有的 issue ,主要用于上线自己开发的 Issue
+        var checkOnlyIssues:LinkedList<String> =LinkedList()
+
+        //扫描文件白名单,有些文件始终都不需要被扫描
+        var fileWhiteList:LinkedList<String> =LinkedList()
+
+        }
+```
+
+# 如何使用
+
+* 1.动态发布 lint-checks
 
 ```kotlin
-// LintGradleClient 文件中 hook 点1 
+LintWrapperHelper.init(true, "0.0.1-2023-05-24-10-18-01")
+```
 
-fun run(registry: IssueRegistry): Pair<List<Warning>, LintBaseline?> {
-    //先判断是否有待检查的文件，如果没有直接结束task
-    if (!ScanTargetContainer.hasTarget()) {
-        "There are no target files to scan".log("LintGradleClient")
-        return Pair(emptyList(), null)
-    }
-    val exitCode = run(registry, ScanTargetContainer.checkFileList)
+* 2.使用 EaseLintExtension 完成单项目 easelint 配置
+
+```kotlin
+plugins {
+  id("com.android.library")
+  id("kotlin-android")
+  id("ease.lint")
 }
 
-// LintGradleClient 文件中 hook 点2
-
-override fun configureLintRequest(lintRequest: LintRequest) {
-    // 这里setProjects(null),那么在 LintDriver 中
-    // 就可以走 request.getProjects() ?: computeProjects(request.files)的逻辑
-    lintRequest.setProjects(null)
+val targets = arrayListOf(
+  "SubModuleKotlinPrint.kt",
+  "JavaParse.java",
+  "KotlinParse.kt"
+)
+easeLintExt {
+  val dir = project.projectDir
+  val parent = File(dir, "src/main/java/com/practice/temp")
+  val files = LinkedList<String>()
+  val ignores = LinkedList<String>()
+  parent.listFiles()!!.forEach { file ->
+    targets.forEach { name ->
+      if (file.absolutePath.endsWith(name)) {
+        files.add(file.absolutePath)
+      }
+    }
+  }
+  files.add("/Volumes/D/CodeProject/AndroidProject/EaseLint/AndroidLint-4.1.0/lint-plugin/temp/src/main/java/com/practice/temp/KotlinPrint.kt")
+  targetFiles = files
+  fileWhiteList = ignores
+  checkOnlyIssues = LinkedList<String>().apply {
+    add("LogDetector")
+    add("ParseStringDetector")
+  }
+  disableIssues = LinkedList<String>().apply {
+    add("LogDetector")
+  }
 }
 ```
 
-# hook内容
+* 3.PrepareEaseLintTask
+  easeLint 任务执行前的钩子，用于获取动态配置，并设置参数
+  比如：
 
-* 1.替换lint gradle，在 EaseLintCreationAction 的super configure 之前 hook 覆盖原始
-* 2.在 LintTaskHelper apply 时 加载 lint checks
-* 3.读取 checkList,设置给 com.android.tools.lint.gradle.ScanTargetContainer EaseLintReflectiveLintRunner
-* 4.配置lint 扫描的 扫描文件集合，白名单集合，checkOnly,disableIssue
+1.获取lint-gradle,lint-checks 库的目标版本号（不建议用last等默认下载最新版本的配置，
+这对排查问题会造成极大的阻力）
+
+2.获取 issue 清单配置,动态上下线不同的 Issue
+
+3.读取git 记录，挑选本次需要扫描的文件清单
+
+在 easelint 运行前 都可以通过修改 [com.buildsrc.easelint.lint.helper.LintSlot]
+来动态管理本次扫描的配置
+
+* 4.TreatEaseLintResultTask
+  easeLint 任务执行结束的的钩子，用于处理 easeLint执行产物
+  比如：
+
+1.上传 lint 报告 或发送邮件
+
+2.解析 lint 报告，通知企业 IM
+
+# Tips
+
+基于Android Lint 本身的特特性，只需要有一个 module 引入了 easeLint 插件，就可以扫描任何可访问到的文件。
+
