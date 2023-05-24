@@ -1,50 +1,10 @@
-import java.util.*
-
 plugins {
     id("com.android.application")
     id("kotlin-android")
-//    id("ease.lint")
 }
 fun String.log() {
     println("temp_kts:$this")
 }
-
-val targets = arrayListOf(
-//    "JavaLog.java",
-    "JavaPrint.java",
-//    "KotlinLog.kt",
-    "KotlinPrint.kt"
-//    "LintParcelableKt.kt",
-//    "LintSerializableKt.kt"
-
-)
-val checkOnlyIssues = LinkedList<String>().apply {
-//    add("SerializationDetector")
-//    add("ParcelableDetector")
-    add("LogDetector")
-//    add("ViewIdDetector")
-//    add("RelativeLayoutDetector")
-//    add("ParseStringDetector")
-//    add("ParseColorDetector")
-}
-//easeLintExt {
-//    val dir = project.projectDir
-//    val parent = File(dir, "src/main/java/com/practice/temp")
-//    val files = LinkedList<String>()
-//    val ignores = LinkedList<String>()
-//    parent.listFiles()!!.forEach { file ->
-//        targets.forEach {
-//            if (file.absolutePath.endsWith(it)) {
-//                files.add(file.absolutePath)
-//            }
-//        }
-//    }
-//
-//    targetFiles = files
-//    fileWhiteList = ignores
-////    checkOnlyConfig = checkOnlyIssues
-////    issueDisableList =
-//}
 
 
 android {

@@ -21,8 +21,8 @@ class EaseLintPlugin : Plugin<Project> {
             val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
             LintSlot.addTargetFile(lcg.targetFiles)
             LintSlot.addFileWhiteList(lcg.fileWhiteList)
-            LintSlot.addCheckOnly(lcg.checkOnlyConfig)
-            LintSlot.addDisableIssue(lcg.issueDisableList)
+            LintSlot.addCheckOnlyIssues(lcg.checkOnlyIssues)
+            LintSlot.addDisableIssues(lcg.disableIssues)
 
             // 访问网络，获取lint 配置,lint gradle 版本，lint wrapper，这两个需要在插件任务初始化时完成配置
             // 最好直接从cdn等文件资源读取数据，这样耗时可以忽略不计

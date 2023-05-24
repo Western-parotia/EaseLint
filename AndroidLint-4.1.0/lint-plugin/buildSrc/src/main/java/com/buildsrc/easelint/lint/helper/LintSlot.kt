@@ -16,12 +16,12 @@ object LintSlot {
     val targetFiles = targetFiles_
 
     //需要关闭的 issue 清单，部署到CI时用于快速降级，快速停用个别异常issue，优先级最高
-    private val issueDisableList_: LinkedList<String> = LinkedList()
-    val issueDisableList = issueDisableList_
+    private val disableIssues_: LinkedList<String> = LinkedList()
+    val disableIssues = disableIssues_
 
     // 用于定向控制所有的 issue ,主要用于上线自己开发的 Issue
-    private val checkOnlyConfig_: LinkedList<String> = LinkedList()
-    val checkOnlyConfig = checkOnlyConfig_
+    private val checkOnlyIssues_: LinkedList<String> = LinkedList()
+    val checkOnlyIssues = checkOnlyIssues_
 
     //扫描文件白名单
     private val fileWhiteList_: LinkedList<String> = LinkedList()
@@ -61,26 +61,26 @@ object LintSlot {
         fileWhiteList_.clear()
     }
 
-    fun addDisableIssue(issueIds: LinkedList<String>) {
-        issueDisableList_.addAll(issueIds)
+    fun addDisableIssues(issueIds: LinkedList<String>) {
+        disableIssues_.addAll(issueIds)
     }
 
-    fun clearDisable() {
-        issueDisableList_.clear()
+    fun clearDisableIssues() {
+        disableIssues_.clear()
     }
 
-    fun addCheckOnly(issueIds: LinkedList<String>) {
-        checkOnlyConfig_.addAll(issueIds)
+    fun addCheckOnlyIssues(issueIds: LinkedList<String>) {
+        checkOnlyIssues_.addAll(issueIds)
     }
 
-    fun clearCheckOnly() {
-        checkOnlyConfig_.clear()
+    fun clearCheckOnlyIssues() {
+        checkOnlyIssues_.clear()
     }
 
     fun clearAll() {
         clearWhiteList()
-        clearDisable()
-        clearCheckOnly()
+        clearDisableIssues()
+        clearCheckOnlyIssues()
         clearTargetFiles()
     }
 

@@ -1,7 +1,6 @@
 package com.buildsrc.easelint.lint.helper
 
 import com.android.build.gradle.internal.dsl.LintOptions
-import com.buildsrc.easelint.lint.utils.log
 import org.gradle.api.Project
 import java.io.File
 
@@ -30,10 +29,8 @@ class LintOptionsInjector {
 //            if (lcg.baseline) {
 //                baselineFile = project.file(BASELINE_RELATIVE_PATH)//创建警告基准
 //            }
-            checkOnly(*LintSlot.checkOnlyConfig.toTypedArray())
-            checkOnly.forEach {
-                "checkOnly:$it".log("LintOptionsInjector")
-            }
+            disable(*LintSlot.disableIssues.toTypedArray())
+            checkOnly(*LintSlot.checkOnlyIssues.toTypedArray())
         }
     }
 
