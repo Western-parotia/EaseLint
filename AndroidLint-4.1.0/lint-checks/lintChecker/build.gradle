@@ -15,11 +15,11 @@ dependencies {
     compileOnly "com.android.tools.lint:lint-api:${Dependencies.Lint.lint_version}"
     compileOnly "com.android.tools.lint:lint-checks:${Dependencies.Lint.lint_version}"
 }
-
-jar {
-    manifest {
-        // Only use the "-v2" key here if your checks have been updated to the
-        // new 3.0 APIs (including UAST)
-        attributes("Lint-Registry-v2": "com.easelint.registry.Registry")
-    }
-}
+// 用于代替 resources/META-INF/services下的id注册
+//jar {
+//    manifest {
+//        // Only use the "-v2" key here if your checks have been updated to the
+//        // new 3.0 APIs (including UAST)
+//        attributes("Lint-Registry-v2": "com.easelint.registry.Registry")
+//    }
+//}

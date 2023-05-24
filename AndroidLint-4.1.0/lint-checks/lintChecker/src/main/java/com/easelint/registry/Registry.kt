@@ -3,13 +3,9 @@ package com.easelint.registry
 import com.android.tools.lint.client.api.IssueRegistry
 import com.android.tools.lint.detector.api.CURRENT_API
 import com.android.tools.lint.detector.api.Issue
-import com.easelint.detector.LayoutXmlDetector
-import com.easelint.detector.LogDetector
-import com.easelint.detector.ManifestScreenOrientationDetector
-import com.easelint.detector.ParseDetector
-import com.easelint.detector.SerializationDetector
-import com.easelint.detector.SuppressWarningsDetector
+import com.easelint.detector.*
 
+@Suppress("UnstableApiUsage")
 class Registry : IssueRegistry() {
     override val issues: List<Issue>
         get() = listOf(
@@ -22,5 +18,9 @@ class Registry : IssueRegistry() {
             ParseDetector.ISSUE_PARSE_STRING,
             SuppressWarningsDetector.ISSUE_SUPPRESS_ANNOTATION
         )
-    override val api: Int = CURRENT_API
+    override val api: Int
+        get() = CURRENT_API
+
+    override val minApi: Int
+        get() = 8 // works with Studio 4.1 or later; see com.android.tools.lint.detector.api.Api / ApiKt
 }
