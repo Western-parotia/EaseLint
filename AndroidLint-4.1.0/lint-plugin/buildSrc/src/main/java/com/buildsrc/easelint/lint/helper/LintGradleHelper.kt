@@ -27,6 +27,7 @@ object LintGradleHelper {
     fun injectLintPatch(project: Project) {
         PATH.log("LintGradleHelper:implementation ")
         project.dependencies.add(LintBaseTask.LINT_CLASS_PATH, PATH)
+        "EaseLintPlugin:injectLintPatch".log("lifeTrack____1")
     }
 
 

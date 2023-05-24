@@ -11,30 +11,35 @@ import com.buildsrc.easelint.lint.helper.LintConfigExtensionHelper
 import com.buildsrc.easelint.lint.helper.LintGradleHelper
 import com.buildsrc.easelint.lint.helper.LintWrapperHelper
 import com.buildsrc.easelint.lint.helper.EaseLintTaskHelper
+import com.buildsrc.easelint.lint.task.PrepareEaseLintTask
+import com.buildsrc.easelint.lint.utils.log
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 class EaseLintPlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        LintConfigExtensionHelper.apply(target)
-        target.afterEvaluate {
+    override fun apply(project: Project) {
+        "EaseLintPlugin:apply".log("lifeTrack____1")
+        val libPlugin = project.plugins.findPlugin(LibraryPlugin::class.java)
+        val appPlugin = project.plugins.findPlugin(AppPlugin::class.java)
+        if (libPlugin == null && appPlugin == null) return
+        val currentPlugin = libPlugin ?: appPlugin!!
+
+        LintConfigExtensionHelper.apply(project)
+        // 访问网络，获取lint 配置,lint gradle 版本，lint wrapper，这两个需要在插件任务初始化时完成配置
+        // 最好直接从cdn等文件资源读取数据，这样耗时可以忽略不计
+        LintGradleHelper.init(false, "0.0.4-2023-05-24-11-31-56")
+        LintWrapperHelper.init(true, "0.0.1-2023-05-24-10-18-01")
+
+        project.afterEvaluate {
+            "EaseLintPlugin:afterEvaluate".log("lifeTrack____1")
             val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
             LintSlot.addTargetFile(lcg.targetFiles)
             LintSlot.addFileWhiteList(lcg.fileWhiteList)
             LintSlot.addCheckOnlyIssues(lcg.checkOnlyIssues)
             LintSlot.addDisableIssues(lcg.disableIssues)
-
-            // 访问网络，获取lint 配置,lint gradle 版本，lint wrapper，这两个需要在插件任务初始化时完成配置
-            // 最好直接从cdn等文件资源读取数据，这样耗时可以忽略不计
-            LintGradleHelper.init(false, "0.0.4-2023-05-24-11-31-56")
-            LintWrapperHelper.init(true, "0.0.1-2023-05-24-10-18-01")
-            val libPlugin = target.plugins.findPlugin(LibraryPlugin::class.java)
-            val appPlugin = target.plugins.findPlugin(AppPlugin::class.java)
-            if (libPlugin == null && appPlugin == null) return@afterEvaluate
-            val currentPlugin = libPlugin ?: appPlugin!!
+            //放在afterEvaluate内才能保证在变种配置完成后进行hook
             val variantManager = reflectionVM(currentPlugin)
-
-            EaseLintTaskHelper().apply(target, variantManager)
+            EaseLintTaskHelper().apply(project, variantManager)
         }
     }
 }

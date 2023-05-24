@@ -6,6 +6,8 @@ import com.android.build.gradle.internal.VariantManager
 import com.android.build.gradle.internal.tasks.factory.TaskFactoryImpl
 import com.android.build.gradle.internal.variant.ComponentInfo
 import com.buildsrc.easelint.lint.task.EaseLintPerVariantTask
+import com.buildsrc.easelint.lint.task.PrepareEaseLintTask
+import com.buildsrc.easelint.lint.task.TreatEaseLintResultTask
 import com.google.common.collect.ImmutableList
 import org.gradle.api.GradleException
 import org.gradle.api.Project
@@ -32,14 +34,21 @@ class EaseLintTaskHelper {
         }
         if (variant == null) variant = variantPropertiesList[0]
         if (variant == null) throw GradleException("can not find variant")
-
-        TaskFactoryImpl(project.tasks).apply {
-            register(
-                EaseLintCreationAction(
-                    project, TASK_NAME, variant, variantPropertiesList
-                )
+        val prepareEaseLintTask = project.tasks.create(
+            PrepareEaseLintTask.TASK_NAME,
+            PrepareEaseLintTask::class.java
+        )
+        val treatEaseLintResultTask = project.tasks.create(
+            TreatEaseLintResultTask.TASK_NAME,
+            TreatEaseLintResultTask::class.java
+        )
+        val task = TaskFactoryImpl(project.tasks).register(
+            EaseLintCreationAction(
+                project, TASK_NAME, variant, variantPropertiesList
             )
-        }
+        ).get()
+        task.dependsOn(prepareEaseLintTask)
+        task.finalizedBy(treatEaseLintResultTask)
     }
 
     class EaseLintCreationAction(
