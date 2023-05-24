@@ -8,3 +8,8 @@
 
 buildSrc>root setting.gradle>root build.gradle>module.gradle
 
+lintVersion = gradlePluginVersion + 23.0.0
+
+例如，7 + 23 = 30，所以 AGP 版本7.something对应于 Lint 版本30.something。
+再举一个例子；在撰写本文时，AGP 的当前稳定版本是 4.1.2，因此对应的 Lint API 版本是 27.1.2。
+
