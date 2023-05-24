@@ -1,2 +1,2 @@
 include(":temp")
-include(":singleTest")
+include(":subModule")

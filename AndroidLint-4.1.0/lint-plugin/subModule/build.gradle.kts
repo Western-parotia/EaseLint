@@ -1,7 +1,7 @@
 import java.util.*
 
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("kotlin-android")
     id("ease.lint")
 }
@@ -10,7 +10,7 @@ fun String.log() {
 }
 
 val targets = arrayListOf(
-    "KotlinPrint.kt"
+    "SubModuleKotlinPrint.kt"
 )
 easeLintExt {
     val dir = project.projectDir
@@ -23,8 +23,8 @@ easeLintExt {
                 files.add(file.absolutePath)
             }
         }
-
     }
+    files.add("/Volumes/D/CodeProject/AndroidProject/EaseLint/AndroidLint-4.1.0/lint-plugin/temp/src/main/java/com/practice/temp/KotlinPrint.kt")
     targetFiles = files
     fileWhiteList = ignores
 
@@ -35,24 +35,15 @@ android {
     compileSdk = 31
 
     defaultConfig {
-        applicationId = "com.practice.temp"
         minSdk = 21
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    signingConfigs {
-        create("normalSign") {
-            storeFile = file("test.jks")
-            storePassword = "android"
-            keyAlias = "android"
-            keyPassword = "android"
-        }
-    }
+
     buildTypes {
         getByName("debug") {
-            signingConfig = signingConfigs.getByName("normalSign")
 //            isMinifyEnabled = true
             multiDexEnabled = true
         }
@@ -67,20 +58,11 @@ android {
     lintOptions {
         isAbortOnError = false
         isShowAll = true
+        isCheckDependencies = true
     }
 }
 
 dependencies {
-//    implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-23-10-35-42")
-    // core-ktx:1.7.0引入了 kotlin_stdlib 1.5.31，lint 规则打包是 基于 1.4.31 的，会检测不出来
-//    implementation("androidx.core:core-ktx:1.7.0")
     implementation(com.buildsrc.easelint.kts.Dependencies.Kotlin.kotlin_stdlib)
 
-    implementation("androidx.appcompat:appcompat:1.3.0")
-    implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-//    compileOnly("com.android.tools.lint:lint-checks:27.1.1")
 }

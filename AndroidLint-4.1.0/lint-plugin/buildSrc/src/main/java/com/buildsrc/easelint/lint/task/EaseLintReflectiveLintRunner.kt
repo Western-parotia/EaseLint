@@ -55,8 +55,7 @@ class EaseLintReflectiveLintRunner {
         try {
             val loader = getLintClassLoader(gradle, lintClassPath)
             if (!lockTarget(project, loader)) {
-                "There has no target file need to scan,lint task over".log()
-                return
+               throw GradleException("Before running easelint, you may need to check if the target is empty first.")
             }
             val cls = loader.loadClass("com.android.tools.lint.gradle.LintGradleExecution")
             val constructor = cls.getConstructor(LintExecutionRequest::class.java)
