@@ -10,7 +10,9 @@ fun String.log() {
 }
 
 val targets = arrayListOf(
-    "SubModuleKotlinPrint.kt"
+    "SubModuleKotlinPrint.kt",
+    "JavaParse.java",
+    "KotlinParse.kt"
 )
 easeLintExt {
     val dir = project.projectDir
@@ -27,7 +29,10 @@ easeLintExt {
     files.add("/Volumes/D/CodeProject/AndroidProject/EaseLint/AndroidLint-4.1.0/lint-plugin/temp/src/main/java/com/practice/temp/KotlinPrint.kt")
     targetFiles = files
     fileWhiteList = ignores
-
+    checkOnlyConfig = LinkedList<String>().apply {
+        add("LogDetector")
+//        add("ParseStringDetector")
+    }
 }
 
 
