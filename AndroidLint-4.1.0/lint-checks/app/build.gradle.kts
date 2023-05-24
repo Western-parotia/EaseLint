@@ -24,13 +24,14 @@ android {
         viewBinding = true
     }
     val lintIds = arrayOf(
-        "LogDetector",
-        "SerializationDetector",
-        "ParseColorDetector"
+//        "SerializationDetector",
+//        "ParseColorDetector",
+        "LogDetector"
+
     )
     lintOptions {
 //        disable("GradleDependency")
-//        checkOnly(*lintIds)
+        checkOnly(*lintIds)
 //        lintConfig = file("lint.xml")
         isAbortOnError = false
         isCheckDependencies = false
@@ -42,8 +43,8 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${com.buildsrc.kts.Dependencies.Kotlin.kotlin_version}")
-    implementation(project(":lintWrapper"))
-//    implementation("com.easelint.snapshot:lint-checks:0.0.1-2023-05-23-10-35-42")
+//    implementation(project(":lintWrapper"))
+    implementation("com.easelint.snapshot:27.1.0-lint-checks:0.0.1-2023-05-24-10-12-14")
     implementation("com.google.code.gson:gson:2.9.0")
 
 }
