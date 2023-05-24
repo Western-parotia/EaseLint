@@ -8,6 +8,7 @@ import com.android.build.gradle.internal.variant.ComponentInfo
 import com.buildsrc.easelint.lint.helper.LintGradleHelper
 import com.buildsrc.easelint.lint.helper.LintWrapperHelper
 import com.google.common.collect.ImmutableList
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 
 class LintTaskHelper {
@@ -31,7 +32,7 @@ class LintTaskHelper {
             it.name.contains("debug")
         }
         if (variant == null) variant = variantPropertiesList[0]
-        if (variant == null) return
+        if (variant == null) throw GradleException("can not find variant")
 
         TaskFactoryImpl(project.tasks).apply {
             register(
