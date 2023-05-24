@@ -7,10 +7,10 @@ import com.android.build.gradle.internal.plugins.AppPlugin
 import com.android.build.gradle.internal.plugins.BasePlugin
 import com.android.build.gradle.internal.plugins.LibraryPlugin
 import com.buildsrc.easelint.lint.helper.LintSlot
-import com.buildsrc.easelint.lint.extensions.LintConfigExtensionHelper
+import com.buildsrc.easelint.lint.helper.LintConfigExtensionHelper
 import com.buildsrc.easelint.lint.helper.LintGradleHelper
 import com.buildsrc.easelint.lint.helper.LintWrapperHelper
-import com.buildsrc.easelint.lint.helper.LintTaskHelper
+import com.buildsrc.easelint.lint.helper.EaseLintTaskHelper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -18,6 +18,12 @@ class EaseLintPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         LintConfigExtensionHelper.apply(target)
         target.afterEvaluate {
+            val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
+            LintSlot.addTargetFile(lcg.targetFiles)
+            LintSlot.addFileWhiteList(lcg.fileWhiteList)
+            LintSlot.addCheckOnly(lcg.checkOnlyConfig)
+            LintSlot.addDisableIssue(lcg.issueDisableList)
+
             // 访问网络，获取lint 配置,lint gradle 版本，lint wrapper，这两个需要在插件任务初始化时完成配置
             // 最好直接从cdn等文件资源读取数据，这样耗时可以忽略不计
             LintGradleHelper.init(false, "0.0.4-2023-05-24-11-31-56")
@@ -27,14 +33,8 @@ class EaseLintPlugin : Plugin<Project> {
             if (libPlugin == null && appPlugin == null) return@afterEvaluate
             val currentPlugin = libPlugin ?: appPlugin!!
             val variantManager = reflectionVM(currentPlugin)
-            //初始化lint task（hook点）
-            LintTaskHelper().apply(target, variantManager)
-            val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
-            LintSlot.clearAll()
-            LintSlot.addTargetFile(lcg.targetFiles)
-            LintSlot.addFileWhiteList(lcg.fileWhiteList)
-            LintSlot.addCheckOnly(lcg.checkOnlyConfig)
-            LintSlot.addDisableIssue(lcg.issueDisableList)
+
+            EaseLintTaskHelper().apply(target, variantManager)
         }
     }
 }

@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableList
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 
-class LintTaskHelper {
+class EaseLintTaskHelper {
     companion object {
         const val TASK_NAME = "easeLint"
     }

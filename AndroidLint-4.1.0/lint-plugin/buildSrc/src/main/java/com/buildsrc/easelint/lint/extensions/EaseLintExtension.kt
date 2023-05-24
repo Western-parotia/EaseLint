@@ -2,21 +2,6 @@ package com.buildsrc.easelint.lint.extensions
 
 import org.gradle.api.Project
 import java.util.*
-
-
-object LintConfigExtensionHelper {
-    const val EXTENSION_EASELINT = "easeLintExt"
-
-    fun apply(project: Project) {
-        project.extensions.create(EXTENSION_EASELINT, LintConfigExtension::class.java)
-    }
-
-    fun findLintConfigExtension(project: Project): LintConfigExtension {
-        val target = project.extensions.getByName(EXTENSION_EASELINT)
-        return target as LintConfigExtension
-    }
-}
-
 /**
  * 在module的build.gradle中配置 easeLint 参数
  */
