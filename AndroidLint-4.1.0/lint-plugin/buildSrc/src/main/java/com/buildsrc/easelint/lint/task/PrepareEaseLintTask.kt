@@ -17,6 +17,9 @@ import org.gradle.api.tasks.TaskAction
  * 2.获取 issue 清单配置
  * 3.读取git 记录，挑选本次需要扫描的文件清单
  *
+ * 在 easelint 运行前 都可以通过修改 [com.buildsrc.easelint.lint.helper.LintSlot]
+ * 来动态管理本次扫描的配置
+ *
  * <Task 类必须都是 open>
  */
 open class PrepareEaseLintTask : DefaultTask() {
@@ -27,16 +30,7 @@ open class PrepareEaseLintTask : DefaultTask() {
     @TaskAction
     fun action() {
         "PrepareEaseLintTask:action".log("lifeTrack____1")
-
+//        LintSlot.xxx
     }
 
-    override fun doFirst(action: Action<in Task>): Task {
-        "doFirst".log(TASK_NAME)
-        return super.doFirst(action)
-    }
-
-    override fun doLast(action: Closure<*>): Task {
-        "doLast".log(TASK_NAME)
-        return super.doLast(action)
-    }
 }

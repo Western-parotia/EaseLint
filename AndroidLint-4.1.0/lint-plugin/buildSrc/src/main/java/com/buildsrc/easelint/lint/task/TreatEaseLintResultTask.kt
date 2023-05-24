@@ -24,14 +24,4 @@ open class TreatEaseLintResultTask : DefaultTask() {
         "TreatEaseLintResultTask:action".log("lifeTrack____1")
 
     }
-
-    override fun doFirst(action: Action<in Task>): Task {
-        "doFirst".log(TASK_NAME)
-        return super.doFirst(action)
-    }
-
-    override fun doLast(action: Closure<*>): Task {
-        "doLast".log(TASK_NAME)
-        return super.doLast(action)
-    }
 }
