@@ -37,6 +37,8 @@ class EaseLintPlugin : Plugin<Project> {
             LintSlot.addFileWhiteList(lcg.fileWhiteList)
             LintSlot.addCheckOnlyIssues(lcg.checkOnlyIssues)
             LintSlot.addDisableIssues(lcg.disableIssues)
+            LintSlot.setCompareBranch(lcg.compareBranch)
+            LintSlot.setCompareCommitId(lcg.compareCommitId)
             //放在afterEvaluate内才能保证在变种配置完成后进行hook
             val variantManager = reflectionVM(currentPlugin)
             EaseLintTaskHelper().apply(project, variantManager)

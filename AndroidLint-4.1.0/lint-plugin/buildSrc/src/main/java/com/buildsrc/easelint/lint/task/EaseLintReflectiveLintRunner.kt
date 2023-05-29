@@ -18,8 +18,8 @@ import java.util.*
 
 class EaseLintReflectiveLintRunner {
 
-    private fun lockTheTarget(loader: ClassLoader): Boolean {
-        val files = LintSlot.finalTargets()
+    private fun lockTheTarget(loader: ClassLoader, project: Project): Boolean {
+        val files = LintSlot.finalTargets(project)
         if (files.isNotEmpty()) {
             val clz = loader.loadClass(LINT_GRADLE_HOOK_CLASS)
             val method = clz.getDeclaredMethod("putCheckListFiles", List::class.java)
@@ -37,7 +37,7 @@ class EaseLintReflectiveLintRunner {
     ) {
         try {
             val loader = getLintClassLoader(gradle, lintClassPath)
-            if (!lockTheTarget(loader)) {
+            if (!lockTheTarget(loader, project)) {
                 throw GradleException("Before running easelint, you may need to check if the target is empty first.")
             }
             val cls = loader.loadClass("com.android.tools.lint.gradle.LintGradleExecution")

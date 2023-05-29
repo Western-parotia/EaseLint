@@ -18,5 +18,11 @@ open class LintConfigExtension {
     //扫描文件白名单,有些文件始终都不需要被扫描
     var fileWhiteList: LinkedList<String> = LinkedList()
 
+    //通过git获取目标文件，对比指定分支，默认对比远程master分支
+    var compareBranch: String = ""
+
+    //通过git获取目标文件，对比指定的提交记录
+    var compareCommitId: String = ""
+
 }
 
