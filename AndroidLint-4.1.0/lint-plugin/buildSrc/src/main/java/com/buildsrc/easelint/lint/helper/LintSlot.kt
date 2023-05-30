@@ -146,7 +146,14 @@ object LintSlot {
         bos.close()
         fileList.forEach {
             if (it.isEmpty()) return@forEach
-            val file = File(project.rootProject.rootDir, it)
+            /*
+            从git指令中获取到的文件路径是相对路径，
+            路径开头可能和从project.rootDir获取到
+            的根目录绝对路径有重复。因此通过项目名称来
+            来截取相对路径，去掉多余路径，避免Lint加载
+            文件失败。
+             */
+            val file = File(project.rootDir, it.substringAfter(project.rootProject.name))
             if (!fileWhiteList.contains(file.absolutePath)) {
                 files.add(file)
             }
