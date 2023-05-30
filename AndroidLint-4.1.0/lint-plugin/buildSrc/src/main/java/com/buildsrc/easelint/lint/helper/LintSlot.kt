@@ -119,6 +119,8 @@ object LintSlot {
 
     fun finalTargets(project: Project): List<File> {
         val files = LinkedList<File>()
+        val pathList = LinkedList<String>()
+
         //使用配置的commitId，未配置则先查询指定分支最新的commitId
         val commitId = compareCommitId.ifEmpty {
             //待对比分支，未指定则默认使用远程master分支
@@ -141,10 +143,23 @@ object LintSlot {
             setCommandLine("git", "diff", commitId, "HEAD", "--name-only", "--diff-filter=ACMRTUXB")
         }
         val fileListStr = bos.toString()
+        pathList.addAll(fileListStr.split("\n"))
+        bos.reset()
 
-        val fileList = fileListStr.split("\n")
+        /*
+        上面的git diff命令只能比较两次提交记录间的差异，适合在CI上执行。
+        但是也需要本地执行，因此需要加上对比工作区和上一次提交之间的差异，
+        寻找未提交的改动新增文件
+         */
+        project.exec {
+            standardOutput = bos
+            setCommandLine("git", "diff", "HEAD", "--name-only", "--diff-filter=ACMRTUXB")
+        }
+        val cachedFileListStr = bos.toString()
+        pathList.addAll(cachedFileListStr.split("\n"))
         bos.close()
-        fileList.forEach {
+
+        pathList.distinct().forEach {
             if (it.isEmpty()) return@forEach
             /*
             从git指令中获取到的文件路径是相对路径，
@@ -154,7 +169,7 @@ object LintSlot {
             文件失败。
              */
             val file = File(project.rootDir, it.substringAfter(project.rootProject.name))
-            if (!fileWhiteList.contains(file.absolutePath)) {
+            if (file.exists() && !fileWhiteList.contains(file.absolutePath)) {
                 files.add(file)
             }
         }
