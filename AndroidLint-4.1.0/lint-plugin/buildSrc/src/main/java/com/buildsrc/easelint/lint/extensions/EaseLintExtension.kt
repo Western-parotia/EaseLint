@@ -31,12 +31,11 @@ open class LintConfigExtension {
     fun setGitDiffConfig(
         compareBranch: String,
         compareCommitId: String,
-        targetFileSuffix: List<String> = emptyList()
+        targetFileSuffix: List<String> = listOf("java", "kt", "xml")
     ) {
         gitDiffConfig.compareBranch = compareBranch
         gitDiffConfig.compareCommitId = compareCommitId
-        if (targetFileSuffix.isNotEmpty())
-            gitDiffConfig.targetFileSuffix = targetFileSuffix
+        gitDiffConfig.targetFileSuffix = targetFileSuffix
     }
 
 }
@@ -49,6 +48,6 @@ class GitDiffConfig {
     var compareCommitId: String = ""
 
     //目标文件的后缀
-    var targetFileSuffix: List<String> = listOf("java", "kt", "xml")
+    var targetFileSuffix: List<String> = emptyList()
 }
 

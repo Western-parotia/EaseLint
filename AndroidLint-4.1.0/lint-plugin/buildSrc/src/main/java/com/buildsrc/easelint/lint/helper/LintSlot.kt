@@ -94,10 +94,13 @@ object LintSlot {
         clearTargetFiles()
     }
 
-    fun finalTargets(): List<File> {
+    fun finalTargets(project: Project): List<File> {
         val files = LinkedList<File>()
-        targetFiles.forEach { t ->
-            if (!fileWhiteList.contains(t)) {
+        //在手动配置的文件列表中插入git diff查询出的差异文件
+        targetFiles.addAll(addGitDiffTarget(project))
+        //先将所有文件路径去重
+        targetFiles.distinct().forEach { t ->
+            if (fileWhiteList.firstOrNull { t.contains(it) }.isNullOrEmpty()) {
                 val file = File(t)
                 if (file.exists()) {
                     files.add(file)
@@ -109,11 +112,14 @@ object LintSlot {
         return files
     }
 
-    fun finalTargets(project: Project): List<File> {
-        val files = LinkedList<File>()
+    private fun addGitDiffTarget(project: Project): List<String> {
+        if (gitDiffConfig.compareBranch.isEmpty() && gitDiffConfig.compareCommitId.isEmpty())
+            return emptyList()
+        val targetList = LinkedList<String>()
         val pathList = LinkedList<String>()
 
-        //使用配置的commitId，未配置则先查询指定分支最新的commitId
+        //=============git diff指令开始==============
+        //step1.使用配置的commitId，未配置则先查询指定分支最新的commitId
         val commitId = gitDiffConfig.compareCommitId.ifEmpty {
             //待对比分支，未指定则默认使用远程master分支
             val branch = gitDiffConfig.compareBranch.ifEmpty { "origin" }
@@ -128,7 +134,7 @@ object LintSlot {
             if (commitList.isNotEmpty()) commitList[0] else ""
         }
 
-        //找出和指定commitId之间的差异文件
+        //step2.找出和指定commitId之间的差异文件
         val bos = ByteArrayOutputStream()
         project.rootProject.exec {
             standardOutput = bos
@@ -139,6 +145,7 @@ object LintSlot {
         bos.reset()
 
         /*
+        step3.
         上面的git diff命令只能比较两次提交记录间的差异，适合在CI上执行。
         但是也需要本地执行，因此需要加上对比工作区和上一次提交之间的差异，
         寻找未提交的改动新增文件
@@ -150,10 +157,12 @@ object LintSlot {
         val cachedFileListStr = bos.toString()
         pathList.addAll(cachedFileListStr.split("\n"))
         bos.close()
+        //=============git diff指令结束==============
 
-        pathList.distinct().forEach {
+        pathList.forEach {
             if (it.isEmpty()) return@forEach
             val suffix = it.substringAfterLast(".")
+            //筛选符合要求后缀的文件
             if (!gitDiffConfig.targetFileSuffix.contains(suffix)) return@forEach
             /*
             从git指令中获取到的文件路径是相对路径，
@@ -162,11 +171,8 @@ object LintSlot {
             来截取相对路径，去掉多余路径，避免Lint加载
             文件失败。
              */
-            val file = File(project.rootDir, it.substringAfter(project.rootProject.name))
-            if (file.exists() && !fileWhiteList.contains(file.absolutePath)) {
-                files.add(file)
-            }
+            targetList.add("${project.rootDir}${it.substringAfter(project.rootProject.name)}")
         }
-        return files
+        return targetList
     }
 }

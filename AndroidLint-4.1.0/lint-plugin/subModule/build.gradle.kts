@@ -41,6 +41,7 @@ easeLintExt {
     disableIssues = LinkedList<String>().apply {
 //        add("LogDetector")
     }
+    setGitDiffConfig("main","")
 }
 
 
