@@ -19,6 +19,9 @@ open class LintConfigExtension {
     //扫描文件白名单,有些文件始终都不需要被扫描
     var fileWhiteList: LinkedList<String> = LinkedList()
 
+    //扫描文件后缀白名单,指定后缀文件始终都不需要被扫描
+    var suffixWhiteList: LinkedList<String> = LinkedList()
+
     internal val gitDiffConfig = GitDiffConfig()
 
     /**
@@ -26,16 +29,13 @@ open class LintConfigExtension {
      *
      * @param compareBranch 对比指定分支，默认对比远程master分支
      * @param compareCommitId 对比指定的提交记录
-     * @param targetFileSuffix 目标文件后缀
      */
     fun setGitDiffConfig(
         compareBranch: String,
-        compareCommitId: String,
-        targetFileSuffix: List<String> = listOf("java", "kt", "xml")
+        compareCommitId: String
     ) {
         gitDiffConfig.compareBranch = compareBranch
         gitDiffConfig.compareCommitId = compareCommitId
-        gitDiffConfig.targetFileSuffix = targetFileSuffix
     }
 
 }
@@ -46,8 +46,5 @@ class GitDiffConfig {
 
     //通过git获取目标文件，对比指定的提交记录
     var compareCommitId: String = ""
-
-    //目标文件的后缀
-    var targetFileSuffix: List<String> = emptyList()
 }
 

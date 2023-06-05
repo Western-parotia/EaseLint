@@ -35,6 +35,7 @@ class EaseLintPlugin : Plugin<Project> {
             val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
             LintSlot.addTargetFile(lcg.targetFiles)
             LintSlot.addFileWhiteList(lcg.fileWhiteList)
+            LintSlot.addsuffixWhiteList(lcg.suffixWhiteList)
             LintSlot.addCheckOnlyIssues(lcg.checkOnlyIssues)
             LintSlot.addDisableIssues(lcg.disableIssues)
             LintSlot.setGitDiffConfig(lcg.gitDiffConfig)

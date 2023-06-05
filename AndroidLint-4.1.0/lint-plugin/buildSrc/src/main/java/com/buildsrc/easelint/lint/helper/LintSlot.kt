@@ -30,6 +30,10 @@ object LintSlot {
     private val fileWhiteList_: LinkedList<String> = LinkedList()
     val fileWhiteList = fileWhiteList_
 
+    //扫描文件后缀白名单
+    private val suffixWhiteList_: LinkedList<String> = LinkedList()
+    val suffixWhiteList = suffixWhiteList_
+
     //git筛选文件配置
     private var gitDiffConfig = GitDiffConfig()
 
@@ -83,6 +87,14 @@ object LintSlot {
         checkOnlyIssues_.clear()
     }
 
+    fun addsuffixWhiteList(whiteList: LinkedList<String>) {
+        suffixWhiteList_.addAll(whiteList)
+    }
+
+    fun clearsuffixWhiteList() {
+        suffixWhiteList_.clear()
+    }
+
     fun setGitDiffConfig(config: GitDiffConfig) {
         gitDiffConfig = config
     }
@@ -92,6 +104,7 @@ object LintSlot {
         clearDisableIssues()
         clearCheckOnlyIssues()
         clearTargetFiles()
+        clearsuffixWhiteList()
     }
 
     fun finalTargets(project: Project): List<File> {
@@ -100,13 +113,15 @@ object LintSlot {
         targetFiles.addAll(addGitDiffTarget(project))
         //先将所有文件路径去重
         targetFiles.distinct().forEach { t ->
-            if (fileWhiteList.firstOrNull { t.contains(it) }.isNullOrEmpty()) {
-                val file = File(t)
-                if (file.exists()) {
-                    files.add(file)
-                } else {
-                    "this file[$t] is not exists".log("EaseLintReflectiveLintRunner")
-                }
+            //判断文件白名单
+            if (!fileWhiteList.firstOrNull { t.contains(it) }.isNullOrEmpty()) return@forEach
+            //判断文件后缀白名单
+            if (!suffixWhiteList.firstOrNull { t.endsWith(it) }.isNullOrEmpty()) return@forEach
+            val file = File(t)
+            if (file.exists()) {
+                files.add(file)
+            } else {
+                "this file[$t] is not exists".log("EaseLintReflectiveLintRunner")
             }
         }
         return files
@@ -162,16 +177,19 @@ object LintSlot {
         pathList.forEach {
             if (it.isEmpty()) return@forEach
             val suffix = it.substringAfterLast(".")
-            //筛选符合要求后缀的文件
-            if (!gitDiffConfig.targetFileSuffix.contains(suffix)) return@forEach
             /*
             从git指令中获取到的文件路径是相对路径，
             路径开头可能和从project.rootDir获取到
             的根目录绝对路径有重复。因此通过项目名称来
             来截取相对路径，去掉多余路径，避免Lint加载
-            文件失败。
+            文件失败。且git diff获取到的文件路径分隔符
+            为/，统一替换成当前系统分隔符
              */
-            targetList.add("${project.rootDir}${it.substringAfter(project.rootProject.name)}")
+            targetList.add(
+                "${project.rootDir}${
+                    it.substringAfter(project.rootProject.name).replace("/", File.separator)
+                }"
+            )
         }
         return targetList
     }
