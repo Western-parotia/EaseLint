@@ -1,6 +1,7 @@
 package com.buildsrc.easelint.lint.helper
 
 import com.buildsrc.easelint.lint.extensions.GitDiffConfig
+import com.buildsrc.easelint.lint.extensions.LintConfigExtension
 import com.buildsrc.easelint.lint.task.LintException
 import com.buildsrc.easelint.lint.utils.log
 import org.gradle.api.Project
@@ -13,6 +14,18 @@ import java.util.*
  *
  */
 object LintSlot {
+    private enum class TaskParams(val paramName: String) {
+        TARGET_FILES("targetFiles"),
+        DISABLE_ISSUES("disableIssues"),
+        CHECK_ONLY_ISSUES("checkOnlyIssues"),
+        FILE_WHITE_LIST("fileWhiteList"),
+        SUFFIX_WHITE_LIST("suffixWhiteList"),
+        COMPARE_BRANCH("compareBranch"),
+        COMPARE_COMMIT_ID("compareCommitId"),
+    }
+
+    private const val PARAMS_TYPE_EXTENSION = "set extension params"
+    private const val PARAMS_TYPE_TASK = "overwrite task params"
 
     //扫描目标，统一为文件全路径
     private val targetFiles_: LinkedList<String> = LinkedList()
@@ -38,12 +51,69 @@ object LintSlot {
     private var gitDiffConfig = GitDiffConfig()
 
     /**
+     * 设置在build.gradle中配置的extension参数
+     *
+     * @param lcg [LintConfigExtension]
+     */
+    fun setExtensionParams(lcg: LintConfigExtension) {
+        LintSlot.addTargetFile(lcg.targetFiles, PARAMS_TYPE_EXTENSION)
+        LintSlot.addFileWhiteList(lcg.fileWhiteList, PARAMS_TYPE_EXTENSION)
+        LintSlot.addSuffixWhiteList(lcg.suffixWhiteList, PARAMS_TYPE_EXTENSION)
+        LintSlot.addCheckOnlyIssues(lcg.checkOnlyIssues, PARAMS_TYPE_EXTENSION)
+        LintSlot.addDisableIssues(lcg.disableIssues, PARAMS_TYPE_EXTENSION)
+        LintSlot.setGitDiffConfig(lcg.gitDiffConfig, PARAMS_TYPE_EXTENSION)
+    }
+
+    /**
+     * 设置使用命令执行task时配置的参数
+     *
+     * @param project
+     */
+    fun setTaskParams(project: Project) {
+        val targetFiles = getParamList(project, TaskParams.TARGET_FILES.paramName)
+        if (targetFiles.isNotEmpty()) {
+            clearTargetFiles()
+            addTargetFile(targetFiles, PARAMS_TYPE_TASK)
+        }
+
+        val disableIssues = getParamList(project, TaskParams.DISABLE_ISSUES.paramName)
+        if (disableIssues.isNotEmpty()) {
+            clearDisableIssues()
+            addDisableIssues(disableIssues, PARAMS_TYPE_TASK)
+        }
+
+        val checkOnlyIssues = getParamList(project, TaskParams.CHECK_ONLY_ISSUES.paramName)
+        if (checkOnlyIssues.isNotEmpty()) {
+            clearCheckOnlyIssues()
+            addCheckOnlyIssues(checkOnlyIssues, PARAMS_TYPE_TASK)
+        }
+
+        val fileWhiteList = getParamList(project, TaskParams.FILE_WHITE_LIST.paramName)
+        if (fileWhiteList.isNotEmpty()) {
+            clearWhiteList()
+            addFileWhiteList(fileWhiteList, PARAMS_TYPE_TASK)
+        }
+
+        val suffixWhiteList = getParamList(project, TaskParams.SUFFIX_WHITE_LIST.paramName)
+        if (suffixWhiteList.isNotEmpty()) {
+            clearSuffixWhiteList()
+            addSuffixWhiteList(suffixWhiteList, PARAMS_TYPE_TASK)
+        }
+
+        val compareBranch = getParamsString(project, TaskParams.COMPARE_BRANCH.paramName)
+        val compareCommitId = getParamsString(project, TaskParams.COMPARE_COMMIT_ID.paramName)
+        if (compareBranch.isNotEmpty() || compareCommitId.isNotEmpty()) {
+            setGitDiffConfig(GitDiffConfig(compareBranch, compareCommitId), PARAMS_TYPE_TASK)
+        }
+    }
+
+    /**
      * 白名单支持文件夹级别，所以为了避免多module 扫描的白名单存在冲突，限制白名单文件路径最少提供4级目录
      * 比如/com/xx/utils 很容易导致范围过大
      * 建议  moduleName/src/main/java/com/xx/xx
      * @param filePaths
      */
-    fun addFileWhiteList(filePaths: LinkedList<String>) {
+    private fun addFileWhiteList(filePaths: List<String>, type: String) {
         filePaths.forEach {
             val itemPath = it.split("/")
             if (itemPath.size < 4) {
@@ -57,46 +127,52 @@ object LintSlot {
                 fileWhiteList_.add(it.replace("/", File.separator))
             }
         }
+        "fileWhiteList:$fileWhiteList_".log(type)
     }
 
     fun clearTargetFiles() {
         targetFiles_.clear()
     }
 
-    fun addTargetFile(file: LinkedList<String>) {
+    private fun addTargetFile(file: List<String>, type: String) {
         targetFiles_.addAll(file)
+        "targetFiles:$targetFiles_".log(type)
     }
 
     fun clearWhiteList() {
         fileWhiteList_.clear()
     }
 
-    fun addDisableIssues(issueIds: LinkedList<String>) {
+    private fun addDisableIssues(issueIds: List<String>, type: String) {
         disableIssues_.addAll(issueIds)
+        "disableIssues:$disableIssues_".log(type)
     }
 
     fun clearDisableIssues() {
         disableIssues_.clear()
     }
 
-    fun addCheckOnlyIssues(issueIds: LinkedList<String>) {
+    private fun addCheckOnlyIssues(issueIds: List<String>, type: String) {
         checkOnlyIssues_.addAll(issueIds)
+        "checkOnlyIssues:$checkOnlyIssues_".log(type)
     }
 
     fun clearCheckOnlyIssues() {
         checkOnlyIssues_.clear()
     }
 
-    fun addsuffixWhiteList(whiteList: LinkedList<String>) {
+    private fun addSuffixWhiteList(whiteList: List<String>, type: String) {
         suffixWhiteList_.addAll(whiteList)
+        "suffixWhiteList:$suffixWhiteList_".log(type)
     }
 
-    fun clearsuffixWhiteList() {
+    fun clearSuffixWhiteList() {
         suffixWhiteList_.clear()
     }
 
-    fun setGitDiffConfig(config: GitDiffConfig) {
+    private fun setGitDiffConfig(config: GitDiffConfig, type: String) {
         gitDiffConfig = config
+        "gitDiffConfig:$gitDiffConfig".log(type)
     }
 
     fun clearAll() {
@@ -104,10 +180,12 @@ object LintSlot {
         clearDisableIssues()
         clearCheckOnlyIssues()
         clearTargetFiles()
-        clearsuffixWhiteList()
+        clearSuffixWhiteList()
     }
 
     fun finalTargets(project: Project): List<File> {
+        //在获取最终检查的文件前，先配置gradlew命令中的参数
+        setTaskParams(project)
         val files = LinkedList<File>()
         //在手动配置的文件列表中插入git diff查询出的差异文件
         targetFiles.addAll(addGitDiffTarget(project))
@@ -125,6 +203,36 @@ object LintSlot {
             }
         }
         return files
+    }
+
+    /**
+     * 获取gradlew命令中配置的list类型参数
+     *
+     * @param project
+     * @param paramName 参数名称
+     * @return
+     */
+    private fun getParamList(project: Project, paramName: String): List<String> {
+        return if (project.hasProperty(paramName)) {
+            return project.findProperty(paramName)!!.toString().split(",")
+        } else {
+            emptyList<String>()
+        }
+    }
+
+    /**
+     * 获取gradlew命令中配置的string类型参数
+     *
+     * @param project
+     * @param paramName 参数名称
+     * @return
+     */
+    private fun getParamsString(project: Project, paramName: String): String {
+        return if (project.hasProperty(paramName)) {
+            return project.findProperty(paramName)!!.toString()
+        } else {
+            ""
+        }
     }
 
     private fun addGitDiffTarget(project: Project): List<String> {
@@ -176,7 +284,6 @@ object LintSlot {
 
         pathList.forEach {
             if (it.isEmpty()) return@forEach
-            val suffix = it.substringAfterLast(".")
             /*
             从git指令中获取到的文件路径是相对路径，
             路径开头可能和从project.rootDir获取到
