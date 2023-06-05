@@ -10,3 +10,15 @@
 * setting.gradle.kts
 * build.gradle.kts
 * module:build.gradle.kts
+
+# buildSrc 导入gradle 将会导致如下错误
+
+```
+
+[//]: # (//这里导入 gradle 将导致与根目录的 plugin 导入冲突：)
+implementation("com.android.tools.build:gradle:7.4.2")
+
+[//]: # (The request for this plugin could not be satisfied because the plugin )
+[//]: # (is already on the classpath with an unknown version, so compatibility cannot be checked)
+```
+
