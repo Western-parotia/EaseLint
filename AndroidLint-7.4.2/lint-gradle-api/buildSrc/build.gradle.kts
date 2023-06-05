@@ -2,6 +2,7 @@ plugins {
     `kotlin-dsl`
     // gradle 7.x 之后捆绑的 kotlin 更新为 1.4.31
     id("org.jetbrains.kotlin.jvm") version "1.4.31"
+
 }
 
 
@@ -12,14 +13,6 @@ object Repositories {
     private const val aliyunJcenter = "https://maven.aliyun.com/repository/jcenter/"
     private const val aliyunCentral = "https://maven.aliyun.com/repository/central/"
     private const val jitpackIo = "https://jitpack.io"
-    internal const val aliyunReleaseAndArtifacts =
-        "https://packages.aliyun.com/maven/repository/2196753-release-jjUEtd/"
-    internal const val aliyunSnapshotAndArtifacts =
-        "https://packages.aliyun.com/maven/repository/2196753-snapshot-XaSZiY"
-
-    //公共账号密码，只可用于拉取
-    private const val aliyunMjDefName = "642b9f209f62bf75b33fc1ae"
-    private const val aliyunMjDefPassword = "EkNR7ao]bCHh"
 
     /**
      * 默认的需要拉的库
@@ -33,16 +26,6 @@ object Repositories {
             maven(aliyunJcenter)
             maven(aliyunCentral)
             maven(jitpackIo)
-
-        }
-    }
-
-    internal fun RepositoryHandler.mavenPassword(url: String, pwdName: String, pwd: String) {
-        maven(url) {
-            credentials {
-                username = pwdName
-                password = pwd
-            }
         }
     }
 }
@@ -59,5 +42,8 @@ java {
 
 dependencies {
     gradleApi()
-    implementation("com.android.tools.build:gradle:7.4.2")
+    // 这里导入 gradle 将导致与根目录的 plugin 导入冲突：
+// The request for this plugin could not be satisfied because the plugin
+// is already on the classpath with an unknown version, so compatibility cannot be checked
+//    implementation("com.android.tools.build:gradle:7.4.2")
 }
