@@ -1,0 +1,46 @@
+import com.buildsrc.kts.Dependencies
+
+plugins {
+    id 'java-library'
+    id 'kotlin'
+    id 'maven-publish'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    implementation Dependencies.Kotlin.kotlin_stdlib
+    compileOnly Dependencies.Lint.lint_gradle
+    compileOnly gradleApi()
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource
+}
+
+publishing {
+    publications {
+        lintGradle(MavenPublication) {
+            groupId = 'com.mj.lint'
+            artifactId = 'lint-gradle'
+            version = lint_gradle_version
+            from components.java
+            artifact sourcesJar
+        }
+    }
+
+    repositories {
+        maven {
+            url("https://mijukeji-maven.pkg.coding.net/repository/jileiku/base_maven/")
+            credentials {
+                username = "base_maven-1639657395993"
+                password = "631a6828fffb502f53b0c51db9072ebf76418ac3"
+            }
+
+        }
+    }
+}
