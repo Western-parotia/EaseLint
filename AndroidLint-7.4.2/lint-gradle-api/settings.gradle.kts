@@ -11,6 +11,7 @@ pluginManagement {
     }
 
 }
+println("gv---:${gradle.gradleVersion}")
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -23,3 +24,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "lint-gradle-api"
 include(":app")
+//include(":lintGradle")

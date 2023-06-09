@@ -1,3 +1,8 @@
+buildscript {
+    dependencies {
+        classpath("com.android.tools.build:gradle:7.4.2")
+    }
+}
 // plugins 内 无法访问 buildSrc,plugins
 plugins {
     id("com.android.library").version("7.4.2").apply(false)
