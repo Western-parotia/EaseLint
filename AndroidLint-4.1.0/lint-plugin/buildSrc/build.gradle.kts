@@ -38,5 +38,6 @@ repositories {
 dependencies {
     // 无法引用 buildSrc 内的类
     implementation("com.android.tools.build:gradle:4.1.0")
+    implementation("org.dom4j:dom4j:2.1.4")
 }
 

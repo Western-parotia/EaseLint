@@ -11,6 +11,7 @@ class LintOptionsInjector {
         private val TAG = LintOptionsInjector::class.java.simpleName
         const val XML_OUTPUT_RELATIVE_PATH = "build/easeLintReports/lint-results.xml"
         const val HTML_OUTPUT_RELATIVE_PATH = "build/easeLintReports/lint-results.html"
+        const val JSON_OUTPUT_RELATIVE_PATH = "build/easeLintReports/lint-results.json"
         const val BASELINE_RELATIVE_PATH = "lint-baseline.xml"
     }
 
