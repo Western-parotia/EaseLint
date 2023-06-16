@@ -11,7 +11,6 @@ import com.buildsrc.easelint.lint.helper.LintConfigExtensionHelper
 import com.buildsrc.easelint.lint.helper.LintGradleHelper
 import com.buildsrc.easelint.lint.helper.LintWrapperHelper
 import com.buildsrc.easelint.lint.helper.EaseLintTaskHelper
-import com.buildsrc.easelint.lint.task.PrepareEaseLintTask
 import com.buildsrc.easelint.lint.utils.log
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -33,10 +32,7 @@ class EaseLintPlugin : Plugin<Project> {
         project.afterEvaluate {
             "EaseLintPlugin:afterEvaluate".log("lifeTrack____1")
             val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
-            LintSlot.addTargetFile(lcg.targetFiles)
-            LintSlot.addFileWhiteList(lcg.fileWhiteList)
-            LintSlot.addCheckOnlyIssues(lcg.checkOnlyIssues)
-            LintSlot.addDisableIssues(lcg.disableIssues)
+            LintSlot.setExtensionParams(lcg)
             //放在afterEvaluate内才能保证在变种配置完成后进行hook
             val variantManager = reflectionVM(currentPlugin)
             EaseLintTaskHelper().apply(project, variantManager)

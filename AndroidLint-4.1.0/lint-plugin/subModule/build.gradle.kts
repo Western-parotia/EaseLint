@@ -41,6 +41,10 @@ easeLintExt {
     disableIssues = LinkedList<String>().apply {
 //        add("LogDetector")
     }
+    suffixWhiteList = LinkedList<String>().apply {
+//        add("kt")
+    }
+    setGitDiffConfig("main","")
 }
 
 
