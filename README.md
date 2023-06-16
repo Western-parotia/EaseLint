@@ -42,7 +42,9 @@ object LintSlot{
 LintWrapperHelper.init(true, "0.0.1-2023-05-24-10-18-01")
 ```
 
-## 2.使用 EaseLintExtension 完成单项目 easelint 配置
+## 2.使用 EaseLintExtension或者gradlew参数完成单项目 easelint 配置
+
+### EaseLintExtension配置
 
 ```kotlin
 plugins {
@@ -69,16 +71,43 @@ easeLintExt {
     }
   }
   files.add("/Volumes/D/CodeProject/AndroidProject/EaseLint/AndroidLint-4.1.0/lint-plugin/temp/src/main/java/com/practice/temp/KotlinPrint.kt")
+  //指定需要检查文件
   targetFiles = files
+  //文件白名单（检查时需要忽略的文件）
   fileWhiteList = ignores
+  //检查指定规则（只检查checkOnlyIssues中包含的规则，其余规则均不检查）
   checkOnlyIssues = LinkedList<String>().apply {
     add("LogDetector")
     add("ParseStringDetector")
   }
+  //指定不检查的规则
   disableIssues = LinkedList<String>().apply {
     add("LogDetector")
   }
+  //文件后缀白名单（检查时会忽略对应后缀的文件）
+  suffixWhiteList = LinkedList<String>().apply {
+    add("kt")
+  }
+  /*
+  通过git diff命令获取需要检查的差异文件，
+  其中compareBranch为需要对比的分支，
+  compareCommitId为需要对比的提交记录。
+  两个配置二选一，若只配配置compareBranch，则与该分支的最新提交记录比较
+  若只配置compareCommitId，则与该提交记录比较。
+  （若不配置GitDiffConfig参数，则只检查targetFiles中指定的文件，
+  反之则检查targetFiles和获取到的差异文件）
+  */
+  setGitDiffConfig(compareBranch = "main", compareCommitId = "")
 }
+```
+
+### gradlew配置
+
+使用gradlew命令执行easeLint任务时可在命令中配置检查参数，所有参数与EaseLintExtension配置中的参数相同，
+每一项参数值优先使用gradlew命令中配置的参数，若未配置则使用EaseLintExtension中配置的参数。
+
+```
+ ./gradlew easeLint -PtargetFiles="filePath1,filePath2" -PdisableIssues="LogDetector" -PcheckOnlyIssues="LogDetector,ParseStringDetector" -PfileWhiteList="src/main/java/com/example1,src/main/java/com/example2" -PsuffixWhiteList="md,xml" -PcompareBranch="master" -PcompareCommitId="id12345"
 ```
 
 ## 3.PrepareEaseLintTask
