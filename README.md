@@ -107,7 +107,7 @@ easeLintExt {
 每一项参数值优先使用gradlew命令中配置的参数，若未配置则使用EaseLintExtension中配置的参数。
 
 ```
- ./gradlew easeLint -PtargetFiles="filePath1,filePath2" -PdisableIssues="LogDetector" -PcheckOnlyIssues="LogDetector,ParseStringDetector" -PfileWhiteList="src/main/java/com/example1,src/main/java/com/example2" -PsuffixWhiteList="md,xml" -PcompareBranch="master" -PcompareCommitId="id12345"
+ ./gradlew easeLint -PtargetFiles="filePath1,filePath2" -PdisableIssues="LogDetector" -PcheckOnlyIssues="LogDetector,ParseStringDetector" -PfileWhiteList="src/main/java/com/example1,src/main/java/com/example2" -PsuffixWhiteList="md,xml" -PcompareBranch="main" -PcompareCommitId="id12345"
 ```
 
 ## 3.PrepareEaseLintTask
