@@ -1,0 +1,74 @@
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'jacoco-tools-base'
+apply plugin: 'sdk-java-lib'
+
+group = 'com.android.tools.lint'
+archivesBaseName = 'lint'
+version = rootProject.ext.baseVersion
+
+dependencies {
+    compile project(':base:lint-checks')
+    compile libs.guava
+    compile project(':base:uast')
+    compile project(':base:kotlin-compiler')
+    compile project(':base:manifest-merger')
+    compile project(':analytics-library:shared')
+    compile project(':analytics-library:protos')
+    compile project(':analytics-library:tracker')
+
+    compile libs.kotlin_reflect
+    compile libs.kotlin_stdlib
+}
+
+sourceSets {
+    main.resources.srcDir 'src/main/java'
+    test.resources.srcDir 'src/test/java'
+}
+
+test {
+    maxParallelForks = Runtime.runtime.availableProcessors() / 2
+}
+
+task lintStartScripts(type: CreateStartScripts) {
+    classpath = project.getTasks().getAt(JavaPlugin.JAR_TASK_NAME).getOutputs().getFiles().plus(
+            project.getConfigurations().getByName("runtime"))
+    outputDir new File(project.getBuildDir(), "scripts")
+
+    description "Creates OS specific scripts to start the lint CLI"
+    mainClassName = 'com.android.tools.lint.Main'
+    applicationName = 'lint'
+    defaultJvmOpts = ["-Xmx1024m", "-Dcom.android.tools.lint.bindir=MY_APP_HOME"]
+
+    doLast {
+        unixScript.text = unixScript.text.replace('MY_APP_HOME', '\$APP_HOME')
+        windowsScript.text = windowsScript.text.replace('MY_APP_HOME', '%~dp0\\..')
+    }
+}
+
+
+sdk {
+    common(mac, linux) {
+        item(new File(lintStartScripts.outputDir, "lint")) {
+            into "bin"
+            notice null
+            builtBy 'lintStartScripts'
+        }
+    }
+    windows {
+        item(new File(lintStartScripts.outputDir, "lint.bat")) {
+            into "bin"
+            notice null
+            builtBy 'lintStartScripts'
+        }
+    }
+}
+
+// configure the manifest of the sdkJar task.
+sdkJar.manifest.attributes("Main-Class": "com.android.tools.lint.Main")
+
+project.ext.pomName = 'Android Lint Tool'
+project.ext.pomDesc = 'Lint tools. Both a Command line tool and a library to add lint features to other tools'
+
+apply from: "$rootDir/buildSrc/base/publish.gradle"
+apply from: "$rootDir/buildSrc/base/javadoc.gradle"
