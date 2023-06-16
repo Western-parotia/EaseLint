@@ -25,5 +25,5 @@ dependencyResolutionManagement {
 rootProject.name = "lint-gradle-api"
 include(":app")
 //include(":lintGradle")
-include(":tt")
 include(":cli")
+include(":lib")

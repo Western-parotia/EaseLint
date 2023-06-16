@@ -29,7 +29,6 @@ import static com.android.tools.lint.detector.api.TextFormat.TEXT;
 
 import com.android.SdkConstants;
 import com.android.annotations.NonNull;
-import com.android.annotations.Nullable;
 import com.android.tools.lint.checks.BuiltinIssueRegistry;
 import com.android.tools.lint.client.api.Configuration;
 import com.android.tools.lint.client.api.DefaultConfiguration;
@@ -58,6 +57,16 @@ import com.google.common.base.Charsets;
 import com.google.common.io.ByteStreams;
 import com.intellij.openapi.util.Ref;
 import com.intellij.pom.java.LanguageLevel;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.kotlin.config.ApiVersion;
+import org.jetbrains.kotlin.config.LanguageVersion;
+import org.jetbrains.kotlin.config.LanguageVersionSettings;
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -80,13 +89,6 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.kotlin.config.ApiVersion;
-import org.jetbrains.kotlin.config.LanguageVersion;
-import org.jetbrains.kotlin.config.LanguageVersionSettings;
-import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 /**
  * Command line driver for the lint framework
@@ -146,11 +148,16 @@ public class Main {
     private static final String PROP_WORK_DIR = "com.android.tools.lint.workdir";
     private final LintCliFlags flags = new LintCliFlags();
     private IssueRegistry globalIssueRegistry;
-    @Nullable private File sdkHome;
-    @Nullable private File jdkHome;
+    @Nullable
+    private File sdkHome;
+    @Nullable
+    private File jdkHome;
 
-    /** Creates a CLI driver */
-    public Main() {}
+    /**
+     * Creates a CLI driver
+     */
+    public Main() {
+    }
 
     /**
      * Runs the static analysis command line driver
@@ -259,7 +266,6 @@ public class Main {
                         return super.getKotlinLanguageLevel(project);
                     }
 
-                    @NonNull
                     @Override
                     public Configuration getConfiguration(
                             @NonNull final Project project, @Nullable LintDriver driver) {
@@ -1023,7 +1029,6 @@ public class Main {
                                 reader.readModule(
                                         input,
                                         Collections.emptyList(),
-                                        // TODO: Define any path variables Gradle may be setting!
                                         true,
                                         Collections.emptyList());
                         modules.add(module);
