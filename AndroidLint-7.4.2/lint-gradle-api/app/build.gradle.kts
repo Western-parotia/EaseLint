@@ -30,7 +30,7 @@ dependencies {
     compileOnly("com.android.tools.lint:lint-gradle:30.4.2")
     compileOnly("com.android.tools.lint:lint-checks:30.4.2")
     // Main.java
-    compileOnly("com.android.tools.lint:lint:25.3.0")
+    compileOnly("com.android.tools.lint:lint:30.4.2")
 
     implementation("androidx.core:core-ktx:1.8.0")
     implementation("androidx.appcompat:appcompat:1.4.1")

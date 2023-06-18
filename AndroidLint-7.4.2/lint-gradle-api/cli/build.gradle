@@ -29,7 +29,7 @@ dependencies {
     compileOnly "com.android.tools.lint:lint-checks:30.4.2"
 //    +-compileOnly "com.android.tools.lint:lint-api:30.4.2"
 
-    compileOnly "com.android.tools:common:25.3.0"
+    compileOnly "com.android.tools:common:30.4.2"
     compileOnly "com.android.tools.lint:lint-model:30.4.2"
 
 }
