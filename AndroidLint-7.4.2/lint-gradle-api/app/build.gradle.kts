@@ -35,13 +35,14 @@ dependencies {
     compileOnly("com.android.tools.lint:lint-checks:30.4.2")
     compileOnly("com.android.tools.lint:lint-gradle:30.4.2")
 
-    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("com.easelint:27.1.0-lint-checks:0.0.1-2023-06-20-05-03-30")
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("com.google.android.material:material:1.5.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    implementation("androidx.core:core-ktx:1.8.0")
 
+
+}
+repositories {
 
 }
 

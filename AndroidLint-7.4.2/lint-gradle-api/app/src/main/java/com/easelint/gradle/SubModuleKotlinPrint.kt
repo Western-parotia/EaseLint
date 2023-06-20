@@ -1,4 +1,4 @@
-package com.practice.temp
+package com.easelint.gradle
 
 class SubModuleKotlinPrint {
     fun log() {
