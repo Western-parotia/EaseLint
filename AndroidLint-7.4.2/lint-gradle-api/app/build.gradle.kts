@@ -22,7 +22,12 @@ android {
         sourceCompatibility(11)
         targetCompatibility(11)
     }
-
+    lint {
+        abortOnError = false
+        xmlReport = true
+        htmlReport = true
+        textReport = false
+    }
 }
 
 dependencies {
