@@ -9,7 +9,7 @@ android {
     compileSdk = 33
     defaultConfig {
         applicationId = "com.easelint.gradle"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 33
     }
     buildTypes {
@@ -26,11 +26,13 @@ android {
 }
 
 dependencies {
-    compileOnly("com.android.tools.build:gradle:7.4.2")
-    compileOnly("com.android.tools.lint:lint-gradle:30.4.2")
-    compileOnly("com.android.tools.lint:lint-checks:30.4.2")
-    // Main.java
+    compileOnly("com.android.tools.build:gradle:7.4.2") // 1
     compileOnly("com.android.tools.lint:lint:30.4.2")
+    compileOnly("com.android.tools.lint:lint-model:30.4.2") //2
+    compileOnly("com.android.tools:common:30.4.2")
+    compileOnly("com.android.tools.lint:lint-checks:30.4.2")
+    compileOnly("com.android.tools.lint:lint-gradle:30.4.2")
+    // Main.java
 
     implementation("androidx.core:core-ktx:1.8.0")
     implementation("androidx.appcompat:appcompat:1.4.1")
@@ -38,6 +40,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+
+
 }
 
 //com.android.tools.lint:lint-checks:30.4.2

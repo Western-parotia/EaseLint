@@ -12,21 +12,39 @@
 30+,从[lint gradle maven list](https://mvnrepository.com/artifact/com.android.tools.lint/lint-gradle?repo=google)
 挑出最后一个30的版本为 30.4.2 作为 Lint Gradle 的hook版本
 
-# 编译顺序
+# task 顺序
 
-* buildScr
-* setting.gradle.kts
-* build.gradle.kts
-* module:build.gradle.kts
+./gradlew lint --dry-run
 
-# buildSrc 导入gradle 将会导致如下错误
-
-```
-
-[//]: # (//这里导入 gradle 将导致与根目录的 plugin 导入冲突：)
-implementation("com.android.tools.build:gradle:7.4.2")
-
-[//]: # (The request for this plugin could not be satisfied because the plugin )
-[//]: # (is already on the classpath with an unknown version, so compatibility cannot be checked)
-```
-
+:app:preBuild SKIPPED
+:app:preDebugBuild SKIPPED
+:app:compileDebugAidl SKIPPED
+:app:compileDebugRenderscript SKIPPED
+:app:generateDebugBuildConfig SKIPPED
+:app:checkDebugAarMetadata SKIPPED
+:app:generateDebugResValues SKIPPED
+:app:mapDebugSourceSetPaths SKIPPED
+:app:generateDebugResources SKIPPED
+:app:mergeDebugResources SKIPPED
+:app:packageDebugResources SKIPPED
+:app:parseDebugLocalResources SKIPPED
+:app:createDebugCompatibleScreenManifests SKIPPED
+:app:extractDeepLinksDebug SKIPPED
+:app:processDebugMainManifest SKIPPED
+:app:processDebugManifest SKIPPED
+:app:processDebugManifestForPackage SKIPPED
+:app:processDebugResources SKIPPED
+:app:compileDebugKotlin SKIPPED
+:app:javaPreCompileDebug SKIPPED
+:app:compileDebugJavaWithJavac SKIPPED
+:app:bundleDebugClassesToCompileJar SKIPPED
+:app:preDebugAndroidTestBuild SKIPPED
+:app:processDebugAndroidTestManifest SKIPPED
+:app:compileDebugAndroidTestRenderscript SKIPPED
+:app:extractProguardFiles SKIPPED
+:app:generateDebugAndroidTestResValues SKIPPED
+----------------------------------
+:app:lintAnalyzeDebug SKIPPED
+:app:lintReportDebug SKIPPED
+:app:lintDebug SKIPPED
+:app:lint SKIPPED
