@@ -1,5 +1,6 @@
 import com.buildsrc.kts.Repositories
 
+com.buildsrc.kts.GlobalConfig.init(project)
 buildscript {
     dependencies {
         classpath(com.buildsrc.kts.Dependencies.Gradle.agp)
