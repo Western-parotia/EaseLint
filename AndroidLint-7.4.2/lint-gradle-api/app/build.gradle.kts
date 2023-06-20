@@ -26,13 +26,14 @@ android {
 }
 
 dependencies {
+
     compileOnly("com.android.tools.build:gradle:7.4.2") // 1
+    // Main.java 在 lint包中
     compileOnly("com.android.tools.lint:lint:30.4.2")
     compileOnly("com.android.tools.lint:lint-model:30.4.2") //2
     compileOnly("com.android.tools:common:30.4.2")
     compileOnly("com.android.tools.lint:lint-checks:30.4.2")
     compileOnly("com.android.tools.lint:lint-gradle:30.4.2")
-    // Main.java
 
     implementation("androidx.core:core-ktx:1.8.0")
     implementation("androidx.appcompat:appcompat:1.4.1")

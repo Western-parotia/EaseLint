@@ -4,7 +4,7 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.kotlin.dsl.maven
 
 object Repositories {
-    private const val aliyunGradlePlugin= "https://maven.aliyun.com/repository/gradle-plugin"
+    private const val aliyunGradlePlugin = "https://maven.aliyun.com/repository/gradle-plugin"
     private const val aliyunNexusPublic = "https://maven.aliyun.com/nexus/content/groups/public/"
     private const val aliyunPublic = "https://maven.aliyun.com/repository/public/"
     private const val aliyunGoogle = "https://maven.aliyun.com/repository/google/"
@@ -25,6 +25,7 @@ object Repositories {
      */
     @JvmStatic
     fun defRepositories(resp: RepositoryHandler) {
+        println("The Repositories.kt have been loaded ")
         resp.apply {
             maven(aliyunGradlePlugin)
             maven(aliyunNexusPublic)
@@ -33,8 +34,9 @@ object Repositories {
             maven(aliyunJcenter)
             maven(aliyunCentral)
             maven(jitpackIo)
-//            google()
-//            mavenCentral()
+            mavenPassword(aliyunReleaseAndArtifacts, aliyunMjDefName, aliyunMjDefPassword)
+            google()
+            mavenCentral()
 //            gradlePluginPortal()
         }
     }

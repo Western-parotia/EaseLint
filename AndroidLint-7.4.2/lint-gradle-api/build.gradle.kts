@@ -1,12 +1,18 @@
+import com.buildsrc.kts.Repositories
+
 buildscript {
     dependencies {
-        classpath("com.android.tools.build:gradle:7.4.2")
+        classpath(com.buildsrc.kts.Dependencies.Gradle.agp)
     }
 }
-// plugins 内 无法访问 buildSrc,plugins
+
 plugins {
-    id("com.android.library") version ("7.4.2") apply (false)
-    id("com.android.application") version ("7.4.2") apply (false)
-    id("org.jetbrains.kotlin.android") version ("1.7.20") apply (false)
-    id("org.jetbrains.kotlin.jvm") version "1.8.20" apply false
+    com.buildsrc.kts.Dependencies.Plugins.add(this)
+}
+
+// 在 settings.gradle 中也无法直接使用 buildSrc的类，所以还是改到这里进行配置
+allprojects {
+    repositories {
+        Repositories.defRepositories(this)
+    }
 }
