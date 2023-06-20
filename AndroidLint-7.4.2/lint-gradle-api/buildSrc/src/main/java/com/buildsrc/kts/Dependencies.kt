@@ -31,7 +31,7 @@ object Dependencies {
 //        |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.7.10 (*)
 //        |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10
 //        |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.7.10 (*)
-        const val version = "1.7.20"
+        const val version = "1.7.10"
         const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
     }
 

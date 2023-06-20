@@ -13,6 +13,7 @@ object Repositories {
     private const val aliyunJcenter = "https://maven.aliyun.com/repository/jcenter/"
     private const val aliyunCentral = "https://maven.aliyun.com/repository/central/"
     private const val jitpackIo = "https://jitpack.io"
+    private const val google = "https://maven.google.com/"
 
     /**
      * 默认的需要拉的库
@@ -26,6 +27,8 @@ object Repositories {
             maven(aliyunJcenter)
             maven(aliyunCentral)
             maven(jitpackIo)
+            maven(google)
+
         }
     }
 }
@@ -41,9 +44,14 @@ java {
 }
 
 dependencies {
-    gradleApi()
     // 这里导入 gradle 将导致与根目录的 plugin 导入冲突：
 // The request for this plugin could not be satisfied because the plugin
 // is already on the classpath with an unknown version, so compatibility cannot be checked
-//    implementation("com.android.tools.build:gradle:7.4.2")
+//    implementation("com.android.tools.build:gradle:7.4.1")// 7.4.2 与 项目的apg 冲突
+//    compileOnly("com.android.tools.build:gradle:7.4.2")// 7.4.2 与 项目的apg 冲突
+    implementation("com.android.tools.lint:lint:30.4.2")
+    implementation("com.android.tools.lint:lint-api:30.4.2")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.10")
+    implementation("com.android.tools.external.org-jetbrains:uast:30.4.2")
+
 }
