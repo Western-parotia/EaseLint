@@ -1,0 +1,71 @@
+//package com.buildsrc.lint
+//
+//import com.android.build.gradle.internal.lint.AndroidLintAnalysisTask
+//import com.android.build.gradle.internal.lint.LintMode
+//import java.util.Collections
+//
+// abstract class EaseLintTask :AndroidLintAnalysisTask(){
+//
+//   override  fun doTaskAction() {
+//        val parent =
+//            project.tasks.findByName("lintAnalyze") as AndroidLintAnalysisTask
+//        parent.lintTool.submit(
+//           mainClass = "com.android.tools.lint.Main",
+//           workerExecutor = workerExecutor,
+//           arguments = generateCommandLineArguments(parent),
+//           android = android.get(),
+//           fatalOnly = fatalOnly.get(),
+//           await = false,
+//           lintMode = LintMode.ANALYSIS)
+//    }
+//     private fun Collection<String>.asLintPaths() = joinToString(separator = ";", postfix = ";")
+//
+//     private fun MutableList<String>.add(arg: String, value: String) {
+//         add(arg)
+//         add(value)
+//     }
+//     fun generateCommandLineArguments(parent:AndroidLintAnalysisTask): List<String> {
+//
+//        val arguments = mutableListOf<String>()
+//
+//        arguments += "--analyze-only"
+//        if (parent.fatalOnly.get()) {
+//            arguments += "--fatalOnly"
+//        }
+//        arguments += listOf("--jdk-home", parent.systemPropertyInputs.javaHome.get())
+//         parent.androidSdkHome.orNull?.let { arguments.add("--sdk-home", it) }
+//
+//         // 不设置model
+////        arguments += "--lint-model"
+////        arguments += listOf(parent.lintModelDirectory.get().asFile.absolutePath).asLintPaths()
+//
+//        for (check in parent.checkOnly.get()) {
+//            arguments += listOf("--check", check)
+//        }
+//
+//        val rules = parent.lintRuleJars.files.filter { it.isFile }.map { it.absolutePath }
+//        if (rules.isNotEmpty()) {
+//            arguments += "--lint-rule-jars"
+//            arguments += rules.asLintPaths()
+//        }
+//        if (parent.printStackTrace.get()) {
+//            arguments += "--stacktrace"
+//        }
+//        arguments += parent.lintTool.initializeLintCacheDir()
+//
+//        // Pass information to lint using the --client-id, --client-name, and --client-version flags
+//        // so that lint can apply gradle-specific and version-specific behaviors.
+//        arguments.add("--client-id", "gradle")
+//        arguments.add("--client-name", "AGP")
+//        arguments.add("--client-version", "7.4.2")
+//
+//        // Pass --offline flag only if lint version is 30.3.0-beta01 or higher because earlier
+//        // versions of lint don't accept that flag.
+////        if (offline.get()
+////            && GradleVersion.tryParse(lintTool.version.get())
+////                ?.isAtLeast(30, 3, 0, "beta", 1, false) == true) {
+////            arguments += "--offline"
+////        }
+//        return Collections.unmodifiableList(arguments)
+//    }
+//}

@@ -43,7 +43,6 @@ dependencies {
 
     implementation("com.easelint:27.1.0-lint-checks:0.0.1-2023-06-20-05-03-30")
     implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("com.google.android.material:material:1.5.0")
     implementation("androidx.core:core-ktx:1.8.0")
 
 }

@@ -48,3 +48,6 @@
 :app:lintReportDebug SKIPPED
 :app:lintDebug SKIPPED
 :app:lint SKIPPED
+lint-results-debug.html
+lint-results-debug.txt
+lint-results-debug.xml

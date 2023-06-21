@@ -1,6 +1,6 @@
 package com.buildsrc.lint
 
-import com.android.tools.lint.EaseLintMain
+import com.android.build.gradle.internal.lint.AndroidLintAnalysisTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -28,9 +28,10 @@ class EaseLintPlugin : Plugin<Project> {
         args.add("/Volumes/D/PersonalAndroidProject/EaseLint_7.0/AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/com/easelint/gradle/JavaParse.java")
         project.afterEvaluate {
             tasks.register("easeLint").get().doLast {
-                val result = EaseLintMain().run(args.toTypedArray())
-                println("easeLint result:$result")
+//                val result = EaseLintMain().run(args.toTypedArray())
+//                println("easeLint result:$result")
             }
+
         }
     }
 }

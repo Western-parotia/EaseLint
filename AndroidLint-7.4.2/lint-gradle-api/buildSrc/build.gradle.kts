@@ -48,12 +48,12 @@ dependencies {
 // The request for this plugin could not be satisfied because the plugin
 // is already on the classpath with an unknown version, so compatibility cannot be checked
 //    implementation("com.android.tools.build:gradle:7.4.1")// 7.4.2 与 项目的apg 冲突
-//    compileOnly("com.android.tools.build:gradle:7.4.2")// 7.4.2 与 项目的apg 冲突
+//    implementation("com.android.tools.build:gradle:7.4.2")// 7.4.2 与 项目的apg 冲突
     //开发完 EaseLintMain 之后将依赖改为 compileOnly，避免因为BuildSrc 的ClassLoader提前加载了 Lint相关类
     // 导致 app module 编译失败
-    implementation("com.android.tools.lint:lint:30.4.2")
-    implementation("com.android.tools.lint:lint-api:30.4.2")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.10")
-    implementation("com.android.tools.external.org-jetbrains:uast:30.4.2")
+//    implementation("com.android.tools.lint:lint:30.4.2")
+//    implementation("com.android.tools.lint:lint-api:30.4.2")
+//    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.10")
+//    implementation("com.android.tools.external.org-jetbrains:uast:30.4.2")
 
 }

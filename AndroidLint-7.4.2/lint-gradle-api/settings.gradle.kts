@@ -35,6 +35,6 @@ dependencyResolutionManagement {
 
 
 rootProject.name = "lint-gradle-api"
-include(":app")
+//include(":app")
 //include(":cli")
 include(":linttest")
