@@ -1,23 +1,39 @@
-import com.buildsrc.kts.Repositories
+//import com.buildsrc.kts.Repositories
 
-com.buildsrc.kts.GlobalConfig.init(project)
+//com.buildsrc.kts.GlobalConfig.init(project)
 buildscript {
     dependencies {
-        classpath(com.buildsrc.kts.Dependencies.Gradle.agp)
+        classpath("com.android.tools.build:gradle:7.4.2")
+//        classpath(com.buildsrc.kts.Dependencies.Gradle.agp)
     }
 }
 
 plugins {
-    com.buildsrc.kts.Dependencies.Plugins.add(this)
-//    id("com.android.library") version ("7.4.2") apply (true)
-//    id("com.android.application") version ("7.4.2") apply (false)
-//    id("org.jetbrains.kotlin.android") version ("1.7.20") apply (false)
-//    id("org.jetbrains.kotlin.jvm") version ("1.7.20") apply false
+//    com.buildsrc.kts.Dependencies.Plugins.add(this)
+    id("com.android.library") version ("7.4.2") apply (true)
+    id("com.android.application") version ("7.4.2") apply (false)
+    id("org.jetbrains.kotlin.android") version ("1.7.20") apply (false)
+    id("org.jetbrains.kotlin.jvm") version ("1.7.20") apply false
 }
 //
 //// 在 settings.gradle 中也无法直接使用 buildSrc的类，所以还是改到这里进行配置
 allprojects {
     repositories {
-        Repositories.defRepositories(this)
+        maven("https://maven.aliyun.com/repository/gradle-plugin")
+        maven("https://maven.aliyun.com/nexus/content/groups/public/")
+        maven("https://maven.aliyun.com/repository/google/")
+        maven("https://maven.aliyun.com/repository/central/")
+        maven("https://maven.aliyun.com/repository/public/")
+        maven("https://maven.google.com/")
+
+        mavenCentral()
+        maven {
+            setUrl("https://packages.aliyun.com/maven/repository/2196753-release-jjUEtd/")
+            credentials {
+                username = "642b9f209f62bf75b33fc1ae"
+                password = "EkNR7ao]bCHh"
+            }
+        }
+//        Repositories.defRepositories(this)
     }
 }

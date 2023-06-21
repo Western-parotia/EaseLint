@@ -44,6 +44,10 @@ android {
 }
 
 dependencies {
+    compileOnly("com.android.tools.build:gradle:7.4.2")
+    compileOnly("com.android.tools.lint:lint-model:30.4.2")
+    compileOnly("com.android.tools:common:30.4.2")
+    compileOnly("com.android.tools:sdk-common:30.4.2")
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.core:core-ktx:1.8.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")

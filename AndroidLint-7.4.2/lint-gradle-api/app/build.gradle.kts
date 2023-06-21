@@ -8,10 +8,13 @@ android {
 
     namespace = "com.easelint.gradle"
     compileSdk = 33
+    compileSdkVersion = "android-33"
     defaultConfig {
         applicationId = "com.easelint.gradle"
         minSdk = 26
         targetSdk = 33
+        compileSdkVersion = "android-33"
+
     }
     buildTypes {
         getByName("release") {
@@ -41,7 +44,7 @@ dependencies {
     compileOnly("com.android.tools.lint:lint-checks:30.4.2")
     compileOnly("com.android.tools.lint:lint-gradle:30.4.2")
 
-    implementation("com.easelint:27.1.0-lint-checks:0.0.1-2023-06-20-05-03-30")
+//    implementation("com.easelint:27.1.0-lint-checks:0.0.1-2023-06-20-05-03-30")
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.core:core-ktx:1.8.0")
 
