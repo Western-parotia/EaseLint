@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("easelint")
 }
 
 android {
@@ -32,13 +33,13 @@ android {
 
 dependencies {
 
-//    compileOnly("com.android.tools.build:gradle:7.4.2") // 1
-//    // Main.java 在 lint包中
-//    compileOnly("com.android.tools.lint:lint:30.4.2")
-//    compileOnly("com.android.tools.lint:lint-model:30.4.2") //2
-//    compileOnly("com.android.tools:common:30.4.2")
-//    compileOnly("com.android.tools.lint:lint-checks:30.4.2")
-//    compileOnly("com.android.tools.lint:lint-gradle:30.4.2")
+    compileOnly("com.android.tools.build:gradle:7.4.2") // 1
+    // Main.java 在 lint包中
+    compileOnly("com.android.tools.lint:lint:30.4.2")
+    compileOnly("com.android.tools.lint:lint-model:30.4.2") //2
+    compileOnly("com.android.tools:common:30.4.2")
+    compileOnly("com.android.tools.lint:lint-checks:30.4.2")
+    compileOnly("com.android.tools.lint:lint-gradle:30.4.2")
 
     implementation("com.easelint:27.1.0-lint-checks:0.0.1-2023-06-20-05-03-30")
     implementation("androidx.appcompat:appcompat:1.4.1")
@@ -82,3 +83,5 @@ dependencies {
 //|    \--- org.ow2.asm:asm-tree:9.2
 //|         \--- org.ow2.asm:asm:9.2
 //\--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10 (*
+
+
