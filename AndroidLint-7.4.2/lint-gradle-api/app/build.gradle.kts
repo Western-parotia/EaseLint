@@ -7,8 +7,8 @@ plugins {
 android {
 
     namespace = "com.easelint.gradle"
-    compileSdk = 33
-    compileSdkVersion = "android-33"
+//    compileSdk = 33
+//    compileSdkVersion = "android-33"
     defaultConfig {
         applicationId = "com.easelint.gradle"
         minSdk = 26
