@@ -5,7 +5,17 @@ import com.android.build.gradle.internal.lint.AndroidLintAnalysisTask
 import com.android.build.gradle.internal.lint.LintMode
 import java.util.Collections
 
+/**
+easeLintTask 每次执行都是针对指定文件，且为主动执行，
+不启用 @input,@output 等引入增量，这让执行结果永远不受，编译与gradle 缓存影响。
+再无异常的情况下，通常也不会产生二次扫描，那么始终保持执行过程与结果是纯净的比象征性的提高
+lint扫描速度要恰当
+ */
+
 abstract class EaseLintTask : AndroidLintAnalysisTask() {
+    companion object {
+        const val TASK_NAME = "easeLint"
+    }
 
     override fun doTaskAction() {
         val parent =
