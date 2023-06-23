@@ -47,19 +47,12 @@ dependencies {
     // 这里导入 gradle 将导致与根目录的 plugin 导入冲突：
     /* The request for this plugin could not be satisfied because the plugin
      is already on the classpath with an unknown version, so compatibility cannot be checked
-        need  compileOnly
+
+     *so there all Lint lib need compileOnly*
     */
     compileOnly("com.android.tools.build:gradle:7.4.2")
     compileOnly("com.android.tools.lint:lint-model:30.4.2")
     compileOnly("com.android.tools:common:30.4.2")
     compileOnly("com.android.tools:sdk-common:30.4.2")
-
-
-    //开发完 EaseLintMain 之后将依赖改为 compileOnly，避免因为BuildSrc 的ClassLoader提前加载了 Lint相关类
-    // 导致 app module 编译失败
-//    implementation("com.android.tools.lint:lint:30.4.2")
-//    implementation("com.android.tools.lint:lint-api:30.4.2")
-//    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.10")
-//    implementation("com.android.tools.external.org-jetbrains:uast:30.4.2")
 
 }
