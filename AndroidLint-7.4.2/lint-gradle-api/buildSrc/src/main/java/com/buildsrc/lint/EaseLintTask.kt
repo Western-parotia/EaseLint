@@ -1,30 +1,34 @@
 package com.buildsrc.lint
 
+import com.android.Version
 import com.android.build.gradle.internal.lint.AndroidLintAnalysisTask
 import com.android.build.gradle.internal.lint.LintMode
 import java.util.Collections
 
- abstract class EaseLintTask :AndroidLintAnalysisTask(){
+abstract class EaseLintTask : AndroidLintAnalysisTask() {
 
-   override  fun doTaskAction() {
+    override fun doTaskAction() {
         val parent =
             project.tasks.findByName("lintAnalyze") as AndroidLintAnalysisTask
         parent.lintTool.submit(
-           mainClass = "com.android.tools.lint.Main",
-           workerExecutor = workerExecutor,
-           arguments = generateCommandLineArguments(parent),
-           android = android.get(),
-           fatalOnly = fatalOnly.get(),
-           await = false,
-           lintMode = LintMode.ANALYSIS)
+            mainClass = "com.android.tools.lint.Main",
+            workerExecutor = workerExecutor,
+            arguments = generateCommandLineArguments(parent),
+            android = android.get(),
+            fatalOnly = fatalOnly.get(),
+            await = false,
+            lintMode = LintMode.ANALYSIS
+        )
     }
-     private fun Collection<String>.asLintPaths() = joinToString(separator = ";", postfix = ";")
 
-     private fun MutableList<String>.add(arg: String, value: String) {
-         add(arg)
-         add(value)
-     }
-     fun generateCommandLineArguments(parent:AndroidLintAnalysisTask): List<String> {
+    private fun Collection<String>.asLintPaths() = joinToString(separator = ";", postfix = ";")
+
+    private fun MutableList<String>.add(arg: String, value: String) {
+        add(arg)
+        add(value)
+    }
+
+    private fun generateCommandLineArguments(parent: AndroidLintAnalysisTask): List<String> {
 
         val arguments = mutableListOf<String>()
 
@@ -33,9 +37,13 @@ import java.util.Collections
             arguments += "--fatalOnly"
         }
         arguments += listOf("--jdk-home", parent.systemPropertyInputs.javaHome.get())
-         parent.androidSdkHome.orNull?.let { arguments.add("--sdk-home", it) }
+        parent.androidSdkHome.orNull?.let { arguments.add("--sdk-home", it) }
 
-         // 不设置model
+        /*
+        不设置model，在Main.java 中的逻辑: model 与 file list 不能同时存在，且在model 为null
+        时才会扫描特殊指定的 file 集合
+        要制定自己的扫描文件，只需要直接在集合末尾 追加 file 绝对路径即可。
+        */
 //        arguments += "--lint-model"
 //        arguments += listOf(parent.lintModelDirectory.get().asFile.absolutePath).asLintPaths()
 
@@ -57,7 +65,7 @@ import java.util.Collections
         // so that lint can apply gradle-specific and version-specific behaviors.
         arguments.add("--client-id", "gradle")
         arguments.add("--client-name", "AGP")
-        arguments.add("--client-version", "7.4.2")
+        arguments.add("--client-version", Version.ANDROID_GRADLE_PLUGIN_VERSION)
 
         // Pass --offline flag only if lint version is 30.3.0-beta01 or higher because earlier
         // versions of lint don't accept that flag.
