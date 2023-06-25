@@ -1,6 +1,4 @@
-//import com.buildsrc.kts.Repositories
-
-//com.buildsrc.kts.GlobalConfig.init(project)
+com.buildsrc.kts.GlobalConfig.init(project)
 buildscript {
     repositories {
         maven("https://maven.aliyun.com/repository/gradle-plugin")
@@ -15,7 +13,7 @@ buildscript {
         classpath(kotlin("gradle-plugin", version = "1.7.0"))
     }
 }
-
+//为新版本API，在buildSrc 导入AGP时会报错插件版本不唯一
 //plugins {
 ////    com.buildsrc.kts.Dependencies.Plugins.add(this)
 //    id("com.android.library") version ("7.4.2") apply (false)

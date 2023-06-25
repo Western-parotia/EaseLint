@@ -11,24 +11,14 @@ import org.gradle.api.GradleException
 class EaseLintPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
+        val libPlugin = project.plugins.findPlugin(LibraryPlugin::class.java)
+        val appPlugin = project.plugins.findPlugin(AppPlugin::class.java)
+        if (libPlugin == null && appPlugin == null) throw GradleException("libPlugin and appPlugin both null")
 
         LintConfigExtensionHelper.apply(project)
 
-        val ext =
-            project.extensions.getByName("androidComponents") as ApplicationAndroidComponentsExtension
-        ext.finalizeDsl { appExt ->
-            appExt.buildTypes.create("staging").let { buildType ->
-                buildType.initWith(appExt.buildTypes.getByName("debug"))
-            }
-        }
-
         project.afterEvaluate {
-            val appPlugin1 = project.plugins.findPlugin("com.android.application")
-
-            val appPlugin2 = project.plugins.getPlugin(AppPlugin::class.java)
-
-//             EaseLintTask 继承自 AndroidLintAnalysisTask
-            val easeLintTask = project.tasks.create(
+            project.tasks.create(
                 EaseLintTask.TASK_NAME,
                 EaseLintTask::class.java
             )

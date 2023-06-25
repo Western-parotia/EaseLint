@@ -19,14 +19,14 @@ abstract class EaseLintTask : AndroidLintAnalysisTask() {
 
     override fun doTaskAction() {
         val parent =
-            project.tasks.findByName("lintAnalyze") as AndroidLintAnalysisTask
+            project.tasks.findByName("lintAnalyzeDebug") as AndroidLintAnalysisTask
 
         parent.lintTool.submit(
             mainClass = "com.android.tools.lint.Main",
-            workerExecutor = workerExecutor,
+            workerExecutor = parent.workerExecutor,
             arguments = generateCommandLineArguments(parent),
-            android = android.get(),
-            fatalOnly = fatalOnly.get(),
+            android = parent.android.get(),
+            fatalOnly = parent.fatalOnly.get(),
             await = false,
             lintMode = LintMode.ANALYSIS
         )
