@@ -1,24 +1,23 @@
 package com.buildsrc.kts
 
-import org.gradle.kotlin.dsl.PluginDependenciesSpecScope
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.version
 import org.gradle.plugin.use.PluginDependenciesSpec
 
 object Dependencies {
 
-    object Plugins {
-        // 奇怪： 命名 拓展是 PluginDependenciesSpecScope.() 但是编译完要用 PluginDependenciesSpec 接收
-        fun add(ps: PluginDependenciesSpec) {
-            ps.apply {
-                id("com.android.library") version (Gradle.version) apply (false)
-                id("com.android.application") version (Gradle.version) apply (false)
-                id("org.jetbrains.kotlin.android") version (Kotlin.version) apply (false)
-                id("org.jetbrains.kotlin.jvm") version (Kotlin.version) apply false
-            }
-        }
-
-    }
+//    object Plugins {
+//        // 奇怪： 命名 拓展是 PluginDependenciesSpecScope.() 但是编译完要用 PluginDependenciesSpec 接收
+//        fun add(ps: PluginDependenciesSpec) {
+//            ps.apply {
+//                id("com.android.library") version (Gradle.version) apply (false)
+//                id("com.android.application") version (Gradle.version) apply (false)
+//                id("org.jetbrains.kotlin.android") version (Kotlin.version) apply (false)
+//                id("org.jetbrains.kotlin.jvm") version (Kotlin.version) apply false
+//            }
+//        }
+//
+//    }
 
     object Kotlin {
         // 为什么这里选择 1.7.20 的kotlin

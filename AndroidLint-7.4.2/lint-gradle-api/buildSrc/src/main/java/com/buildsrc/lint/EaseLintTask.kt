@@ -20,6 +20,7 @@ abstract class EaseLintTask : AndroidLintAnalysisTask() {
     override fun doTaskAction() {
         val parent =
             project.tasks.findByName("lintAnalyze") as AndroidLintAnalysisTask
+
         parent.lintTool.submit(
             mainClass = "com.android.tools.lint.Main",
             workerExecutor = workerExecutor,

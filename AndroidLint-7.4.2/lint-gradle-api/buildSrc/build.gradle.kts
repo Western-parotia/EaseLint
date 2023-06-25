@@ -1,8 +1,6 @@
 plugins {
     `kotlin-dsl`
-    // gradle 7.x 之后捆绑的 kotlin 更新为 1.4.31
-    id("org.jetbrains.kotlin.jvm") version "1.4.31"
-
+    kotlin("jvm") version "1.6.21"
 }
 
 
@@ -50,7 +48,9 @@ dependencies {
 
      *so there all Lint lib need compileOnly*
     */
-    compileOnly("com.android.tools.build:gradle:7.4.2")
+    gradleApi()
+    implementation("com.android.tools.build:gradle:7.4.2")
+    implementation(kotlin("stdlib"))
     compileOnly("com.android.tools.lint:lint-model:30.4.2")
     compileOnly("com.android.tools:common:30.4.2")
     compileOnly("com.android.tools:sdk-common:30.4.2")
