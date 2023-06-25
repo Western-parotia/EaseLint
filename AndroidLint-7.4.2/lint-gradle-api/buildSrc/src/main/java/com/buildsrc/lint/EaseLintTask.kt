@@ -3,7 +3,11 @@ package com.buildsrc.lint
 import com.android.Version
 import com.android.build.api.artifact.impl.ArtifactsImpl
 import com.android.build.gradle.internal.SdkComponentsBuildService
+import com.android.build.gradle.internal.component.AndroidTestCreationConfig
 import com.android.build.gradle.internal.component.ComponentCreationConfig
+import com.android.build.gradle.internal.component.TestComponentCreationConfig
+import com.android.build.gradle.internal.component.UnitTestCreationConfig
+import com.android.build.gradle.internal.component.VariantCreationConfig
 import com.android.build.gradle.internal.lint.AndroidLintAnalysisTask
 import com.android.build.gradle.internal.lint.LintMode
 import com.android.build.gradle.internal.lint.ProjectInputs
@@ -14,6 +18,8 @@ import com.android.build.gradle.internal.scope.ProjectInfo
 import com.android.build.gradle.internal.services.TaskCreationServices
 import com.android.build.gradle.internal.services.getBuildService
 import com.android.build.gradle.internal.services.getLintParallelBuildService
+import com.android.build.gradle.internal.tasks.factory.GlobalTaskCreationConfig
+import com.android.build.gradle.internal.tasks.factory.TaskFactory
 import com.android.build.gradle.internal.tasks.factory.VariantTaskCreationAction
 import com.android.build.gradle.internal.utils.fromDisallowChanges
 import com.android.build.gradle.internal.utils.getDesugaredMethods
@@ -39,16 +45,17 @@ lint扫描速度要恰当
 abstract class EaseLintTask : AndroidLintAnalysisTask() {
     companion object {
         const val TASK_NAME = "easeLint"
+
     }
 
     override fun doTaskAction() {
         val parent =
             project.tasks.findByName("lintAnalyzeDebug") as AndroidLintAnalysisTask
-
+    val arguments = generateCommandLineArguments(parent)
         parent.lintTool.submit(
             mainClass = "com.android.tools.lint.Main",
             workerExecutor = parent.workerExecutor,
-            arguments = generateCommandLineArguments(parent),
+            arguments = arguments,
             android = parent.android.get(),
             fatalOnly = parent.fatalOnly.get(),
             await = false,
@@ -58,10 +65,9 @@ abstract class EaseLintTask : AndroidLintAnalysisTask() {
 
     class SingleVariantCreationAction(variant: VariantWithTests) :
         ELVariantCreationAction(variant) {
-        //        override val name = creationConfig.computeTaskName("lintAnalyze")
-        override val name = "easeLint"
+        override val name = creationConfig.computeTaskName("easeLint")
         override val fatalOnly = false
-        override val description = "Run lint analysis on the ${creationConfig.name} variant"
+        override val description = "Run easeLint analysis on the ${creationConfig.name} variant"
 
         override fun handleProvider(taskProvider: TaskProvider<EaseLintTask>) {
             ELRegisterOutputArtifacts.registerOutputArtifacts(
@@ -264,6 +270,7 @@ abstract class EaseLintTask : AndroidLintAnalysisTask() {
 //                ?.isAtLeast(30, 3, 0, "beta", 1, false) == true) {
 //            arguments += "--offline"
 //        }
+        arguments.add("/Volumes/D/PersonalAndroidProject/EaseLint_7.0/AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/com/easelint/gradle/SubModuleKotlinPrint.kt")
         return Collections.unmodifiableList(arguments)
     }
 }

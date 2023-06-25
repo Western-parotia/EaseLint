@@ -11,6 +11,10 @@ import org.gradle.api.tasks.TaskProvider;
 
 import kotlin.jvm.functions.Function1;
 
+/**
+ * 通过java 文件访问kotlin 的 internal 方法，关闭 编译错误
+ * 另一种是通过反射，范型多的时候反射过于麻烦
+ */
 public class ArtifactsImplProxy {
 
     final String LINT_PRINT_STACKTRACE_ENVIRONMENT_VARIABLE = "LINT_PRINT_STACKTRACE";
