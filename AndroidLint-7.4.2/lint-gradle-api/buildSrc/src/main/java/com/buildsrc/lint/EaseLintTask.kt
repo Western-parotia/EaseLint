@@ -239,7 +239,7 @@ abstract class EaseLintTask : AndroidLintAnalysisTask() {
         要制定自己的扫描文件，只需要直接在集合末尾 追加 file 绝对路径即可。
         */
 //        arguments += "--lint-model"
-//        arguments += listOf(parent.lintModelDirectory.get().asFile.absolutePath).asLintPaths()
+//        arguments += listOf(lintModelDirectory.get().asFile.absolutePath).asLintPaths()
 
         for (check in checkOnly.get()) {
             arguments += listOf("--check", check)
