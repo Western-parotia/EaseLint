@@ -49,16 +49,13 @@ abstract class EaseLintTask : AndroidLintAnalysisTask() {
     }
 
     override fun doTaskAction() {
-        val parent =
-            project.tasks.findByName("lintAnalyzeDebug") as AndroidLintAnalysisTask
-
-        val arguments = generateCommandLineArguments(parent)
-        parent.lintTool.submit(
+        val arguments = generateCommandLineArguments()
+        lintTool.submit(
             mainClass = "com.android.tools.lint.Main",
-            workerExecutor = parent.workerExecutor,
+            workerExecutor = workerExecutor,
             arguments = arguments,
-            android = parent.android.get(),
-            fatalOnly = parent.fatalOnly.get(),
+            android = android.get(),
+            fatalOnly = fatalOnly.get(),
             await = false,
             lintMode = LintMode.ANALYSIS
         )
@@ -66,7 +63,7 @@ abstract class EaseLintTask : AndroidLintAnalysisTask() {
 
     class SingleVariantCreationAction(variant: VariantWithTests) :
         ELVariantCreationAction(variant) {
-        override val name = creationConfig.computeTaskName("easeLint")
+        override val name = creationConfig.computeTaskName(TASK_NAME)
         override val fatalOnly = false
         override val description = "Run easeLint analysis on the ${creationConfig.name} variant"
 
@@ -225,16 +222,16 @@ abstract class EaseLintTask : AndroidLintAnalysisTask() {
         add(value)
     }
 
-    private fun generateCommandLineArguments(parent: AndroidLintAnalysisTask): List<String> {
+    private fun generateCommandLineArguments(): List<String> {
 
         val arguments = mutableListOf<String>()
 
         arguments += "--analyze-only"
-        if (parent.fatalOnly.get()) {
+        if (fatalOnly.get()) {
             arguments += "--fatalOnly"
         }
-        arguments += listOf("--jdk-home", parent.systemPropertyInputs.javaHome.get())
-        parent.androidSdkHome.orNull?.let { arguments.add("--sdk-home", it) }
+        arguments += listOf("--jdk-home", systemPropertyInputs.javaHome.get())
+        androidSdkHome.orNull?.let { arguments.add("--sdk-home", it) }
 
         /*
         不设置model，在Main.java 中的逻辑: model 与 file list 不能同时存在，且在model 为null
@@ -244,19 +241,19 @@ abstract class EaseLintTask : AndroidLintAnalysisTask() {
 //        arguments += "--lint-model"
 //        arguments += listOf(parent.lintModelDirectory.get().asFile.absolutePath).asLintPaths()
 
-        for (check in parent.checkOnly.get()) {
+        for (check in checkOnly.get()) {
             arguments += listOf("--check", check)
         }
 
-        val rules = parent.lintRuleJars.files.filter { it.isFile }.map { it.absolutePath }
+        val rules = lintRuleJars.files.filter { it.isFile }.map { it.absolutePath }
         if (rules.isNotEmpty()) {
             arguments += "--lint-rule-jars"
             arguments += rules.asLintPaths()
         }
-        if (parent.printStackTrace.get()) {
+        if (printStackTrace.get()) {
             arguments += "--stacktrace"
         }
-        arguments += parent.lintTool.initializeLintCacheDir()
+        arguments += lintTool.initializeLintCacheDir()
 
         // Pass information to lint using the --client-id, --client-name, and --client-version flags
         // so that lint can apply gradle-specific and version-specific behaviors.
