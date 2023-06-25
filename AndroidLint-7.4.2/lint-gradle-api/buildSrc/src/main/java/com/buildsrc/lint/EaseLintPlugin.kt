@@ -1,6 +1,5 @@
 package com.buildsrc.lint
 
-import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.gradle.internal.plugins.AppPlugin
 import com.android.build.gradle.internal.plugins.LibraryPlugin
 import org.gradle.api.Plugin

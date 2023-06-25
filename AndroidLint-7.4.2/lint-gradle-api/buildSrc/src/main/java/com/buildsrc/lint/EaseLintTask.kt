@@ -21,10 +21,7 @@ import com.android.build.gradle.internal.utils.setDisallowChanges
 import com.android.builder.core.ComponentType
 import com.android.builder.core.ComponentTypeImpl
 import com.android.tools.lint.model.LintModelModuleType
-import org.gradle.api.Task
 import org.gradle.api.file.Directory
-import org.gradle.api.file.FileSystemLocation
-import org.gradle.api.file.FileSystemLocationProperty
 import org.gradle.api.logging.configuration.ShowStacktrace
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.provider.Provider
@@ -85,11 +82,19 @@ abstract class EaseLintTask : AndroidLintAnalysisTask() {
             internalArtifactType: InternalArtifactType<Directory>,
             artifacts: ArtifactsImpl
         ) {
-            artifacts
-                .setInitialProvider(taskProvider, EaseLintTask::partialResultsDirectory)
-                .withName(PARTIAL_RESULTS_DIR_NAME)
-                .on(internalArtifactType)
+            ArtifactsImplProxy().proxy(
+                taskProvider, EaseLintTask::partialResultsDirectory,
+                artifacts,
+                internalArtifactType
+            )
+//            artifacts
+//                .setInitialProvider(taskProvider){
+//                    it.partialResultsDirectory
+//                }
+//                .withName(PARTIAL_RESULTS_DIR_NAME)
+//                .on(internalArtifactType)
         }
+
 
     }
 
@@ -151,8 +156,6 @@ abstract class EaseLintTask : AndroidLintAnalysisTask() {
 
             task.group = JavaBasePlugin.VERIFICATION_GROUP
             task.description = description
-            // 反射 绕过似有方法
-
             task.ELInitializeGlobalInputs(
                 services = variant.main.services,
                 isAndroid = true
