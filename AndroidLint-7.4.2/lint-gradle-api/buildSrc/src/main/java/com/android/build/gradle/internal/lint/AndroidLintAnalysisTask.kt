@@ -38,8 +38,10 @@ import com.android.build.gradle.internal.tasks.TaskCategory
 import com.android.ide.common.repository.GradleVersion
 import com.android.tools.lint.model.LintModelSerialization
 import com.android.utils.FileUtils
+import com.android.utils.JvmWideVariable
 import com.buildsrc.lint.ArtifactsImplProxy
 import com.google.common.annotations.VisibleForTesting
+import com.google.common.reflect.TypeToken
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
@@ -62,6 +64,8 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskProvider
 import java.io.File
+import java.lang.ref.SoftReference
+import java.net.URI
 import java.net.URLClassLoader
 import java.util.Collections
 
@@ -119,47 +123,14 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
     @get:PathSensitive(PathSensitivity.NONE)
     @get:Optional
     abstract val desugaredMethodsFiles: ConfigurableFileCollection
-    private fun getPlatformClassLoader(): ClassLoader {
-        // AGP is currently compiled against java 8 APIs, so do this by reflection (b/160392650)
-        return ClassLoader::class.java.getMethod("getPlatformClassLoader")
-            .invoke(null) as ClassLoader
-    }
+
 
     override fun doTaskAction() {
         println("----------- AndroidLintAnalysisTask has been cover by EaseLint -----------")
+        LintHook().loadHookFile(lintTool,project)
         lintTool.lintClassLoaderBuildService.get().shouldDispose = true
         writeLintModelFile()
-
-        val isSpecial = false
-
-        var arguments = generateCommandLineArguments(!isSpecial)
-        if (isSpecial) {
-            val newList = mutableListOf<String>()
-            newList.addAll(arguments)
-            newList.add(
-                "/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/" +
-                        "AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/" +
-                        "com/easelint/gradle/SubModuleKotlinPrint.kt"
-            )
-            newList.add(
-                "/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/" +
-                        "AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/" +
-                        "com/easelint/gradle/JavaParse.java"
-            )
-            arguments = newList
-        }
-        println("arguments: start =================")
-        arguments.forEach {
-            println(it)
-        }
-        println("arguments: end =================")
-        // 创建 classLoader 先加载自己的 LintRequest
-//        lintTool.classpath.files
-        val uris = lintTool.classpath.files.map { it.toURI() }
-        val classpathUrls = uris.map { it.toURL() }.toTypedArray()
-        val classLoader = URLClassLoader(classpathUrls, getPlatformClassLoader())
-        classLoader.loadClass("com.android.tools.lint.client.api.LintRequest")
-
+        var arguments = generateCommandLineArguments(true)
         lintTool.submit(
             mainClass = "com.android.tools.lint.Main",
             workerExecutor = workerExecutor,
@@ -170,6 +141,7 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
             lintMode = LintMode.ANALYSIS
         )
     }
+
 
     private fun writeLintModelFile() {
         val module = ProjectInputsProxy.convertToLintModelModule(projectInputs)
