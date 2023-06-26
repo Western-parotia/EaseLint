@@ -1,5 +1,6 @@
 package com.buildsrc.lint
 
+import com.android.build.gradle.internal.lint.AndroidLintAnalysisTask
 import com.android.build.gradle.internal.lint.LintTaskManager
 import com.android.build.gradle.internal.lint.VariantWithTests
 import com.android.build.gradle.internal.plugins.AppPlugin
@@ -18,8 +19,6 @@ import org.gradle.api.artifacts.Configuration
 class EaseLintPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-//        val lintClassPath: Configuration = project.configurations.getByName(OpenAndroidLintTask.LINT_CLASS_PATH)
-//        lintClassPath.dependencies.add()
 
         val libPlugin = project.plugins.findPlugin(LibraryPlugin::class.java)
         val appPlugin = project.plugins.findPlugin(AppPlugin::class.java)
@@ -27,13 +26,14 @@ class EaseLintPlugin : Plugin<Project> {
         val basePlugin = appPlugin ?: libPlugin!!
         LintConfigExtensionHelper.apply(project)
 
-//        project.configurations.detachedConfiguration()
-        val globalConfig = basePlugin.variantManager.globalTaskCreationConfig
-//        val projectService = ProjectServices()
-//        val lintFiles = projectService.lintFromMaven.files
-//        lintFiles.
-//        services.lintFromMaven
-//        services.dependencies.add("")
+        project.gradle.taskGraph.whenReady {
+            // after afterEvaluate
+            val task = project.tasks.getByName("lintAnalyzeDebug") as AndroidLintAnalysisTask
+            val lintTool = task
+
+
+        }
+
 
     }
 }
