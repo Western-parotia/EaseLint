@@ -139,22 +139,22 @@ open class LintRequest(
     open fun getProjects(): Collection<Project>? = projects
 
     fun setProjects(projects: Collection<Project>?): LintRequest {
-        projects?.forEach {
-            it.addFile(
-                File(
-                    "/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/" +
-                            "AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/" +
-                            "com/easelint/gradle/SubModuleKotlinPrint.kt"
-                )
+        val project = projects?.first()
+        project?.addFile(
+            File(
+                "/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/" +
+                        "AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/" +
+                        "com/easelint/gradle/SubModuleKotlinPrint.kt"
             )
-            it.addFile(
-                File(
-                    "/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/" +
-                            "AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/" +
-                            "com/easelint/gradle/JavaParse.java"
-                )
+        )
+        project?.addFile(
+            File(
+                "/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/" +
+                        "AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/" +
+                        "com/easelint/gradle/JavaParse.java"
             )
-        }
+        )
+
         this.projects = projects
         println("========= easeLint cover LintRequest ==========")
         return this
