@@ -38,10 +38,9 @@ import com.android.build.gradle.internal.tasks.TaskCategory
 import com.android.ide.common.repository.GradleVersion
 import com.android.tools.lint.model.LintModelSerialization
 import com.android.utils.FileUtils
-import com.android.utils.JvmWideVariable
 import com.buildsrc.lint.ArtifactsImplProxy
+import com.buildsrc.lint.LintHook
 import com.google.common.annotations.VisibleForTesting
-import com.google.common.reflect.TypeToken
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
@@ -64,9 +63,6 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskProvider
 import java.io.File
-import java.lang.ref.SoftReference
-import java.net.URI
-import java.net.URLClassLoader
 import java.util.Collections
 
 /** Task to invoke lint with the --analyze-only flag, producing partial results. */

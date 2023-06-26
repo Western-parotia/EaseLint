@@ -1,5 +1,8 @@
-package com.android.build.gradle.internal.lint
+package com.buildsrc.lint
 
+import com.android.build.gradle.internal.lint.AndroidLintWorkAction
+import com.android.build.gradle.internal.lint.LintFromMaven
+import com.android.build.gradle.internal.lint.LintTool
 import com.android.utils.JvmWideVariable
 import com.google.common.reflect.TypeToken
 import org.gradle.api.Project
@@ -9,9 +12,9 @@ import java.lang.ref.SoftReference
 import java.net.URI
 import java.net.URLClassLoader
 
-class LintHook {
+object LintHook {
 
-    val logger = Logging.getLogger(Task::class.java)
+    private val logger = Logging.getLogger(Task::class.java)
 
     /**
      * Cache the classloaders across the daemon, even if the buildscipt classpath changes
