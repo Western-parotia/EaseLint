@@ -22,16 +22,16 @@ class EaseLintPlugin : Plugin<Project> {
         LintConfigExtensionHelper.apply(project)
 
         project.afterEvaluate {
-
-            val taskFactory: TaskFactory = TaskFactoryImpl(project.tasks)
-            val globalConfig = basePlugin.variantManager.globalTaskCreationConfig
-            // debug,release,x? 这里可以借助外部参数
-            val variant = basePlugin.variantManager.mainComponents.findLast {
-                it.variant.name == "debug"
-            }!!.variant
-
-            val target = VariantWithTests(variant)
-            taskFactory.register(EaseLintTask.SingleVariantCreationAction(target))
+//
+//            val taskFactory: TaskFactory = TaskFactoryImpl(project.tasks)
+//            val globalConfig = basePlugin.variantManager.globalTaskCreationConfig
+//            // debug,release,x? 这里可以借助外部参数
+//            val variant = basePlugin.variantManager.mainComponents.findLast {
+//                it.variant.name == "debug"
+//            }!!.variant
+//
+//            val target = VariantWithTests(variant)
+//            taskFactory.register(EaseLintTask.SingleVariantCreationAction(target))
         }
     }
 }

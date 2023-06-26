@@ -22,6 +22,7 @@ import com.android.build.api.dsl.Lint
 import com.android.build.gradle.internal.SdkComponentsBuildService
 import com.android.build.gradle.internal.component.ComponentCreationConfig
 import com.android.build.gradle.internal.component.VariantCreationConfig
+import com.android.build.gradle.internal.profile.AnalyticsService
 import com.android.build.gradle.internal.publishing.AndroidArtifacts
 import com.android.build.gradle.internal.scope.InternalArtifactType
 import com.android.build.gradle.internal.services.TaskCreationServices
@@ -37,6 +38,8 @@ import com.android.build.gradle.internal.tasks.TaskCategory
 import com.android.ide.common.repository.GradleVersion
 import com.android.tools.lint.model.LintModelSerialization
 import com.android.utils.FileUtils
+import com.buildsrc.lint.ArtifactsImplProxy
+import com.buildsrc.lint.EaseLintTask
 import com.google.common.annotations.VisibleForTesting
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
@@ -118,6 +121,7 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
     abstract val desugaredMethodsFiles: ConfigurableFileCollection
 
     override fun doTaskAction() {
+        println("running EaseLint -----------------")
         lintTool.lintClassLoaderBuildService.get().shouldDispose = true
         writeLintModelFile()
         lintTool.submit(
@@ -132,7 +136,7 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
     }
 
     private fun writeLintModelFile() {
-        val module = projectInputs.convertToLintModelModule()
+        val module = ProjectInputsProxy.convertToLintModelModule(projectInputs)
 
         val variant =
             variantInputs.toLintModel(
@@ -190,7 +194,8 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
         // versions of lint don't accept that flag.
         if (offline.get()
             && GradleVersion.tryParse(lintTool.version.get())
-                ?.isAtLeast(30, 3, 0, "beta", 1, false) == true) {
+                ?.isAtLeast(30, 3, 0, "beta", 1, false) == true
+        ) {
             arguments += "--offline"
         }
 
@@ -228,13 +233,14 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
      * CreationAction for the lintVitalAnalyzeVariant task. Does not use the variant with tests
      */
     class LintVitalCreationAction(variant: VariantCreationConfig) :
-        VariantCreationAction(VariantWithTests(
-            variant,
-            androidTest = null,
-            unitTest = null,
-            testFixtures = null
-        ))
-    {
+        VariantCreationAction(
+            VariantWithTests(
+                variant,
+                androidTest = null,
+                unitTest = null,
+                testFixtures = null
+            )
+        ) {
         override val name = creationConfig.computeTaskName("lintVitalAnalyze")
         override val fatalOnly = true
         override val description =
@@ -296,7 +302,7 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
                     creationConfig.global.lintOptions.checkOnly
                 }
             )
-            task.projectInputs.initialize(variant, LintMode.ANALYSIS)
+            ProjectInputsProxy.initialize(task.projectInputs, variant, LintMode.ANALYSIS)
             task.variantInputs.initialize(
                 variant,
                 checkDependencies = false,
@@ -327,7 +333,7 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
             getBuildService(buildServiceRegistry, SdkComponentsBuildService::class.java)
 
         this.android.setDisallowChanges(isAndroid)
-        if(isAndroid) {
+        if (isAndroid) {
             this.androidSdkHome.set(
                 sdkComponentsBuildService.flatMap { it.sdkDirectoryProvider }
                     .map { it.asFile.absolutePath }
@@ -373,26 +379,46 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
         )
         this.group = JavaBasePlugin.VERIFICATION_GROUP
         this.variantName = ""
-        this.analyticsService.setDisallowChanges(getBuildService(taskCreationServices.buildServiceRegistry))
+//        this.analyticsService.setDisallowChanges(getBuildService(taskCreationServices.buildServiceRegistry))
+        this.analyticsService.setDisallowChanges(
+            getBuildService(
+                taskCreationServices.buildServiceRegistry,
+                AnalyticsService::class.java
+            )
+        )
         this.fatalOnly.setDisallowChanges(fatalOnly)
         this.checkOnly.setDisallowChanges(lintOptions.checkOnly)
         this.lintTool.initialize(taskCreationServices)
-        this.projectInputs
-            .initializeForStandalone(
-                project,
-                javaPluginExtension,
-                lintOptions,
-                LintMode.ANALYSIS
-            )
-        this.variantInputs
-            .initializeForStandalone(
-                project,
-                javaPluginExtension,
-                taskCreationServices.projectOptions,
-                fatalOnly,
-                checkDependencies = false,
-                LintMode.ANALYSIS
-            )
+        ProjectInputsProxy.initializeForStandalone(
+            this.projectInputs,
+            project,
+            javaPluginExtension,
+            lintOptions,
+            LintMode.ANALYSIS
+        )
+//            .initializeForStandalone(
+//                project,
+//                javaPluginExtension,
+//                lintOptions,
+//                LintMode.ANALYSIS
+//            )
+        VariantInputsProxy.initializeForStandalone(
+            this.variantInputs,
+            project,
+            javaPluginExtension,
+            taskCreationServices.projectOptions,
+            fatalOnly,
+            checkDependencies = false,
+            LintMode.ANALYSIS
+        )
+//        this.variantInputs.initializeForStandalone(
+//                project,
+//                javaPluginExtension,
+//                taskCreationServices.projectOptions,
+//                fatalOnly,
+//                checkDependencies = false,
+//                LintMode.ANALYSIS
+//            )
         this.lintRuleJars.fromDisallowChanges(customLintChecksConfig)
         this.lintModelDirectory
             .setDisallowChanges(
@@ -410,10 +436,15 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
             internalArtifactType: InternalArtifactType<Directory>,
             artifacts: ArtifactsImpl
         ) {
-            artifacts
-                .setInitialProvider(taskProvider, AndroidLintAnalysisTask::partialResultsDirectory)
-                .withName(PARTIAL_RESULTS_DIR_NAME)
-                .on(internalArtifactType)
+            ArtifactsImplProxy().proxy(
+                taskProvider, AndroidLintAnalysisTask::partialResultsDirectory,
+                artifacts,
+                internalArtifactType
+            )
+//            artifacts
+//                .setInitialProvider(taskProvider, AndroidLintAnalysisTask::partialResultsDirectory)
+//                .withName(PARTIAL_RESULTS_DIR_NAME)
+//                .on(internalArtifactType)
         }
     }
 }

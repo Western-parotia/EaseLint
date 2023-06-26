@@ -3,10 +3,7 @@ package com.buildsrc.lint
 import com.android.Version
 import com.android.build.api.artifact.impl.ArtifactsImpl
 import com.android.build.gradle.internal.SdkComponentsBuildService
-import com.android.build.gradle.internal.component.AndroidTestCreationConfig
 import com.android.build.gradle.internal.component.ComponentCreationConfig
-import com.android.build.gradle.internal.component.TestComponentCreationConfig
-import com.android.build.gradle.internal.component.UnitTestCreationConfig
 import com.android.build.gradle.internal.component.VariantCreationConfig
 import com.android.build.gradle.internal.lint.AndroidLintAnalysisTask
 import com.android.build.gradle.internal.lint.LintMode
@@ -49,7 +46,7 @@ abstract class EaseLintTask : AndroidLintAnalysisTask() {
     }
 
     override fun doTaskAction() {
-        val arguments = generateCommandLineArguments()
+        val arguments = elGenerateCommandLineArguments()
         lintTool.submit(
             mainClass = "com.android.tools.lint.Main",
             workerExecutor = workerExecutor,
@@ -222,7 +219,7 @@ abstract class EaseLintTask : AndroidLintAnalysisTask() {
         add(value)
     }
 
-    private fun generateCommandLineArguments(): List<String> {
+    fun elGenerateCommandLineArguments(): List<String> {
 
         val arguments = mutableListOf<String>()
 
