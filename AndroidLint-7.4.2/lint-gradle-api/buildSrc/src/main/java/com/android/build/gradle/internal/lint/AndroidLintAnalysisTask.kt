@@ -121,7 +121,7 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
     abstract val desugaredMethodsFiles: ConfigurableFileCollection
 
     override fun doTaskAction() {
-        println("running EaseLint -----------------")
+        println("----------- AndroidLintAnalysisTask has been cover by EaseLint -----------")
         lintTool.lintClassLoaderBuildService.get().shouldDispose = true
         writeLintModelFile()
         lintTool.submit(
