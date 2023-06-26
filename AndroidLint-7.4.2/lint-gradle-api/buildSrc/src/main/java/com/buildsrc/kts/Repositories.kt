@@ -35,6 +35,7 @@ object Repositories {
             maven(aliyunCentral)
             maven(jitpackIo)
             mavenPassword(aliyunReleaseAndArtifacts, aliyunMjDefName, aliyunMjDefPassword)
+            mavenPassword(aliyunSnapshotAndArtifacts, aliyunMjDefName, aliyunMjDefPassword)
             google()
             mavenCentral()
 //            gradlePluginPortal()

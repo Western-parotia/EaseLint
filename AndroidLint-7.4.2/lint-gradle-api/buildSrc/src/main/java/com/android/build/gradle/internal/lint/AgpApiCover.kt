@@ -9,12 +9,13 @@ import com.android.build.gradle.internal.services.getBuildService
 import com.android.build.gradle.internal.utils.fromDisallowChanges
 import com.android.build.gradle.internal.utils.setDisallowChanges
 import com.android.build.gradle.options.ProjectOptions
+import com.android.builder.core.ComponentType
+import com.android.builder.core.ComponentTypeImpl
 import com.android.ide.common.repository.GradleVersion
 import com.android.tools.lint.model.DefaultLintModelMavenName
 import com.android.tools.lint.model.DefaultLintModelModule
 import com.android.tools.lint.model.LintModelModule
 import com.android.tools.lint.model.LintModelModuleType
-import com.buildsrc.lint.toLintModelModuleType
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.provider.Provider
@@ -24,7 +25,16 @@ import org.gradle.api.services.BuildServiceRegistry
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.compile.JavaCompile
 import java.io.File
-
+fun ComponentType.toLintModelModuleType(): LintModelModuleType {
+    return when (this) {
+        // FIXME add other types
+        ComponentTypeImpl.BASE_APK -> LintModelModuleType.APP
+        ComponentTypeImpl.LIBRARY -> LintModelModuleType.LIBRARY
+        ComponentTypeImpl.OPTIONAL_APK -> LintModelModuleType.DYNAMIC_FEATURE
+        ComponentTypeImpl.TEST_APK -> LintModelModuleType.TEST
+        else -> throw RuntimeException("Unsupported ComponentTypeImpl value")
+    }
+}
 object VariantInputsProxy {
 
 

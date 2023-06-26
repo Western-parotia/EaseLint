@@ -1,12 +1,13 @@
 com.buildsrc.kts.GlobalConfig.init(project)
 buildscript {
     repositories {
-        maven("https://maven.aliyun.com/repository/gradle-plugin")
-        maven("https://maven.aliyun.com/nexus/content/groups/public/")
-        maven("https://maven.aliyun.com/repository/google/")
-        maven("https://maven.aliyun.com/repository/central/")
-        maven("https://maven.aliyun.com/repository/public/")
-        google()
+        com.buildsrc.kts.Repositories.defRepositories(this)
+//        maven("https://maven.aliyun.com/repository/gradle-plugin")
+//        maven("https://maven.aliyun.com/nexus/content/groups/public/")
+//        maven("https://maven.aliyun.com/repository/google/")
+//        maven("https://maven.aliyun.com/repository/central/")
+//        maven("https://maven.aliyun.com/repository/public/")
+//        google()
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.4.2")
@@ -27,21 +28,21 @@ buildscript {
 // 所以此项目中优先使用 显式配置方式
 allprojects {
     repositories {
-        maven("https://maven.aliyun.com/repository/gradle-plugin")
-        maven("https://maven.aliyun.com/nexus/content/groups/public/")
-        maven("https://maven.aliyun.com/repository/google/")
-        maven("https://maven.aliyun.com/repository/central/")
-        maven("https://maven.aliyun.com/repository/public/")
-        maven("https://maven.google.com/")
-
-        mavenCentral()
-        maven {
-            setUrl("https://packages.aliyun.com/maven/repository/2196753-release-jjUEtd/")
-            credentials {
-                username = "642b9f209f62bf75b33fc1ae"
-                password = "EkNR7ao]bCHh"
-            }
-        }
-//        Repositories.defRepositories(this)
+        com.buildsrc.kts.Repositories.defRepositories(this)
+//        maven("https://maven.aliyun.com/repository/gradle-plugin")
+//        maven("https://maven.aliyun.com/nexus/content/groups/public/")
+//        maven("https://maven.aliyun.com/repository/google/")
+//        maven("https://maven.aliyun.com/repository/central/")
+//        maven("https://maven.aliyun.com/repository/public/")
+//        maven("https://maven.google.com/")
+//
+//        mavenCentral()
+//        maven {
+//            setUrl("https://packages.aliyun.com/maven/repository/2196753-release-jjUEtd/")
+//            credentials {
+//                username = "642b9f209f62bf75b33fc1ae"
+//                password = "EkNR7ao]bCHh"
+//            }
+//        }
     }
 }

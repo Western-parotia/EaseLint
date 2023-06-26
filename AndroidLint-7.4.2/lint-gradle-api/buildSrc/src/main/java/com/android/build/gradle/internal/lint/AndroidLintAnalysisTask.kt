@@ -39,7 +39,6 @@ import com.android.ide.common.repository.GradleVersion
 import com.android.tools.lint.model.LintModelSerialization
 import com.android.utils.FileUtils
 import com.buildsrc.lint.ArtifactsImplProxy
-import com.buildsrc.lint.EaseLintTask
 import com.google.common.annotations.VisibleForTesting
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
@@ -63,6 +62,7 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskProvider
 import java.io.File
+import java.net.URLClassLoader
 import java.util.Collections
 
 /** Task to invoke lint with the --analyze-only flag, producing partial results. */
@@ -119,15 +119,51 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
     @get:PathSensitive(PathSensitivity.NONE)
     @get:Optional
     abstract val desugaredMethodsFiles: ConfigurableFileCollection
+    private fun getPlatformClassLoader(): ClassLoader {
+        // AGP is currently compiled against java 8 APIs, so do this by reflection (b/160392650)
+        return ClassLoader::class.java.getMethod("getPlatformClassLoader")
+            .invoke(null) as ClassLoader
+    }
 
     override fun doTaskAction() {
         println("----------- AndroidLintAnalysisTask has been cover by EaseLint -----------")
         lintTool.lintClassLoaderBuildService.get().shouldDispose = true
         writeLintModelFile()
+
+        val isSpecial = false
+
+        var arguments = generateCommandLineArguments(!isSpecial)
+        if (isSpecial) {
+            val newList = mutableListOf<String>()
+            newList.addAll(arguments)
+            newList.add(
+                "/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/" +
+                        "AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/" +
+                        "com/easelint/gradle/SubModuleKotlinPrint.kt"
+            )
+            newList.add(
+                "/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/" +
+                        "AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/" +
+                        "com/easelint/gradle/JavaParse.java"
+            )
+            arguments = newList
+        }
+        println("arguments: start =================")
+        arguments.forEach {
+            println(it)
+        }
+        println("arguments: end =================")
+        // 创建 classLoader 先加载自己的 LintRequest
+//        lintTool.classpath.files
+        val uris = lintTool.classpath.files.map { it.toURI() }
+        val classpathUrls = uris.map { it.toURL() }.toTypedArray()
+        val classLoader = URLClassLoader(classpathUrls, getPlatformClassLoader())
+        classLoader.loadClass("com.android.tools.lint.client.api.LintRequest")
+
         lintTool.submit(
             mainClass = "com.android.tools.lint.Main",
             workerExecutor = workerExecutor,
-            arguments = generateCommandLineArguments(),
+            arguments = arguments,
             android = android.get(),
             fatalOnly = fatalOnly.get(),
             await = false,
@@ -156,7 +192,7 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
     }
 
     @VisibleForTesting
-    internal fun generateCommandLineArguments(): List<String> {
+    internal fun generateCommandLineArguments(addModel: Boolean = true): List<String> {
 
         val arguments = mutableListOf<String>()
 
@@ -166,10 +202,10 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
         }
         arguments += listOf("--jdk-home", systemPropertyInputs.javaHome.get())
         androidSdkHome.orNull?.let { arguments.add("--sdk-home", it) }
-
-        arguments += "--lint-model"
-        arguments += listOf(lintModelDirectory.get().asFile.absolutePath).asLintPaths()
-
+        if (addModel) {
+            arguments += "--lint-model"
+            arguments += listOf(lintModelDirectory.get().asFile.absolutePath).asLintPaths()
+        }
         for (check in checkOnly.get()) {
             arguments += listOf("--check", check)
         }
@@ -198,6 +234,7 @@ abstract class AndroidLintAnalysisTask : NonIncrementalTask() {
         ) {
             arguments += "--offline"
         }
+//        arguments.add("/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/com/easelint/gradle/SubModuleKotlinPrint.kt")
 
         return Collections.unmodifiableList(arguments)
     }

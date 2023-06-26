@@ -11,4 +11,8 @@ class MainActivity : AppCompatActivity() {
             text = "Hello world"
         })
     }
+
+    fun foo() {
+        val a = "1".toLong()
+    }
 }
