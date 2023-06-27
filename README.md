@@ -1,21 +1,47 @@
 # EaseLint
 
-项目包含三模块来完成，分别是
+从多个实践反馈来看，每个团队的CI 或 DevOps 技术服务技术栈都存在较大区别，适配通常需要内部开发者根据需要来定制开发，
+所以 EaseLint 并不会提供傻瓜式的集成式服务。
+
+EaseLint 将尽量保持较为独立功能结构，并以此为基础追求丝滑的集成实践示范。
+
+## AGP 4.x ✅
+
 [lintPlugin](AndroidLint-4.1.0/lint-plugin),
 [Lint-gradle](AndroidLint-4.1.0/lint-gradle-api)
 ,[Lint-checks](AndroidLint-4.1.0/lint-checks)
 
-# 版本兼容
+| 功能名称 | 完成状态 | 备注 |
+|------|--|--------|
+| 自定义扫描文件目标 | ✅ | 无反射 |
+| 动态修改LintOptions | ✅ | 无反射 |
+| 基于Git diff 抓取目标文件 | ✅ | 支持基于 分支与commitId |
+| 动态导入 lint-checks | ✅ | |
+| 结果解析 | ✅ | |
 
-* AGP 4.x ✅
-* AGP 7.x 准备中...
+## AGP 7.x 进行中...
 
-# 特性
+[lintPlugin](AndroidLint-7.4.2/lint-plugin)
+[lint-api module](AndroidLint-7.4.2/lint-plugin/lint-api)
+
+| 功能名称 | 完成状态 | 备注 |
+|------|--|--------|
+| 自定义扫描文件目标 | ✅ | 无反射 |
+| 动态修改LintOptions | - | |
+| 基于Git diff 抓取目标文件 | - | 支持基于 分支与commitId |
+| 动态导入 lint-checks | - | |
+| 结果解析 | - | |
+
+# 使用建议
+
+## 1.在CI上建议自定义 Task 动态导入 lint-checks ，并从远端拉取配置进行修改
 
 * 精准指定扫描目标，比如某一次 git 新增或修改的代码
-* 动态控制 lintOptions,在lint task 运行前都可以通过修改 LintSlot 的属性进行修改。
+* 动态控制 lintOptions,在lint task 运行前都可以通过修改 LintSlot 的属性。
 
-目前已经支持的属性：
+```kotlin
+LintWrapperHelper.init(true, "0.0.1-2023-05-24-10-18-01")
+```
 
 ```java
 object LintSlot{
@@ -34,15 +60,7 @@ object LintSlot{
         }
 ```
 
-# 使用
-
-## 1.动态导入 lint-checks
-
-```kotlin
-LintWrapperHelper.init(true, "0.0.1-2023-05-24-10-18-01")
-```
-
-## 2.使用 EaseLintExtension 完成单项目 easelint 配置
+## 2. 如果只是在本地使用，可以在module中使用 EaseLintExtension 完成单项目 easelint 配置
 
 ```kotlin
 plugins {
@@ -51,33 +69,7 @@ plugins {
   id("ease.lint")
 }
 
-val targets = arrayListOf(
-  "SubModuleKotlinPrint.kt",
-  "JavaParse.java",
-  "KotlinParse.kt"
-)
 easeLintExt {
-  val dir = project.projectDir
-  val parent = File(dir, "src/main/java/com/practice/temp")
-  val files = LinkedList<String>()
-  val ignores = LinkedList<String>()
-  parent.listFiles()!!.forEach { file ->
-    targets.forEach { name ->
-      if (file.absolutePath.endsWith(name)) {
-        files.add(file.absolutePath)
-      }
-    }
-  }
-  files.add("/Volumes/D/CodeProject/AndroidProject/EaseLint/AndroidLint-4.1.0/lint-plugin/temp/src/main/java/com/practice/temp/KotlinPrint.kt")
-  targetFiles = files
-  fileWhiteList = ignores
-  checkOnlyIssues = LinkedList<String>().apply {
-    add("LogDetector")
-    add("ParseStringDetector")
-  }
-  disableIssues = LinkedList<String>().apply {
-    add("LogDetector")
-  }
 }
 ```
 
