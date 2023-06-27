@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    //一定要晚于 com.android.application 插件
     id("ease.lint")
 }
 
@@ -31,9 +32,9 @@ android {
         xmlReport = true
         htmlReport = true
         textReport = false
-        disable.add("SerializationDetector")
-        checkOnly.add("LogDetector")
-        checkOnly.add("ParseColorDetector")
+//        disable.add("LogDetector")
+        checkOnly.add("ParseStringDetector")
+//        checkOnly.add("LogDetector")
     }
 
 }
@@ -52,7 +53,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.core:core-ktx:1.8.0")
     //查看源码
-    implementation("com.easelint.snapshot:30.4.2-lint-api:0.0.1-2023-06-26-05-48-55")
+    implementation("com.easelint.snapshot:30.4.2-lint-api:0.0.1-2023-06-27-10-03-13")
 
 }
 

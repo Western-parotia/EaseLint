@@ -1,5 +1,6 @@
 package com.buildsrc.lint
 
+import com.android.build.gradle.AppExtension
 import com.android.build.gradle.internal.lint.AndroidLintAnalysisTask
 import com.android.build.gradle.internal.plugins.AppPlugin
 import com.android.build.gradle.internal.plugins.LibraryPlugin
@@ -15,18 +16,23 @@ class EaseLintPlugin : Plugin<Project> {
         val libPlugin = project.plugins.findPlugin(LibraryPlugin::class.java)
         val appPlugin = project.plugins.findPlugin(AppPlugin::class.java)
         if (libPlugin == null && appPlugin == null) throw GradleException("libPlugin and appPlugin can not all be null")
-        val basePlugin = appPlugin ?: libPlugin!!
         LintConfigExtensionHelper.apply(project)
-        project.gradle.taskGraph.whenReady {
-            // after afterEvaluate
-            val task = project.tasks.getByName("lintAnalyzeDebug") as AndroidLintAnalysisTask
-            LintHook.loadHookFile(task.lintTool, project)
-            // 添加新任务 关联到 lintAnalyzeDebug ，来做准备工作
 
-            val globalConfig = basePlugin.variantManager.globalTaskCreationConfig
-            val lint = globalConfig.lintOptions
-            val checkOnly = lint.checkOnly
-            val disableIssue = lint.disable
+        project.afterEvaluate {
+
+            LintConfigExtensionHelper.setCoverLintOptions(this)
+
+            val lintAnalyzeDebug =
+                project.tasks.getByName("lintAnalyzeDebug") as AndroidLintAnalysisTask
+            LintHook.loadHookFile(lintAnalyzeDebug.lintTool, project)
+            // 添加新任务 关联到 lintAnalyzeDebug ，来做准备工作
+            val lintConfigTask = project.tasks.register(
+                EaseLintTask.TASK_NAME, EaseLintTask::class.java,
+            )
+            lintConfigTask.get().finalizedBy(lintAnalyzeDebug)
+        }
+        project.gradle.taskGraph.whenReady {
+
         }
 
     }

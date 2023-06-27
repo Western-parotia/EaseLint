@@ -19,6 +19,8 @@ package com.android.tools.lint.client.api
 import com.android.tools.lint.detector.api.Platform
 import com.android.tools.lint.detector.api.Project
 import com.android.tools.lint.detector.api.Scope
+import com.android.utils.JvmWideVariable
+import com.google.common.reflect.TypeToken
 import java.io.File
 import java.util.*
 
@@ -139,24 +141,26 @@ open class LintRequest(
     open fun getProjects(): Collection<Project>? = projects
 
     fun setProjects(projects: Collection<Project>?): LintRequest {
-        val project = projects?.first()
-        project?.addFile(
-            File(
-                "/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/" +
-                        "AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/" +
-                        "com/easelint/gradle/SubModuleKotlinPrint.kt"
-            )
-        )
-        project?.addFile(
-            File(
-                "/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/" +
-                        "AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/" +
-                        "com/easelint/gradle/JavaParse.java"
-            )
-        )
+        targetFiles.executeCallableSynchronously {
+            projects?.first()?.let {
+                targetFiles.get().forEach { path ->
+                    val file = File(path)
+                    it.addFile(file)
+                }
+            }
 
+        }
         this.projects = projects
         println("========= easeLint cover LintRequest ==========")
         return this
+    }
+
+    companion object {
+        private val targetFiles: JvmWideVariable<ArrayList<String>> =
+            JvmWideVariable(
+                LintRequest::class.java,
+                "targetFiles",
+                object : TypeToken<ArrayList<String>>() {}
+            ) { ArrayList() }
     }
 }
