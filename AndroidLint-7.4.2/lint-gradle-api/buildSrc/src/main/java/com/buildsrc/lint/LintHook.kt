@@ -43,7 +43,7 @@ object LintHook {
             .invoke(null) as ClassLoader
     }
 
-    fun loadHookFile(lintTool: LintTool, project: Project) {
+    fun loadHook(lintTool: LintTool, project: Project) {
         val group = "com.easelint.snapshot"
         val name = "30.4.2-lint-api"
         val version = "0.0.1-2023-06-26-05-48-55"
@@ -68,7 +68,7 @@ object LintHook {
         summaryFiles.addAll(sysLintFiles)
 
         val key = lintTool.versionKey.get()
-        val classLoader: URLClassLoader = cachedClassloader.executeCallableSynchronously {
+        cachedClassloader.executeCallableSynchronously {
             val map = cachedClassloader.get()
             val classloader = map[key]?.get()?.also {
                 logger.info("Android Lint: Reusing lint classloader {}", key)
@@ -76,6 +76,5 @@ object LintHook {
                 .also { map[key] = SoftReference(it) }
             classloader
         }
-        val x = classLoader
     }
 }

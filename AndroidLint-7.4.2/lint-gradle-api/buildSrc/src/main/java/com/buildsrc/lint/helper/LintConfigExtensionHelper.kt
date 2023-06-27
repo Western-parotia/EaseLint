@@ -18,6 +18,9 @@ object LintConfigExtensionHelper {
     }
 
 
+    /**
+     * 没有找到合适的时机 修改,agp 也会检查是否在配置创建结束后修改lint配置
+     */
     fun setCoverLintOptions(project: Project) {
         val libPlugin = project.plugins.findPlugin(LibraryPlugin::class.java)
         val appPlugin = project.plugins.findPlugin(AppPlugin::class.java)

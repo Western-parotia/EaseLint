@@ -33,7 +33,7 @@ android {
         htmlReport = true
         textReport = false
 //        disable.add("LogDetector")
-        checkOnly.add("ParseStringDetector")
+//        checkOnly.add("ParseStringDetector")
 //        checkOnly.add("LogDetector")
     }
 
