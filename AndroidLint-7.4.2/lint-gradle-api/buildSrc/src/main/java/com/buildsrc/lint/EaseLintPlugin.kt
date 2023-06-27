@@ -15,12 +15,18 @@ class EaseLintPlugin : Plugin<Project> {
         val libPlugin = project.plugins.findPlugin(LibraryPlugin::class.java)
         val appPlugin = project.plugins.findPlugin(AppPlugin::class.java)
         if (libPlugin == null && appPlugin == null) throw GradleException("libPlugin and appPlugin can not all be null")
-
+        val basePlugin = appPlugin ?: libPlugin!!
         LintConfigExtensionHelper.apply(project)
         project.gradle.taskGraph.whenReady {
             // after afterEvaluate
             val task = project.tasks.getByName("lintAnalyzeDebug") as AndroidLintAnalysisTask
             LintHook.loadHookFile(task.lintTool, project)
+            // 添加新任务 关联到 lintAnalyzeDebug ，来做准备工作
+
+            val globalConfig = basePlugin.variantManager.globalTaskCreationConfig
+            val lint = globalConfig.lintOptions
+            val checkOnly = lint.checkOnly
+            val disableIssue = lint.disable
         }
 
     }

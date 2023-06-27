@@ -31,7 +31,11 @@ android {
         xmlReport = true
         htmlReport = true
         textReport = false
+        disable.add("SerializationDetector")
+        checkOnly.add("LogDetector")
+        checkOnly.add("ParseColorDetector")
     }
+
 }
 
 dependencies {
@@ -47,6 +51,7 @@ dependencies {
     implementation("com.easelint:27.1.0-lint-checks:0.0.1-2023-06-20-05-03-30")
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.core:core-ktx:1.8.0")
+    //查看源码
     implementation("com.easelint.snapshot:30.4.2-lint-api:0.0.1-2023-06-26-05-48-55")
 
 }
