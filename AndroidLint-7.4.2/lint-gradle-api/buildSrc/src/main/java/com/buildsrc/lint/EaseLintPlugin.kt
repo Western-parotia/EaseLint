@@ -20,7 +20,7 @@ class EaseLintPlugin : Plugin<Project> {
         project.afterEvaluate {
             val lintAnalyzeDebug =
                 project.tasks.getByName("lintAnalyzeDebug") as AndroidLintAnalysisTask
-            LintHook.loadHook(lintAnalyzeDebug.lintTool, project)
+            LintHook.loadHook(lintAnalyzeDebug.lintTool, project, "0.0.1-2023-06-27-10-03-13")
 
             // 添加新任务 关联到 lintAnalyzeDebug ，来做准备工作
             val lintConfigTask = project.tasks.register(

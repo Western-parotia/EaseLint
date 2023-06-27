@@ -53,7 +53,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.core:core-ktx:1.8.0")
     //查看源码
-    implementation("com.easelint.snapshot:30.4.2-lint-api:0.0.1-2023-06-27-10-03-13")
+//    implementation("com.easelint.snapshot:30.4.2-lint-api:0.0.1-2023-06-27-10-03-13")
 
 }
 

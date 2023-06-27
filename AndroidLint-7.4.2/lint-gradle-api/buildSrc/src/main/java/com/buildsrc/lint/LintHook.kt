@@ -43,10 +43,9 @@ object LintHook {
             .invoke(null) as ClassLoader
     }
 
-    fun loadHook(lintTool: LintTool, project: Project) {
+    fun loadHook(lintTool: LintTool, project: Project,version:String) {
         val group = "com.easelint.snapshot"
         val name = "30.4.2-lint-api"
-        val version = "0.0.1-2023-06-26-05-48-55"
         // 创建 classLoader 将自己的 maven包排在最前面 先喂给 cachedClassloader
         val sysLintFiles: List<URI> = lintTool.classpath.files.map { it.toURI() }
         val config = project.configurations.detachedConfiguration(

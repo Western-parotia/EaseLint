@@ -27,12 +27,18 @@ abstract class EaseLintTask : DefaultTask() {
         val file2 = "/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/" +
                 "AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/" +
                 "com/easelint/gradle/JavaParse.java"
+        val file3 = "/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/" +
+                "AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/" +
+                "com/easelint/gradle/KotlinParse.kt"
+
         targetFiles.executeCallableSynchronously {
-            targetFiles.get().add(file1)
-            targetFiles.get().add(file2)
+            targetFiles.set(ArrayList<String>().apply {
+                add(file1)
+//                add(file2)
+//                add(file3)
+            })
         }
-        // 准备待扫描的文件
-        println("============== EaseLintTask action()=============")
+
 
     }
 
