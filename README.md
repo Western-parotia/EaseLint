@@ -1,21 +1,47 @@
 # EaseLint
 
-项目包含三模块来完成，分别是
+从多个实践反馈来看，每个团队的CI 或 DevOps 技术服务技术栈都存在较大区别，适配通常需要内部开发者根据需要来定制开发，
+所以 EaseLint 并不会提供傻瓜式的集成式服务。
+
+EaseLint 将尽量保持较为独立功能结构，并以此为基础追求丝滑的集成实践示范。
+
+## AGP 4.x ✅
+
 [lintPlugin](AndroidLint-4.1.0/lint-plugin),
 [Lint-gradle](AndroidLint-4.1.0/lint-gradle-api)
 ,[Lint-checks](AndroidLint-4.1.0/lint-checks)
 
-# 版本兼容
+| 功能名称 | 完成状态 | 备注 |
+|------|--|--------|
+| 自定义扫描文件目标 | ✅ | 无反射 |
+| 动态修改LintOptions | ✅ | 无反射 |
+| 基于Git diff 抓取目标文件 | ✅ | 支持基于 分支与commitId |
+| 动态导入 lint-checks | ✅ | |
+| 结果解析 | ✅ | |
 
-* AGP 4.x ✅
-* AGP 7.x 准备中...
+## AGP 7.x 进行中...
 
-# 特性
+[lintPlugin](AndroidLint-7.4.2/lint-plugin)
+[lint-api module](AndroidLint-7.4.2/lint-plugin/lint-api)
+
+| 功能名称 | 完成状态 | 备注 |
+|------|--|--------|
+| 自定义扫描文件目标 | ✅ | 无反射 |
+| 动态修改LintOptions | - | |
+| 基于Git diff 抓取目标文件 | - | 支持基于 分支与commitId |
+| 动态导入 lint-checks | - | |
+| 结果解析 | - | |
+
+# 使用建议
+
+## 1.在CI上建议自定义 Task 动态导入 lint-checks ，并从远端拉取配置进行修改
 
 * 精准指定扫描目标，比如某一次 git 新增或修改的代码
-* 动态控制 lintOptions,在lint task 运行前都可以通过修改 LintSlot 的属性进行修改。
+* 动态控制 lintOptions,在lint task 运行前都可以通过修改 LintSlot 的属性。
 
-目前已经支持的属性：
+```kotlin
+LintWrapperHelper.init(true, "0.0.1-2023-05-24-10-18-01")
+```
 
 ```java
 object LintSlot{
@@ -34,17 +60,7 @@ object LintSlot{
         }
 ```
 
-# 使用
-
-## 1.动态导入 lint-checks
-
-```kotlin
-LintWrapperHelper.init(true, "0.0.1-2023-05-24-10-18-01")
-```
-
-## 2.使用 EaseLintExtension或者gradlew参数完成单项目 easelint 配置
-
-### EaseLintExtension配置
+## 2. 如果只是在本地使用，可以在module中使用 EaseLintExtension 完成单项目 easelint 配置
 
 ```kotlin
 plugins {
@@ -53,61 +69,8 @@ plugins {
   id("ease.lint")
 }
 
-val targets = arrayListOf(
-  "SubModuleKotlinPrint.kt",
-  "JavaParse.java",
-  "KotlinParse.kt"
-)
 easeLintExt {
-  val dir = project.projectDir
-  val parent = File(dir, "src/main/java/com/practice/temp")
-  val files = LinkedList<String>()
-  val ignores = LinkedList<String>()
-  parent.listFiles()!!.forEach { file ->
-    targets.forEach { name ->
-      if (file.absolutePath.endsWith(name)) {
-        files.add(file.absolutePath)
-      }
-    }
-  }
-  files.add("/Volumes/D/CodeProject/AndroidProject/EaseLint/AndroidLint-4.1.0/lint-plugin/temp/src/main/java/com/practice/temp/KotlinPrint.kt")
-  //指定需要检查文件
-  targetFiles = files
-  //文件白名单（检查时需要忽略的文件）
-  fileWhiteList = ignores
-  //检查指定规则（只检查checkOnlyIssues中包含的规则，其余规则均不检查）
-  checkOnlyIssues = LinkedList<String>().apply {
-    add("LogDetector")
-    add("ParseStringDetector")
-  }
-  //指定不检查的规则
-  disableIssues = LinkedList<String>().apply {
-    add("LogDetector")
-  }
-  //文件后缀白名单（检查时会忽略对应后缀的文件）
-  suffixWhiteList = LinkedList<String>().apply {
-    add("kt")
-  }
-  /*
-  通过git diff命令获取需要检查的差异文件，
-  其中compareBranch为需要对比的分支，
-  compareCommitId为需要对比的提交记录。
-  两个配置二选一，若只配配置compareBranch，则与该分支的最新提交记录比较
-  若只配置compareCommitId，则与该提交记录比较。
-  （若不配置GitDiffConfig参数，则只检查targetFiles中指定的文件，
-  反之则检查targetFiles和获取到的差异文件）
-  */
-  setGitDiffConfig(compareBranch = "main", compareCommitId = "")
 }
-```
-
-### gradlew配置
-
-使用gradlew命令执行easeLint任务时可在命令中配置检查参数，所有参数与EaseLintExtension配置中的参数相同，
-每一项参数值优先使用gradlew命令中配置的参数，若未配置则使用EaseLintExtension中配置的参数。
-
-```
- ./gradlew easeLint -PtargetFiles="filePath1,filePath2" -PdisableIssues="LogDetector" -PcheckOnlyIssues="LogDetector,ParseStringDetector" -PfileWhiteList="src/main/java/com/example1,src/main/java/com/example2" -PsuffixWhiteList="md,xml" -PcompareBranch="main" -PcompareCommitId="id12345"
 ```
 
 ## 3.PrepareEaseLintTask

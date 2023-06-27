@@ -1,0 +1,9 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="BaseTheme" parent="Theme.AppCompat.Light">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <!-- Status bar color. -->
+        <!-- Customize your theme here. -->
+    </style>
+</resources>
