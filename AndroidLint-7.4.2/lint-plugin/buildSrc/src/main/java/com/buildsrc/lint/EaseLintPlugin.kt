@@ -1,5 +1,6 @@
 package com.buildsrc.lint
 
+import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.android.build.gradle.internal.lint.AndroidLintAnalysisTask
 import com.android.build.gradle.internal.plugins.AppPlugin
 import com.android.build.gradle.internal.plugins.LibraryPlugin
@@ -7,6 +8,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import  com.buildsrc.lint.helper.LintConfigExtensionHelper
 import org.gradle.api.GradleException
+import org.gradle.kotlin.dsl.configure
 
 class EaseLintPlugin : Plugin<Project> {
 
@@ -16,6 +18,11 @@ class EaseLintPlugin : Plugin<Project> {
         val appPlugin = project.plugins.findPlugin(AppPlugin::class.java)
         if (libPlugin == null && appPlugin == null) throw GradleException("libPlugin and appPlugin can not all be null")
         LintConfigExtensionHelper.apply(project)
+
+        // 修改checkOnly
+        project.configure<BaseAppModuleExtension> {
+            lint.checkOnly.add("LogDetector")
+        }
 
         project.afterEvaluate {
             val lintAnalyzeDebug =

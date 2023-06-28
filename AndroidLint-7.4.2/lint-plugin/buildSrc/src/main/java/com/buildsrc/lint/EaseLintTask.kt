@@ -8,15 +8,15 @@ import org.gradle.api.tasks.TaskAction
 
 abstract class EaseLintTask : DefaultTask() {
     companion object {
-        const val TASK_NAME = "easeLint"
+        const val TASK_NAME = "a1EaseLint"
     }
-
-    private val targetFiles: JvmWideVariable<ArrayList<String>> =
-        JvmWideVariable(
-            LintRequest::class.java,
-            "targetFiles",
-            object : TypeToken<ArrayList<String>>() {}
-        ) { ArrayList() }
+//
+//    private val targetFiles: JvmWideVariable<ArrayList<String>> =
+//        JvmWideVariable(
+//            LintRequest::class.java,
+//            "targetFiles",
+//            object : TypeToken<ArrayList<String>>() {}
+//        ) { ArrayList() }
 
     @TaskAction
     fun action() {
@@ -33,14 +33,14 @@ abstract class EaseLintTask : DefaultTask() {
         val file4 = "/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/" +
                 "AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/" +
                 "com/easelint/gradle/MainActivity.kt"
-        targetFiles.executeCallableSynchronously {
-            targetFiles.set(ArrayList<String>().apply {
-//                add(file1)
-//                add(file2)
-                add(file3)
-                add(file4)
-            })
-        }
+//        targetFiles.executeCallableSynchronously {
+//            targetFiles.set(ArrayList<String>().apply {
+////                add(file1)
+////                add(file2)
+//                add(file3)
+//                add(file4)
+//            })
+//        }
 
 
     }
