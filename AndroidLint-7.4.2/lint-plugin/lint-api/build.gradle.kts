@@ -20,17 +20,17 @@ tasks.register("sourcesJar", org.gradle.jvm.tasks.Jar::class) {
 publishing {
     publications {
         create<MavenPublication>("lintGradle") {
-            com.buildsrc.kts.Publish.Maven.setGAV(this)
+//            com.buildsrc.kts.Publish.Maven.setGAV(this)
             from(components["java"])
             artifact(tasks["sourcesJar"])
         }
     }
 
-    repositories {
-        if (com.buildsrc.kts.Publish.SNAPSHOT) {
-            com.buildsrc.kts.Publish.Maven.aliyunSnapshotRepositories(this)
-        } else {
-            com.buildsrc.kts.Publish.Maven.aliyunReleaseRepositories(this)
-        }
-    }
+//    repositories {
+//        if (com.buildsrc.kts.Publish.SNAPSHOT) {
+//            com.buildsrc.kts.Publish.Maven.aliyunSnapshotRepositories(this)
+//        } else {
+//            com.buildsrc.kts.Publish.Maven.aliyunReleaseRepositories(this)
+//        }
+//    }
 }
