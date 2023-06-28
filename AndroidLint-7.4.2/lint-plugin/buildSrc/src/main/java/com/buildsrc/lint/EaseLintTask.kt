@@ -23,9 +23,9 @@ abstract class EaseLintTask : DefaultTask() {
     @TaskAction
     fun action() {
 
-        val file1 = filePath("SubModuleKotlinPrint.kt")
-        val file2 = filePath("11.kt")
-        val file3 = filePath("22.kt")
+        val file1 = filePath("JavaParse.java")
+        val file2 = filePath("KotlinParse.kt")
+        val file3 = filePath("SubModuleKotlinPrint.kt")
 
         targetFiles.executeCallableSynchronously {
             targetFiles.set(ArrayList<String>().apply {
