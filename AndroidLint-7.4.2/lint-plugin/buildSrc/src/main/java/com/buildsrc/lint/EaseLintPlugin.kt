@@ -20,9 +20,13 @@ class EaseLintPlugin : Plugin<Project> {
         LintConfigExtensionHelper.apply(project)
 
         // 修改checkOnly
-//        project.configure<BaseAppModuleExtension> {
-//            lint.checkOnly.add("LogDetector")
-//        }
+        project.configure<BaseAppModuleExtension> {
+            lint.checkOnly.add("LogDetector")
+            lint.checkOnly.add("ParseStringDetector")
+            // disable 优先级最高
+//            lint.disable.add("LogDetector")
+
+        }
 
         project.afterEvaluate {
             val lintAnalyzeDebug =
