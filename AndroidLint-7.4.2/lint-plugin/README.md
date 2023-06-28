@@ -51,3 +51,7 @@
 lint-results-debug.html
 lint-results-debug.txt
 lint-results-debug.xml
+
+# 源码工程
+
+https://android.googlesource.com/platform/tools/base/+/refs/tags/studio-2022.1.1/build-system/
