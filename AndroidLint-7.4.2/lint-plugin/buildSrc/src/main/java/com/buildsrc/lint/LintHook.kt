@@ -3,6 +3,7 @@ package com.buildsrc.lint
 import com.android.build.gradle.internal.lint.AndroidLintWorkAction
 import com.android.build.gradle.internal.lint.LintFromMaven
 import com.android.build.gradle.internal.lint.LintTool
+import com.android.ide.common.util.pathTreeMapOf
 import com.android.utils.JvmWideVariable
 import com.google.common.reflect.TypeToken
 import org.gradle.api.Project
@@ -13,6 +14,11 @@ import java.net.URI
 import java.net.URLClassLoader
 
 object LintHook {
+    // 用于保持与 com.android.tools.lint.Main.java classLoader 一致
+    private lateinit var lintMainClassLoader: ClassLoader
+
+    lateinit var lintRequestClass: Class<*>
+        private set
 
     private val logger = Logging.getLogger(Task::class.java)
 
@@ -43,7 +49,11 @@ object LintHook {
             .invoke(null) as ClassLoader
     }
 
-    fun loadHook(lintTool: LintTool, project: Project,version:String) {
+    fun loadClassBylintMainClassLoader(name: String): Class<*> {
+        return lintMainClassLoader.loadClass(name)
+    }
+
+    fun loadHook(lintTool: LintTool, project: Project, version: String) {
         val group = "com.easelint.snapshot"
         val name = "30.4.2-lint-api"
         // 创建 classLoader 将自己的 maven包排在最前面 先喂给 cachedClassloader
@@ -67,7 +77,7 @@ object LintHook {
         summaryFiles.addAll(sysLintFiles)
 
         val key = lintTool.versionKey.get()
-        cachedClassloader.executeCallableSynchronously {
+        lintMainClassLoader = cachedClassloader.executeCallableSynchronously {
             val map = cachedClassloader.get()
             val classloader = map[key]?.get()?.also {
                 logger.info("Android Lint: Reusing lint classloader {}", key)
@@ -75,5 +85,7 @@ object LintHook {
                 .also { map[key] = SoftReference(it) }
             classloader
         }
+        lintRequestClass =
+            lintMainClassLoader.loadClass("com.android.tools.lint.client.api.LintRequest")
     }
 }
