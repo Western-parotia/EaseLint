@@ -1,6 +1,5 @@
 package com.buildsrc.lint
 
-import com.android.tools.lint.client.api.LintRequest
 import com.android.utils.JvmWideVariable
 import com.google.common.reflect.TypeToken
 import org.gradle.api.DefaultTask
@@ -9,7 +8,7 @@ import org.gradle.api.tasks.TaskAction
 abstract class EaseLintTask : DefaultTask() {
     companion object {
         const val TASK_NAME = "a1EaseLint"
-        val targetFiles: JvmWideVariable<ArrayList<String>> =
+        private val targetFiles: JvmWideVariable<ArrayList<String>> =
             JvmWideVariable(
                 LintHook.lintRequestClass,
                 "targetFiles",
@@ -17,15 +16,22 @@ abstract class EaseLintTask : DefaultTask() {
             ) { ArrayList() }
     }
 
+    private fun filePath(name: String): String {
+        return project.projectDir.absolutePath + "/src/main/java/com/easelint/gradle/" + name
+    }
+
     @TaskAction
     fun action() {
 
-        val file1 =
-            "/Volumes/D/CodeProject/AndroidProject/EaseLint-7.0/AndroidLint-7.4.2/lint-gradle-api/app/src/main/java/com/easelint/gradle/SubModuleKotlinPrint.kt"
+        val file1 = filePath("SubModuleKotlinPrint.kt")
+        val file2 = filePath("11.kt")
+        val file3 = filePath("22.kt")
 
         targetFiles.executeCallableSynchronously {
             targetFiles.set(ArrayList<String>().apply {
-//                add(file1)
+                add(file1)
+                add(file2)
+                add(file3)
             })
         }
 

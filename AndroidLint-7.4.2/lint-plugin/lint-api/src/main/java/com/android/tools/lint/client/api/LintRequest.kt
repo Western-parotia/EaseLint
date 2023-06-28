@@ -22,6 +22,7 @@ import com.android.tools.lint.detector.api.Scope
 import com.android.utils.JvmWideVariable
 import com.google.common.reflect.TypeToken
 import java.io.File
+import java.io.IOException
 import java.util.*
 
 /** Information about a request to run lint. */
@@ -141,17 +142,26 @@ open class LintRequest(
     open fun getProjects(): Collection<Project>? = projects
 
     fun setProjects(projects: Collection<Project>?): LintRequest {
-        targetFiles.executeCallableSynchronously {
-            projects?.first()?.let {
+        println("========= easeLint cover LintRequest =========")
+        projects?.first()?.let {
+            val unExistFiles = mutableListOf<String>()
+            targetFiles.executeCallableSynchronously {
                 targetFiles.get().forEach { path ->
                     val file = File(path)
-                    it.addFile(file)
+                    if (file.exists()) {
+                        it.addFile(file)
+                    } else {
+                        unExistFiles.add(path)
+                    }
                 }
             }
-
+            if (unExistFiles.isNotEmpty()) {
+                println("======== easeLint Can not found files:$unExistFiles")
+                throw IOException("LintRequest:Can not found files:$unExistFiles")
+            }
         }
         this.projects = projects
-        println("========= easeLint cover LintRequest ==========")
+        println("======== easeLint projects.subset:${projects?.first()?.subset?.size} ========")
         return this
     }
 
