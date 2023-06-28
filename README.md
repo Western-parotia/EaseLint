@@ -5,6 +5,10 @@
 
 EaseLint 将尽量保持较为独立功能结构，并以此为基础追求丝滑的集成实践示范。
 
+Tips:
+关于首次编译的"请在local.properties添加私有仓库的用户名（repositoryUserName）和密码（repositoryPassword）"
+这是用于发布的私有密钥，如果无需发布注释掉 整个 publishing 代码即可
+
 ## AGP 4.x ✅
 
 [lintPlugin](AndroidLint-4.1.0/lint-plugin),
