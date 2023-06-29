@@ -7,6 +7,9 @@ import com.android.build.gradle.internal.plugins.LibraryPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import  com.buildsrc.lint.helper.LintConfigExtensionHelper
+import com.buildsrc.lint.helper.LintSlot
+import com.buildsrc.lint.task.EaseLintTask
+import com.buildsrc.lint.task.LintHook
 import org.gradle.api.GradleException
 import org.gradle.kotlin.dsl.configure
 
@@ -29,6 +32,9 @@ class EaseLintPlugin : Plugin<Project> {
         }
 
         project.afterEvaluate {
+            val lcg = LintConfigExtensionHelper.findLintConfigExtension(project)
+            LintSlot.setExtensionParams(lcg)
+
             val lintAnalyzeDebug =
                 project.tasks.getByName("lintAnalyzeDebug") as AndroidLintAnalysisTask
             LintHook.loadHook(lintAnalyzeDebug.lintTool, project, "0.0.1-2023-06-28-06-30-10")

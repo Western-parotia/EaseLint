@@ -1,9 +1,8 @@
-package com.buildsrc.lint
+package com.buildsrc.lint.task
 
 import com.android.build.gradle.internal.lint.AndroidLintWorkAction
 import com.android.build.gradle.internal.lint.LintFromMaven
 import com.android.build.gradle.internal.lint.LintTool
-import com.android.ide.common.util.pathTreeMapOf
 import com.android.utils.JvmWideVariable
 import com.google.common.reflect.TypeToken
 import org.gradle.api.Project

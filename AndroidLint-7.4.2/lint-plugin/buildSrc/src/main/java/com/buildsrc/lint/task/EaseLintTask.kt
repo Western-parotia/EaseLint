@@ -1,6 +1,7 @@
-package com.buildsrc.lint
+package com.buildsrc.lint.task
 
 import com.android.utils.JvmWideVariable
+import com.buildsrc.lint.helper.LintSlot
 import com.google.common.reflect.TypeToken
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
@@ -16,28 +17,15 @@ abstract class EaseLintTask : DefaultTask() {
             ) { ArrayList() }
     }
 
-    private fun filePath(name: String): String {
-        return project.projectDir.absolutePath + "/src/main/java/com/easelint/gradle/" + name
-    }
-
     @TaskAction
     fun action() {
-
-        val file1 = filePath("JavaLog.java")
-        val file2 = filePath("JavaParse.java")
-        val file3 = filePath("KotlinParse.kt")
-        val file4 = filePath("KotlinLog.kt")
-
         targetFiles.executeCallableSynchronously {
             targetFiles.set(ArrayList<String>().apply {
-                add(file1)
-                add(file2)
-                add(file3)
-                add(file4)
+                LintSlot.finalTargets(project).forEach {
+                    add(it.absolutePath)
+                }
             })
         }
-
-
     }
 
 }

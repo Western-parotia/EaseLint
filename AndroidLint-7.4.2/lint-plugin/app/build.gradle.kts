@@ -1,8 +1,20 @@
+import java.util.*
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     //一定要晚于 com.android.application 插件
     id("ease.lint")
+}
+
+easeLintExt {
+    fileWhiteList = LinkedList<String>().apply {
+//        add("src/main/java/com/buildsrc/lint")
+    }
+    suffixWhiteList = LinkedList<String>().apply {
+//        add("kt")
+    }
+    setGitDiffConfig("main", "")
 }
 
 android {
