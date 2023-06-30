@@ -10,6 +10,7 @@ import  com.buildsrc.lint.helper.LintConfigExtensionHelper
 import com.buildsrc.lint.helper.LintSlot
 import com.buildsrc.lint.task.EaseLintTask
 import com.buildsrc.lint.task.LintHook
+import com.buildsrc.lint.task.TreatEaseLintResultTask
 import org.gradle.api.GradleException
 import org.gradle.kotlin.dsl.configure
 
@@ -44,6 +45,12 @@ class EaseLintPlugin : Plugin<Project> {
                 EaseLintTask.TASK_NAME, EaseLintTask::class.java,
             )
             lintConfigTask.get().finalizedBy("lintDebug")
+            //添加处理最终结果任务
+            val treatEaseLintResultTask = project.tasks.register(
+                TreatEaseLintResultTask.TASK_NAME,
+                TreatEaseLintResultTask::class.java
+            )
+            project.tasks.getByName("lintReportDebug").finalizedBy(treatEaseLintResultTask)
         }
     }
 }

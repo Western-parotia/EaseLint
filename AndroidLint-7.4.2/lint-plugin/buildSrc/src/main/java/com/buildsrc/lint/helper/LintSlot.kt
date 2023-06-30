@@ -1,6 +1,6 @@
 package com.buildsrc.lint.helper
 
-import com.buildsrc.easelint.lint.utils.log
+import com.buildsrc.lint.utils.log
 import com.buildsrc.lint.extensions.GitDiffConfig
 import com.buildsrc.lint.extensions.LintConfigExtension
 import com.buildsrc.lint.task.LintException
