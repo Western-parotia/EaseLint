@@ -9,10 +9,10 @@ plugins {
 
 easeLintExt {
     fileWhiteList = LinkedList<String>().apply {
-//        add("src/main/java/com/buildsrc/lint")
+        add("buildSrc/src/main/java/com/buildsrc")
     }
     suffixWhiteList = LinkedList<String>().apply {
-//        add("kt")
+        add("md")
     }
     setGitDiffConfig("main", "")
 }
