@@ -31,8 +31,8 @@ Tips:
 | 功能名称 | 完成状态 | 备注 |
 |------|--|--------|
 | 自定义扫描文件目标 | ✅ | 无反射 |
-| 动态修改LintOptions | - | |
-| 基于Git diff 抓取目标文件 | - | 支持基于 分支与commitId |
+| 动态修改LintOptions | 对勾 | |
+| 基于Git diff 抓取目标文件 | 对勾 | 支持基于 分支与commitId |
 | 动态导入 lint-checks | - | |
 | 结果解析 | - | |
 
