@@ -1,6 +1,7 @@
 package com.buildsrc.lint.task
 
 import com.android.utils.JvmWideVariable
+import com.buildsrc.lint.helper.LintHookHelper
 import com.buildsrc.lint.helper.LintSlot
 import com.google.common.reflect.TypeToken
 import org.gradle.api.DefaultTask
@@ -11,7 +12,7 @@ abstract class EaseLintTask : DefaultTask() {
         const val TASK_NAME = "a1EaseLint"
         private val targetFiles: JvmWideVariable<ArrayList<String>> =
             JvmWideVariable(
-                LintHook.lintRequestClass,
+                LintHookHelper.lintRequestClass,
                 "targetFiles",
                 object : TypeToken<ArrayList<String>>() {}
             ) { ArrayList() }

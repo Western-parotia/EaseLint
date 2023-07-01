@@ -1,4 +1,4 @@
-package com.buildsrc.lint.task
+package com.buildsrc.lint.helper
 
 import com.android.build.gradle.internal.lint.AndroidLintWorkAction
 import com.android.build.gradle.internal.lint.LintFromMaven
@@ -12,7 +12,7 @@ import java.lang.ref.SoftReference
 import java.net.URI
 import java.net.URLClassLoader
 
-object LintHook {
+object LintHookHelper {
     // 用于保持与 com.android.tools.lint.Main.java classLoader 一致
     private lateinit var lintMainClassLoader: ClassLoader
 

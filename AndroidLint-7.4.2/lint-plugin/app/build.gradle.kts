@@ -1,4 +1,4 @@
-import java.util.*
+import java.util.LinkedList
 
 plugins {
     id("com.android.application")
@@ -61,7 +61,6 @@ dependencies {
 //    compileOnly("com.android.tools.lint:lint-checks:30.4.2")
 //    compileOnly("com.android.tools.lint:lint-gradle:30.4.2")
 
-    implementation("com.easelint:27.1.0-lint-checks:0.0.1-2023-06-20-05-03-30")
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.core:core-ktx:1.8.0")
     //查看源码

@@ -41,7 +41,7 @@ Tips:
 ## 1.在CI上建议自定义 Task 动态导入 lint-checks ，并从远端拉取配置进行修改
 
 * 精准指定扫描目标，比如某一次 git 新增或修改的代码
-* 动态控制 lintOptions,在lint task 运行前都可以通过修改 LintSlot 的属性。
+* 动态控制 lintOptions,在 a1EaseLint task 运行前都可以通过修改 LintSlot 的属性。
 
 ```kotlin
 LintWrapperHelper.init(true, "0.0.1-2023-05-24-10-18-01")
