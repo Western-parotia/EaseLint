@@ -190,7 +190,7 @@ object LintSlot {
             bos.close()
             if (commitList.isNotEmpty()) commitList[0] else ""
         }
-
+        "finally commitId $commitId".log("addGitDiffTarget")
         //step2.找出和指定commitId之间的差异文件
         val bos = ByteArrayOutputStream()
         project.rootProject.exec {
