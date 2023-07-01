@@ -31,8 +31,8 @@ Tips:
 | 功能名称 | 完成状态 | 备注 |
 |------|--|--------|
 | 自定义扫描文件目标 | ✅ | 无反射 |
-| 动态修改LintOptions | - | |
-| 基于Git diff 抓取目标文件 | - | 支持基于 分支与commitId |
+| 动态修改LintOptions | 对勾 | |
+| 基于Git diff 抓取目标文件 | 对勾 | 支持基于 分支与commitId |
 | 动态导入 lint-checks | - | |
 | 结果解析 | - | |
 
@@ -41,7 +41,7 @@ Tips:
 ## 1.在CI上建议自定义 Task 动态导入 lint-checks ，并从远端拉取配置进行修改
 
 * 精准指定扫描目标，比如某一次 git 新增或修改的代码
-* 动态控制 lintOptions,在lint task 运行前都可以通过修改 LintSlot 的属性。
+* 动态控制 lintOptions,在 a1EaseLint task 运行前都可以通过修改 LintSlot 的属性。
 
 ```kotlin
 LintWrapperHelper.init(true, "0.0.1-2023-05-24-10-18-01")

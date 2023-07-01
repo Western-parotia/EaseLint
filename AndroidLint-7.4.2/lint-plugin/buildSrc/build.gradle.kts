@@ -84,5 +84,5 @@ dependencies {
     compileOnly("com.android.tools.lint:lint-model:30.4.2")
     compileOnly("com.android.tools:common:30.4.2")
     compileOnly("com.android.tools:sdk-common:30.4.2")
-    implementation("com.easelint.snapshot:30.4.2-lint-api:0.0.1-2023-06-27-10-03-13")
+
 }

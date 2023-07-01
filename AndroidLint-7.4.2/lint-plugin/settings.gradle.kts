@@ -9,7 +9,7 @@
 
 println("gv---:${gradle.gradleVersion}")
 
-rootProject.name = "lint-gradle-api"
+rootProject.name = "lint-plugin"
 include(":app")
 
-include(":lint-api")
+//include(":lint-api")

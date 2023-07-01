@@ -1,8 +1,20 @@
+import java.util.LinkedList
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     //一定要晚于 com.android.application 插件
     id("ease.lint")
+}
+
+easeLintExt {
+    fileWhiteList = LinkedList<String>().apply {
+//        add("src/main/java/com/buildsrc/lint")
+    }
+    suffixWhiteList = LinkedList<String>().apply {
+//        add("kt")
+    }
+    setGitDiffConfig("main", "")
 }
 
 android {
@@ -49,11 +61,10 @@ dependencies {
 //    compileOnly("com.android.tools.lint:lint-checks:30.4.2")
 //    compileOnly("com.android.tools.lint:lint-gradle:30.4.2")
 
-    implementation("com.easelint:27.1.0-lint-checks:0.0.1-2023-06-20-05-03-30")
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.core:core-ktx:1.8.0")
     //查看源码
-//    implementation("com.easelint.snapshot:30.4.2-lint-api:0.0.1-2023-06-27-10-03-13")
+    compileOnly("com.easelint.snapshot:30.4.2-lint-api:0.0.1-2023-06-28-06-30-10")
 
 }
 
