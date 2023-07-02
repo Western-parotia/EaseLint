@@ -41,5 +41,39 @@ Tips:
 
 # 使用
 
-# 命令方式：推荐
+> 4.x 版本支持外部指定扫描目标，7.x 之后不再支持，只提供给予分支或commitId进行diff的方式
 
+* 引入插件
+
+```aidl
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    //一定要晚于 com.android.application 插件
+    id("ease.lint")
+}
+```
+
+* 方式1：命令行传参（参数优先级高于module内的配置）
+
+```code
+./gradlew easeLint 
+ -PfileWhiteList="src/main/java/com/example1,src/main/java/com/example2"
+ -PsuffixWhiteList="md,xml"
+ -PcompareBranch="master"
+ -PcompareCommitId="id12345"
+```
+
+* 方式2：module 配置
+
+```groovy
+easeLintExt {
+    fileWhiteList = LinkedList<String>().apply {
+        add("buildSrc/src/main/java/com/buildsrc")
+    }
+    suffixWhiteList = LinkedList<String>().apply {
+        add(".md")
+    }
+    setGitDiffConfig("main", "")
+}
+```
