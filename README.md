@@ -1,9 +1,12 @@
 # EaseLint
 
-从多个实践反馈来看，每个团队的CI 或 DevOps 技术服务技术栈都存在较大区别，适配通常需要内部开发者根据需要来定制开发，
-所以 EaseLint 并不会提供傻瓜式的集成式服务。
+EaseLint是对Android Lint的二次开发，通过Hook AGP 源码来实现自定义扫描功能。
 
-EaseLint 将尽量保持较为独立功能结构，并以此为基础追求丝滑的集成实践示范。
+也可以作为一个学习kts构建，AGP开发，熟悉AGP源码的练习项目。
+
+
+> 从实践来看，每个团队的CI技术服务技术栈都存在较大区别，标准化服务与适应性不可兼得，EaseLint也是一样，
+> 你需要熟悉它的每个环节，以适合当下环境的方式引入你的团队。
 
 Tips:
 关于首次编译的"请在local.properties添加私有仓库的用户名（repositoryUserName）和密码（repositoryPassword）"
@@ -35,3 +38,8 @@ Tips:
 | 基于Git diff 抓取目标文件 | ✅ | 支持基于分支与commitId |
 | 动态导入 lint-checks | ✅ | |
 | 结果解析 | - | |
+
+# 使用
+
+# 命令方式：推荐
+

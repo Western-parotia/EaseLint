@@ -14,7 +14,7 @@ easeLintExt {
     suffixWhiteList = LinkedList<String>().apply {
         add("md")
     }
-    setGitDiffConfig("dev_7.x_opt", "")
+    setGitDiffConfig("main", "")
 }
 
 android {
