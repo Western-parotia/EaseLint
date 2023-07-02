@@ -69,20 +69,8 @@ java {
 }
 
 dependencies {
-    // 这里导入 gradle 将导致与根目录的 plugin 导入冲突：
-    /* The request for this plugin could not be satisfied because the plugin
-     is already on the classpath with an unknown version, so compatibility cannot be checked
-
-     *so there all Lint lib need compileOnly*
-    */
-    gradleApi()
     implementation("com.android.tools.build:gradle:7.4.2")
     implementation(kotlin("stdlib"))
     compileOnly("com.android.tools.lint:lint-api:30.4.2")
-    compileOnly("com.android.tools.lint:lint:30.4.2")
-
-    compileOnly("com.android.tools.lint:lint-model:30.4.2")
-    compileOnly("com.android.tools:common:30.4.2")
-    compileOnly("com.android.tools:sdk-common:30.4.2")
 
 }

@@ -80,3 +80,14 @@ easeLintExt {
 
 AndroidLintAnalysisTask为APG 7.x 中的核心Lint task，内部创建了 lint 运行的arguments，此目录下的3个文件为hook AndroidLintAnalysisTask
 时解决了全部包引用的问题。
+
+* buildSrc 需要的依赖库
+```groovy
+    implementation("com.android.tools.build:gradle:7.4.2")
+    implementation(kotlin("stdlib"))
+    compileOnly("com.android.tools.lint:lint-api:30.4.2")
+    compileOnly("com.android.tools.lint:lint:30.4.2")
+    compileOnly("com.android.tools.lint:lint-model:30.4.2")
+    compileOnly("com.android.tools:common:30.4.2")
+    compileOnly("com.android.tools:sdk-common:30.4.2")
+```
