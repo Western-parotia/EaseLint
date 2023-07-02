@@ -75,3 +75,8 @@ easeLintExt {
     setGitDiffConfig("main", "")
 }
 ```
+
+# [lint-code-backup](AndroidLint-7.4.2/lint-plugin/lint-code-backup) 目录说明
+
+AndroidLintAnalysisTask为APG 7.x 中的核心Lint task，内部创建了 lint 运行的arguments，此目录下的3个文件为hook AndroidLintAnalysisTask
+时解决了全部包引用的问题。
