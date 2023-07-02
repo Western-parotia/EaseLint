@@ -1,9 +1,7 @@
 # EaseLint
 
-EaseLint是对Android Lint的二次开发，通过Hook AGP 源码来实现自定义扫描功能。
-
-也可以作为一个学习kts构建，AGP开发，熟悉AGP源码的练习项目。
-
+EaseLint是对Android Lint的二次开发，通过Hook AGP 源码来实现自定义扫描功能。你可以用它快速在开发工作流中搭建起Lint扫描，
+或者作为一个学习kts构建，AGP开发，熟悉AGP源码的练习项目。
 
 > 从实践来看，每个团队的CI技术服务技术栈都存在较大区别，标准化服务与适应性不可兼得，EaseLint也是一样，
 > 你需要熟悉它的每个环节，以适合当下环境的方式引入你的团队。
